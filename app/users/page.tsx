@@ -1,8 +1,6 @@
 import Error from '@/components/error'
 import Loader from '@/components/loader'
-import CreateuserButton from '@/features/users/create-user-button'
-import UserCard from '@/features/users/user-card'
-import UsersList from '@/features/users/users-list'
+import { UsersList } from '@/features/users'
 import { orpc } from '@/lib/orpc'
 import { getQueryClient, HydrateClient } from '@/lib/query/hydration'
 

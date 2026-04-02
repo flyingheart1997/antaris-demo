@@ -1,4 +1,4 @@
-import HeroSection from "@/features/home/hero-section";
+import { HeroSection } from "@/features/home";
 
 export default function Page() {
     return <HeroSection />;
