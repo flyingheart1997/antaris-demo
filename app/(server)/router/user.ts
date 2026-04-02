@@ -1,6 +1,6 @@
 import z from 'zod'
 import { base } from '../middlewares/base'
-import { userFormSchema } from '@/form-schema/user-schema'
+import { userFormSchema } from '@/features/users/types/user-schema'
 import { requireStandardSequrityMiddleware } from '../middlewares/arcjet/standard'
 import { requireRatelimitSequrityMiddleware } from '../middlewares/arcjet/ratelimit'
 import { revalidatePath } from 'next/cache'

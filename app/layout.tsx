@@ -3,7 +3,7 @@ import '@/lib/orpc.server' // for pre-rendering ssr
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
-import { HeroHeader } from "@/features/home/header";
+import { HeroHeader } from "@/features/home";
 import { AllProviders } from '@/providers';
 import { Toaster } from '@/components/ui/sonner';
 
