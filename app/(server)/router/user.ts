@@ -4,6 +4,7 @@ import { userFormSchema } from '@/features/users/types/user-schema'
 import { requireStandardSequrityMiddleware } from '../middlewares/arcjet/standard'
 import { requireRatelimitSequrityMiddleware } from '../middlewares/arcjet/ratelimit'
 import { revalidatePath } from 'next/cache'
+import { getAccessToken } from '@/lib/auth/session'
 
 const addressSchema = z.object({
     street: z.string(),
@@ -48,7 +49,7 @@ export const listusers = base
     .output(z.object({ success: z.boolean(), data: z.array(userSchema) }))
     .handler(async () => {
         try {
-            const response = await fetch('https://crudcrud.com/api/7e2ede8841214aed8d9746878123f394/users')
+            const response = await fetch('https://crudcrud.com/api/f99a643319874c9fb7d66b9c2afbf422/users')
             if (!response.ok) {
                 return {
                     success: false,
@@ -86,7 +87,7 @@ export const getuser = base
     .output(userSchema)
     .handler(async ({ input, errors }) => {
         try {
-            const response = await fetch(`https://crudcrud.com/api/7e2ede8841214aed8d9746878123f394/users/${input.userId}`)
+            const response = await fetch(`https://crudcrud.com/api/f99a643319874c9fb7d66b9c2afbf422/users/${input.userId}`)
             if (!response.ok) {
                 throw errors.INTERNAL_SERVER_ERROR({
                     message: 'Error getting user',
@@ -120,10 +121,14 @@ export const createuser = base
     .output(z.void())
     .handler(async ({ input, errors }) => {
         try {
-            const response = await fetch('https://crudcrud.com/api/7e2ede8841214aed8d9746878123f394/users', {
+            const token = await getAccessToken()
+            console.log("✅ Create User - Extracted Token:", token)
+            
+            const response = await fetch('https://crudcrud.com/api/f99a643319874c9fb7d66b9c2afbf422/users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
                 },
                 body: JSON.stringify(input),
             })
@@ -152,10 +157,14 @@ export const updateuser = base
     .output(z.void())
     .handler(async ({ input, errors }) => {
         try {
-            const response = await fetch(`https://crudcrud.com/api/7e2ede8841214aed8d9746878123f394/users/${input.userId}`, {
+            const token = await getAccessToken()
+            console.log("✅ Update User - Extracted Token:", token)
+
+            const response = await fetch(`https://crudcrud.com/api/f99a643319874c9fb7d66b9c2afbf422/users/${input.userId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
                 },
                 body: JSON.stringify(input.data),
             })
@@ -185,8 +194,14 @@ export const deleteuser = base
     .output(z.void())
     .handler(async ({ input, errors }) => {
         try {
-            const response = await fetch(`https://crudcrud.com/api/7e2ede8841214aed8d9746878123f394/users/${input.userId}`, {
+            const token = await getAccessToken()
+            console.log("✅ Delete User - Extracted Token:", token)
+
+            const response = await fetch(`https://crudcrud.com/api/f99a643319874c9fb7d66b9c2afbf422/users/${input.userId}`, {
                 method: 'DELETE',
+                headers: {
+                    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+                }
             })
             if (!response.ok) {
                 throw errors.INTERNAL_SERVER_ERROR({
