@@ -3,107 +3,163 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const inputVariants = cva(
-  "group/input relative flex items-center w-full min-w-0 transition-all outline-none disabled:pointer-events-none disabled:opacity-50",
+  "group/input-field relative flex items-center w-full min-w-0 transition-all outline-none disabled:pointer-events-none rounded-[6px]",
   {
     variants: {
       variant: {
-        surface: "bg-(--color-surface-bg) border border-(--color-stroke-primary)",
-        solid: "bg-(--color-gray-alpha-3) border border-transparent",
-      },
-      intent: {
-        neutral: "",
-        accent: "aria-selected:border-(--color-stroke-selected) aria-selected:ring-3 aria-selected:ring-(--color-surface-selected)",
-        success: "border-(--color-stroke-success) aria-selected:ring-3 aria-selected:ring-(--color-stroke-success)/20",
-        error: "border-(--color-stroke-error) !ring-3 !ring-(--color-stroke-error)/20",
-        warning: "border-(--color-stroke-warning) aria-selected:ring-3 aria-selected:ring-(--color-stroke-warning)/20",
-        info: "border-(--color-stroke-info) aria-selected:ring-3 aria-selected:ring-(--color-stroke-info)/20",
+        surface: "bg-surface-bg border border-stroke-primary hover:bg-surface-secondary focus-within:border-stroke-selected focus-within:ring-3 focus-within:ring-stroke-selected/20",
+        solid: "bg-surface-tertiary border border-transparent hover:bg-surface-secondary focus-within:bg-surface-bg focus-within:border-stroke-selected focus-within:ring-3 focus-within:ring-stroke-selected/20",
       },
       size: {
-        sm: "h-(--sizing-24) px-(--spacing-8) text-(--text-font-size-md) gap-(--spacing-2) rounded-(--radius-md)",
-        md: "h-(--sizing-32) px-(--spacing-10) text-(--text-font-size-lg) gap-(--spacing-4) rounded-(--radius-md)",
-        lg: "h-(--sizing-40) px-(--spacing-12) text-(--text-font-size-xl) gap-(--spacing-6) rounded-(--radius-md)",
-        xl: "h-(--sizing-48) px-(--spacing-14) text-(--text-font-size-xxl) gap-(--spacing-8) rounded-(--radius-md)",
-      },
-      radius: {
-        none: "!rounded-none",
-        sm: "!rounded-(--radius-sm)",
-        md: "!rounded-(--radius-md)",
-        lg: "!rounded-(--radius-lg)",
-        full: "!rounded-full",
+        md: "h-40 px-12 text-md gap-8",
+        lg: "h-48 px-12 text-lg gap-8",
       },
       state: {
         default: "",
-        hover: "border-(--color-stroke-primary) bg-(--color-surface-hover)",
-        select: "border-(--color-stroke-selected) ring-3 ring-(--color-surface-selected)",
-        error: "border-(--color-stroke-error) ring-3 ring-(--color-stroke-error)/20",
+        error: "border-stroke-error !ring-3 !ring-stroke-error/20",
+        disabled: "opacity-50 cursor-not-allowed",
+        readonly: "cursor-default",
       }
     },
-    compoundVariants: [
-      {
-        variant: "surface",
-        state: "default",
-        className: "hover:bg-(--color-surface-hover) focus-within:border-(--color-stroke-selected) focus-within:ring-3 focus-within:ring-(--color-surface-selected)"
-      },
-      {
-        variant: "solid",
-        state: "default",
-        className: "hover:bg-(--color-gray-alpha-4) focus-within:bg-(--color-surface-bg) focus-within:border-(--color-stroke-selected) focus-within:ring-3 focus-within:ring-(--color-surface-selected)"
-      }
-    ],
     defaultVariants: {
       variant: "surface",
-      intent: "neutral",
       size: "md",
       state: "default",
     },
   }
 )
 
-type Prettify<T> = {
-  [K in keyof T]: T[K];
-} & {};
-
 interface InputProps
   extends Omit<React.ComponentPropsWithoutRef<"input">, "size">,
-  Prettify<VariantProps<typeof inputVariants>> {
-  leftIcon?: React.ReactNode
-  rightIcon?: React.ReactNode
+  VariantProps<typeof inputVariants> {
+  leadingIcon?: React.ReactNode
+  trailingIcon?: React.ReactNode
+  helperText?: string
+  hintText?: string
+  counter?: boolean
+  units?: boolean
+  unitsText?: string
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, variant, intent, size, radius, state, leftIcon, rightIcon, type, disabled, ...props }, ref) => {
-    const isError = props["aria-invalid"] === "true" || props["aria-invalid"] === true || intent === "error" || state === "error"
-    const effectiveState = (state === "default" && isError) ? "error" : state
+  ({
+    className,
+    variant,
+    size,
+    state,
+    leadingIcon,
+    trailingIcon,
+    helperText,
+    hintText,
+    counter,
+    units,
+    unitsText,
+    type,
+    disabled,
+    readOnly,
+    maxLength,
+    onChange,
+    value,
+    defaultValue,
+    ...props
+  }, ref) => {
+    const [inputValue, setInputValue] = React.useState<string | number | readonly string[]>(value ?? defaultValue ?? "")
+
+    React.useEffect(() => {
+      if (value !== undefined) {
+        setInputValue(value)
+      }
+    }, [value])
+
+    const isError = props["aria-invalid"] === "true" || props["aria-invalid"] === true || state === "error"
+    const effectiveState = state === "error" ? "error" : (disabled ? "disabled" : (readOnly ? "readonly" : "default"))
+
+    const count = String(inputValue ?? "").length
+    const max = maxLength || 0
 
     return (
       <div
-        data-slot="input-wrapper"
-        data-variant={variant}
-        data-intent={intent}
-        data-size={size}
-        data-radius={radius}
-        data-state={effectiveState}
-        data-disabled={disabled}
-        className={cn(inputVariants({ variant, intent, size, radius, state: effectiveState, className }))}
+        className={cn(
+          "flex w-full min-w-0 transition-all",
+          className
+        )}
+        data-slot="input-container"
       >
-        {leftIcon && (
-          <span className="flex shrink-0 items-center justify-center pointer-events-none text-(--color-icon-secondary) group-focus-within/input:text-(--color-icon-primary) group-data-[state=error]/input-wrapper:text-(--color-text-error)">
-            {leftIcon}
-          </span>
-        )}
-        <input
-          ref={ref}
-          type={type}
-          disabled={disabled}
-          data-slot="input"
-          className="flex-1 bg-transparent outline-none border-none p-0 h-full w-full placeholder:text-(--color-text-disabled) disabled:cursor-not-allowed selection:bg-(--color-surface-selected)"
-          {...props}
-        />
-        {rightIcon && (
-          <span className="flex shrink-0 items-center justify-center pointer-events-none text-(--color-icon-secondary) group-focus-within/input:text-(--color-icon-primary) group-data-[state=error]/input-wrapper:text-(--color-text-error)">
-            {rightIcon}
-          </span>
-        )}
+        <div className="flex flex-col gap-4 flex-1 min-w-0">
+          <div
+            data-slot="input-field-wrapper"
+            data-variant={variant}
+            data-size={size}
+            data-state={isError ? "error" : effectiveState}
+            data-disabled={disabled}
+            className={cn(inputVariants({ variant, size, state: isError ? "error" : effectiveState }))}
+          >
+            {leadingIcon && (
+              <span className="flex shrink-0 items-center justify-center pointer-events-none text-icon-secondary group-focus-within/input-field:text-icon-primary group-data-[state=error]/input-field:text-text-error">
+                {leadingIcon}
+              </span>
+            )}
+
+            <input
+              ref={ref}
+              type={type}
+              disabled={disabled}
+              readOnly={readOnly}
+              maxLength={maxLength}
+              data-slot="input"
+              className={cn(
+                "flex-1 bg-transparent outline-none border-none p-0 h-full w-full placeholder:text-text-disabled selection:bg-surface-selected text-text-secondary focus:text-text-primary",
+                effectiveState === "readonly" && "cursor-default",
+                effectiveState === "disabled" && "cursor-not-allowed",
+                inputValue && "text-text-primary"
+              )}
+              onChange={(e) => {
+                setInputValue(e.target.value)
+                onChange?.(e)
+              }}
+              value={value}
+              defaultValue={defaultValue}
+              {...props}
+            />
+
+            {units && unitsText && (
+              <span className="text-md text-text-secondary pointer-events-none shrink-0 pr-4">
+                {unitsText}
+              </span>
+            )}
+
+            {trailingIcon && (
+              <span className="flex shrink-0 items-center justify-center pointer-events-none text-icon-secondary group-focus-within/input-field:text-icon-primary group-data-[state=error]/input-field:text-text-error">
+                {trailingIcon}
+              </span>
+            )}
+          </div>
+
+          {(helperText || hintText || counter) && (
+            <div className="flex justify-between items-start text-xs leading-tight min-h-16" data-slot="input-assistive-container">
+              <div
+                className={cn(
+                  "flex-1",
+                  isError ? "text-text-error" : "text-text-secondary"
+                )}
+                data-slot="input-helper-text"
+              >
+                {helperText}
+              </div>
+              <div className="flex gap-8 items-center shrink-0 ml-4" data-slot="input-hint-counter">
+                {hintText && <span className="text-text-disabled">{hintText}</span>}
+                {counter && (
+                  <span className={cn(
+                    "tabular-nums text-xs",
+                    max > 0 && count >= max ? "text-text-error" : "text-text-disabled"
+                  )}>
+                    {count}{max > 0 ? `/${max}` : ""}
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     )
   }

@@ -138,6 +138,11 @@ async function build() {
     for (const [name, token] of Object.entries(allFlat)) {
         allResolvedFlat[name] = resolveValue(token, name, allResolvedFlat);
     }
+    // Inject persistent manual tokens
+    const separatorGradient = 'linear-gradient(270deg, rgba(240, 240, 240, 0.10) 0%, rgba(240, 240, 240, 0.40) 50%, rgba(240, 240, 240, 0.10) 100%)';
+    allFlat['color-stroke-separator'] = { $value: separatorGradient, $type: 'color' };
+    allResolvedFlat['color-stroke-separator'] = separatorGradient;
+    
     // Deep resolution for aliases
     for (let i = 0; i < 2; i++) {
         for (const [name, token] of Object.entries(allFlat)) {
@@ -171,7 +176,12 @@ async function build() {
         } else if (/letter-spacing/i.test(name)) {
             themeKey = `--letter-spacing-${name.replace(/.*letter-spacing-/i, '')}`;
         } else if (/color/i.test(name)) {
-            themeKey = `--color-${name.replace(/^color-/i, '')}`;
+            const val = allResolvedFlat[name];
+            if (val && val.includes('linear-gradient')) {
+                themeKey = `--background-image-${name.replace(/^color-/i, '')}`;
+            } else {
+                themeKey = `--color-${name.replace(/^color-/i, '')}`;
+            }
         } else if (/spacing/i.test(name) || /sizing/i.test(name) || /dim/i.test(name)) {
             const key = name.replace(/^(spacing|sizing|dim)-/i, '');
             if (key) themeKey = `--spacing-${key}`;

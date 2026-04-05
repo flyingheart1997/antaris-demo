@@ -37,7 +37,7 @@ export default function RootLayout({
       >
         <AllProviders>
           <Toaster />
-          <HeroHeader />
+          {/* <HeroHeader /> */}
           {children}
         </AllProviders>
       </body>

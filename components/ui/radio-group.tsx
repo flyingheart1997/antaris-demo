@@ -4,21 +4,45 @@ import * as React from "react"
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group"
 import { cva, type VariantProps } from "class-variance-authority"
 
+import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
 
 const radioGroupItemVariants = cva(
-  "group/radio-group-item peer relative aspect-square shrink-0 rounded-full border border-stroke-primary transition-all outline-none focus-visible:ring-3 focus-visible:ring-surface-selected/50 disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-gray-5 aria-invalid:border-text-error data-[state=checked]:bg-surface-primary data-[state=checked]:border-transparent",
+  "group/radio-item relative inline-flex items-center gap-4 py-4 cursor-pointer outline-none select-none disabled:cursor-not-allowed disabled:pointer-events-none",
   {
     variants: {
-      size: {
-        sm: "size-3.5",
-        md: "size-4",
-        lg: "size-5",
-        xl: "size-6",
+      variant: {
+        surface: "",
+        solid: "",
       },
     },
     defaultVariants: {
-      size: "md",
+      variant: "surface",
+    },
+  }
+)
+
+const radioCircleVariants = cva(
+  "relative flex aspect-square size-16 shrink-0 items-center justify-center rounded-full transition-all border",
+  {
+    variants: {
+      variant: {
+        surface: [
+          "border-stroke-primary bg-transparent",
+          "group-hover/radio-item:bg-surface-hover",
+          "group-data-[state=checked]/radio-item:border-gray-12",
+          "group-disabled/radio-item:border-stroke-disabled group-disabled/radio-item:bg-surface-disabled",
+        ],
+        solid: [
+          "border-stroke-primary bg-transparent",
+          "group-hover/radio-item:bg-surface-hover",
+          "group-data-[state=checked]/radio-item:bg-surface-bg group-data-[state=checked]/radio-item:border-transparent",
+          "group-disabled/radio-item:border-stroke-disabled group-disabled/radio-item:bg-surface-disabled",
+        ],
+      },
+    },
+    defaultVariants: {
+      variant: "surface",
     },
   }
 )
@@ -45,26 +69,35 @@ RadioGroup.displayName = "RadioGroup"
 
 interface RadioGroupItemProps
   extends React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item>,
-  Prettify<VariantProps<typeof radioGroupItemVariants>> { }
+  Prettify<VariantProps<typeof radioGroupItemVariants>> {
+  showText?: boolean;
+}
 
 const RadioGroupItem = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Item>,
   RadioGroupItemProps
->(({ className, size, ...props }, ref) => {
+>(({ className, variant, showText = true, children, ...props }, ref) => {
   return (
     <RadioGroupPrimitive.Item
       ref={ref}
-      className={cn(radioGroupItemVariants({ size, className }))}
+      className={cn(radioGroupItemVariants({ variant, className }))}
       {...props}
     >
-      <RadioGroupPrimitive.Indicator
-        className="flex h-full w-full items-center justify-center"
-      >
-        <div className={cn(
-          "rounded-full bg-white",
-          size === "sm" ? "size-1.5" : size === "lg" ? "size-2.5" : size === "xl" ? "size-3" : "size-2"
-        )} />
-      </RadioGroupPrimitive.Indicator>
+      <div className={cn(radioCircleVariants({ variant }))}>
+        <RadioGroupPrimitive.Indicator
+          className="flex items-center justify-center"
+        >
+          <div className={cn(
+            "size-1.75 rounded-full",
+            variant === "surface" ? "bg-gray-12" : "bg-white"
+          )} />
+        </RadioGroupPrimitive.Indicator>
+      </div>
+      {showText && children && (
+        <Label className="cursor-pointer text-text-primary text-md leading-none group-disabled/radio-item:text-text-disabled">
+          {children}
+        </Label>
+      )}
     </RadioGroupPrimitive.Item>
   )
 })

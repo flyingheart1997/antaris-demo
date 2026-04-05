@@ -45,15 +45,15 @@ function FieldGroup({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
-const fieldVariants = cva("data-[invalid=true]:text-destructive gap-2 group/field flex w-full", {
+const fieldVariants = cva("data-[invalid=true]:text-text-error gap-2 group/field flex w-full", {
   variants: {
     orientation: {
       vertical:
-        "flex-col [&>*]:w-full [&>.sr-only]:w-auto",
+        "flex-col [&>*]:w-full [&>.sr-only]:w-auto gap-6",
       horizontal:
-        "flex-row items-center [&>[data-slot=field-label]]:flex-auto has-[>[data-slot=field-content]]:items-start has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px",
+        "flex-row items-center gap-6 [&>[data-slot=field-label]]:shrink-0 [&>[data-slot=field-label]]:min-w-80 has-[>[data-slot=field-content]]:items-start",
       responsive:
-        "flex-col [&>*]:w-full [&>.sr-only]:w-auto @md/field-group:flex-row @md/field-group:items-center @md/field-group:[&>*]:w-auto @md/field-group:[&>[data-slot=field-label]]:flex-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px",
+        "flex-col [&>*]:w-full [&>.sr-only]:w-auto @md/field-group:flex-row @md/field-group:items-center @md/field-group:gap-6 @md/field-group:[&>[data-slot=field-label]]:shrink-0 @md/field-group:[&>[data-slot=field-label]]:min-w-80 @md/field-group:has-[>[data-slot=field-content]]:items-start",
     },
   },
   defaultVariants: {
@@ -98,8 +98,7 @@ function FieldLabel({
     <Label
       data-slot="field-label"
       className={cn(
-        "has-data-checked:bg-primary/5 dark:has-data-checked:bg-primary/10 gap-2 group-data-[disabled=true]/field:opacity-50 has-[>[data-slot=field]]:rounded-md has-[>[data-slot=field]]:border *:data-[slot=field]:p-2 group/field-label peer/field-label flex w-fit leading-snug",
-        "has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col",
+        "text-sm font-medium text-text-primary gap-6 group-data-[disabled=true]/field:opacity-50 flex w-fit leading-none items-center",
         className
       )}
       {...props}
@@ -125,9 +124,7 @@ function FieldDescription({ className, ...props }: React.ComponentProps<"p">) {
     <p
       data-slot="field-description"
       className={cn(
-        "text-muted-foreground text-left text-xs/relaxed [[data-variant=legend]+&]:-mt-1.5 leading-normal font-normal group-has-data-[orientation=horizontal]/field:text-balance",
-        "last:mt-0 nth-last-2:-mt-1",
-        "[&>a:hover]:text-primary [&>a]:underline [&>a]:underline-offset-4",
+        "text-text-secondary text-left text-xs leading-normal font-normal group-has-data-[orientation=horizontal]/field:text-balance",
         className
       )}
       {...props}
@@ -205,7 +202,7 @@ function FieldError({
     <div
       role="alert"
       data-slot="field-error"
-      className={cn("text-destructive text-xs/relaxed font-normal", className)}
+      className={cn("text-text-error text-xs font-normal", className)}
       {...props}
     >
       {content}

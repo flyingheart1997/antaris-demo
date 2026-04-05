@@ -4,11 +4,11 @@ import { orpc } from '@/lib/orpc'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams, useRouter } from 'next/navigation'
 import { Mail, Globe, User, Trash2, Edit3, Activity, ShieldCheck, Zap, Compass, Briefcase, ArrowRight, Hash } from 'lucide-react'
-import { useUserModal } from '@/hooks/user/useUserModal'
 import { toast } from 'sonner'
 import { useMemo } from 'react'
 import Loader from '@/components/loader'
 import Error from '@/components/error'
+import { useUserModal } from '@/features/users'
 
 const UserDetails = () => {
     const router = useRouter()

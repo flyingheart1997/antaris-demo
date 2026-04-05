@@ -292,4 +292,5 @@
   --sizing-40: 2.5rem;
   --sizing-48: 3rem;
   --sizing-64: 4rem;
+  --color-stroke-separator: linear-gradient(270deg, rgba(240, 240, 240, 0.10) 0%, rgba(240, 240, 240, 0.40) 50%, rgba(240, 240, 240, 0.10) 100%);
 }
