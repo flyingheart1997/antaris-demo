@@ -2,62 +2,110 @@
 
 import Link from 'next/link'
 import type { User } from '@/app/(server)/router/user'
-import { Badge } from '@/components/ui/badge'
-import { ArrowUpRight, Mail } from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/card'
+import { Avatar, AvatarImage, AvatarFallback, AvatarIndicator } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
+import { MoreHorizontal, Edit2, Trash2, Eye } from 'lucide-react'
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+    DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu'
+import { useUserModal } from '../hooks/useUserModal'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { orpc } from '@/lib/orpc'
+import { toast } from 'sonner'
 
 const UserCard = ({ user }: { user: User }) => {
-    const name = user.name
-    const email = user.email
-    const avatar = user.avatar
-    const link = `/users/${user._id}`
-    const gender = user.gender
+    const { name, avatar, _id, username } = user
+    const link = `/users/${_id}`
+    const { openUpdate } = useUserModal()
+    const queryClient = useQueryClient()
+
+    const deleteUserMutation = useMutation({
+        ...orpc.user.delete.mutationOptions(),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({
+                queryKey: orpc.user.list.queryKey(),
+            })
+            toast.success('User deleted successfully')
+        },
+        onError: (error) => {
+            toast.error(error.message)
+        }
+    })
+
+    const handleDelete = (e: React.MouseEvent) => {
+        e.preventDefault()
+        e.stopPropagation()
+        deleteUserMutation.mutate({ userId: _id })
+    }
+
+    const handleEdit = (e: React.MouseEvent) => {
+        e.preventDefault()
+        e.stopPropagation()
+        openUpdate(user)
+    }
 
     return (
-        <Link
-            href={link}
-            className="group relative flex flex-col bg-surface-secondary border border-stroke-primary rounded-md overflow-hidden transition-all duration-500 hover:border-surface-brand/50 hover:shadow-xl hover:shadow-surface-brand/10"
-        >
-            {/* Top Right "View" Indicator */}
-            <div className="absolute top-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div className="bg-surface-bg/60 backdrop-blur-md p-2 rounded-full border border-stroke-primary">
-                    <ArrowUpRight className="w-4 h-4 text-text-primary" />
+        <Card className="group relative flex flex-col items-center text-center bg-surface-primary border-stroke-primary/50 shadow-sm hover:shadow-md transition-all duration-300 rounded-3xl pt-14 pb-10 px-8 overflow-visible" stroke={true}>
+
+            {/* Subtle Action Dropdown (Top Right) */}
+            <div className="absolute top-5 right-5 z-20">
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <button className="flex items-center justify-center rounded-full text-text-secondary hover:text-text-primary hover:bg-surface-secondary transition-colors outline-none">
+                            <MoreHorizontal />
+                        </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-52 shadow-xl p-4">
+                        <DropdownMenuItem onClick={handleEdit} className="cursor-pointer gap-3 py-3 text-sm rounded-lg">
+                            <Edit2 className="h-4 w-4 opacity-70" />
+                            <span>Modify Profile</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator className="bg-stroke-primary/50 my-1" />
+                        <DropdownMenuItem onClick={handleDelete} className="cursor-pointer gap-3 py-3 text-sm text-red-500 focus:text-red-500 focus:bg-red-50 rounded-lg">
+                            <Trash2 className="h-4 w-4 opacity-70" />
+                            <span>Terminate Access</span>
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </div>
+
+            {/* Avatar Section (Centered) - Increased Size */}
+            <div className="mb-8 relative">
+                <div className="relative h-32 w-32 rounded-full border-4 border-surface-bg shadow-lg">
+                    <Avatar className="h-full w-full rounded-full">
+                        <AvatarImage src={avatar} alt={name} className="rounded-full object-cover" />
+                        <AvatarFallback className="rounded-full text-2xl">{name.substring(0, 2)}</AvatarFallback>
+                        <AvatarIndicator color="green" size="4" position="bottom-right" className="border-surface-primary ring-2 ring-surface-primary" />
+                    </Avatar>
                 </div>
             </div>
 
-            {/* Image Wrapper */}
-            <div className="relative h-64 w-full overflow-hidden">
-                <img
-                    className="absolute inset-0 h-full w-full object-cover object-top grayscale transition-all duration-700 ease-out group-hover:grayscale-0 group-hover:scale-110"
-                    src={avatar}
-                    alt={name}
-                />
-                {/* Subtle Overlay Gradient */}
-                <div className="absolute inset-0 bg-linear-to-t from-surface-secondary via-transparent to-transparent opacity-60" />
+            {/* User Identity */}
+            <CardContent className="p-0 mb-10 w-full">
+                <h3 className="text-2xl font-bold text-text-primary tracking-tight mb-2">{name}</h3>
+                <p className="text-base text-text-secondary font-medium mb-5 truncate">@{username || "operator"}</p>
+
+                {/* Visual Rating Stars from Screenshot - Increased Size */}
+                <div className="flex items-center justify-center gap-1 text-yellow-400">
+                    {"★★★★".split("").map((s, i) => <span key={i} className="text-sm">{s}</span>)}
+                    <span className="text-sm text-text-disabled">★</span>
+                </div>
+            </CardContent>
+
+            {/* Primary Action Button (Centered) - More substantial */}
+            <div className="mt-auto w-full px-2">
+                <Link href={link} className="w-full">
+                    <Button variant="outline" color="neutral" size="lg" className="w-full rounded-2xl border-stroke-primary/80 text-text-secondary hover:bg-surface-secondary hover:text-text-primary font-bold transition-all text-sm uppercase tracking-widest">
+                        View Profile
+                    </Button>
+                </Link>
             </div>
-
-            {/* Content Area */}
-            <div className="relative p-5 pt-2 flex flex-col grow">
-                <div className="flex items-start justify-between gap-2 mb-1">
-                    <h3 className="text-lg font-heading font-semibold text-text-primary truncate group-hover:text-text-selected transition-colors duration-300">
-                        {name}
-                    </h3>
-                    <Badge className="bg-surface-brand/10 text-text-selected border-surface-brand/20 text-[10px] uppercase tracking-widest font-bold px-2 py-0.5 rounded-xs">
-                        {gender}
-                    </Badge>
-                </div>
-
-                <div className="flex items-center gap-2 text-text-secondary mb-4 font-body">
-                    <Mail className="w-3.5 h-3.5" />
-                    <span className="text-xs truncate">{email}</span>
-                </div>
-
-                {/* Footer Detail */}
-                <div className="mt-auto pt-4 border-t border-stroke-primary flex items-center justify-between opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0">
-                    <span className="text-[10px] text-text-secondary uppercase font-body tracking-tighter">Verified User</span>
-                    <span className="h-1.5 w-1.5 rounded-full bg-surface-brand shadow-[0_0_8px_var(--color-surface-brand)]" />
-                </div>
-            </div>
-        </Link>
+        </Card>
     )
 }
 

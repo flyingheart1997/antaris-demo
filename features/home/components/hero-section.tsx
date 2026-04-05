@@ -56,6 +56,7 @@ export default function HeroSection() {
                             className="hidden size-full dark:block object-cover opacity-40 grayscale"
                             width="3276"
                             height="4095"
+                            unoptimized
                         />
                     </AnimatedGroup>
 
@@ -154,6 +155,7 @@ export default function HeroSection() {
                                     alt="app screen"
                                     width="2700"
                                     height="1440"
+                                    unoptimized
                                 />
                             </div>
                         </div>

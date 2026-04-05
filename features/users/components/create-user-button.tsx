@@ -7,12 +7,15 @@ import { Plus } from 'lucide-react'
 const CreateUserButton = () => {
     const { openCreate } = useUserModal()
     return (
-        <Button 
-            className='h-11 px-6 rounded-md font-heading font-semibold shadow-lg shadow-surface-brand/20 flex gap-2' 
+        <Button
+            variant="solid"
+            color="accent"
+            size="lg"
+            className='rounded-2xl px-10 font-bold text-base shadow-xl shadow-accent/20 hover:shadow-accent/30 transition-all uppercase tracking-widest'
             onClick={openCreate}
+            leadingIcon={<Plus />}
         >
-            <Plus className="size-4" />
-            <span>Create User</span>
+            Provision Operator
         </Button>
     )
 }
