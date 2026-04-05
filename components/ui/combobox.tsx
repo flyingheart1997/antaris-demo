@@ -5,6 +5,7 @@ import { Combobox as ComboboxPrimitive } from "@base-ui/react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { IconButton } from "@/components/ui/icon-button"
 import {
   InputGroup,
   InputGroupAddon,
@@ -244,11 +245,11 @@ function ComboboxChip({
       {children}
       {showRemove && (
         <ComboboxPrimitive.ChipRemove
-          render={<Button variant="ghost" size="icon-sm" />}
-          className="-ml-1 opacity-50 hover:opacity-100"
+          render={<IconButton variant="ghost" size="sm" />}
+          className="-ml-1 opacity-50 hover:opacity-100 font-normal shadow-none h-auto w-auto"
           data-slot="combobox-chip-remove"
         >
-          <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} className="pointer-events-none" />
+          <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} className="pointer-events-none size-3" />
         </ComboboxPrimitive.ChipRemove>
       )}
     </ComboboxPrimitive.Chip>

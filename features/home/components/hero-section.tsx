@@ -120,7 +120,7 @@ export default function HeroSection() {
                                 <Button
                                     asChild
                                     size="lg"
-                                    className="rounded-md px-10 py-7 text-base font-medium shadow-2xl shadow-surface-brand/30 hover:scale-105 active:scale-95 transition-all duration-300">
+                                    className="rounded-md px-10 py-4 text-base font-medium shadow-2xl shadow-surface-brand/30 hover:scale-105 active:scale-95 transition-all duration-300">
                                     <Link href="/users">
                                         <span className="text-nowrap">Get Started</span>
                                     </Link>

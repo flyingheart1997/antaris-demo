@@ -4,6 +4,7 @@ import { Cancel01Icon } from "@hugeicons/core-free-icons"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { IconButton } from "@/components/ui/icon-button"
 
 function Dialog({
   ...props
@@ -64,10 +65,10 @@ function DialogContent({
         {children}
         {showCloseButton && (
           <DialogPrimitive.Close data-slot="dialog-close" asChild>
-            <Button variant="ghost" className="absolute top-4 right-4" size="icon-sm">
+            <IconButton variant="ghost" className="absolute top-4 right-4" size="sm">
               <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} />
               <span className="sr-only">Close</span>
-            </Button>
+            </IconButton>
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Content>

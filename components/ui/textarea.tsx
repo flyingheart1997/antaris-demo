@@ -1,93 +1,159 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
+import { Info } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { Label } from "@/components/ui/label"
 
 const textareaVariants = cva(
-  "flex min-h-20 w-full transition-all outline-none disabled:pointer-events-none disabled:opacity-50",
+  "flex min-h-15.5 w-full transition-all outline-none disabled:pointer-events-none rounded-lg",
   {
     variants: {
       variant: {
-        surface: "bg-(--color-surface-bg) border border-(--color-stroke-primary)",
-        solid: "bg-(--color-gray-alpha-3) border border-transparent",
-      },
-      intent: {
-        neutral: "",
-        accent: "aria-selected:border-(--color-stroke-selected) aria-selected:ring-3 aria-selected:ring-(--color-surface-selected)",
-        success: "border-(--color-stroke-success) aria-selected:ring-3 aria-selected:ring-(--color-stroke-success)/20",
-        error: "border-(--color-stroke-error) !ring-3 !ring-(--color-stroke-error)/20",
-        warning: "border-(--color-stroke-warning) aria-selected:ring-3 aria-selected:ring-(--color-stroke-warning)/20",
-        info: "border-(--color-stroke-info) aria-selected:ring-3 aria-selected:ring-(--color-stroke-info)/20",
-      },
-      size: {
-        sm: "px-(--spacing-8) py-(--spacing-4) text-(--text-font-size-md) rounded-(--radius-md)",
-        md: "px-(--spacing-10) py-(--spacing-6) text-(--text-font-size-lg) rounded-(--radius-md)",
-        lg: "px-(--spacing-12) py-(--spacing-8) text-(--text-font-size-xl) rounded-(--radius-md)",
-        xl: "px-(--spacing-14) py-(--spacing-10) text-(--text-font-size-xxl) rounded-(--radius-md)",
-      },
-      radius: {
-        none: "rounded-none",
-        sm: "!rounded-(--radius-sm)",
-        md: "!rounded-(--radius-md)",
-        lg: "!rounded-(--radius-lg)",
-        full: "!rounded-full",
+        surface: "bg-surface-bg border border-stroke-primary",
+        solid: "bg-gray-alpha-3 border border-transparent",
       },
       state: {
         default: "",
-        hover: "border-(--color-stroke-primary) bg-(--color-surface-hover)",
-        select: "border-(--color-stroke-selected) ring-3 ring-(--color-surface-selected)",
-        error: "border-(--color-stroke-error) ring-3 ring-(--color-stroke-error)/20",
+        hover: "",
+        active: "ring-3 ring-surface-selected border-stroke-selected",
+        filled: "",
+        disabled: "opacity-60 cursor-not-allowed",
+        error: "border-stroke-error bg-surface-error-subtle ring-3 ring-stroke-error/20",
+        "read-only": "border-dashed border-stroke-disabled cursor-default",
       }
     },
     compoundVariants: [
       {
         variant: "surface",
         state: "default",
-        className: "hover:bg-(--color-surface-hover) focus-within:border-(--color-stroke-selected) focus-within:ring-3 focus-within:ring-(--color-surface-selected)"
+        className: "hover:bg-surface-hover hover:border-stroke-secondary focus:border-stroke-selected focus:ring-3 focus:ring-surface-selected"
       },
       {
         variant: "solid",
         state: "default",
-        className: "hover:bg-(--color-gray-alpha-4) focus-within:bg-(--color-surface-bg) focus-within:border-(--color-stroke-selected) focus-within:ring-3 focus-within:ring-(--color-surface-selected)"
+        className: "hover:bg-gray-alpha-4 focus:bg-surface-bg focus:border-stroke-selected focus:ring-3 focus:ring-surface-selected"
+      },
+      {
+        variant: "surface",
+        state: "filled",
+        className: "bg-surface-primary"
       }
     ],
     defaultVariants: {
       variant: "surface",
-      intent: "neutral",
-      size: "md",
       state: "default",
     },
   }
 )
 
-type Prettify<T> = {
-  [K in keyof T]: T[K];
-} & {};
-
 interface TextareaProps
-  extends Omit<React.ComponentPropsWithoutRef<"textarea">, "size">,
-  Prettify<VariantProps<typeof textareaVariants>> { }
+  extends Omit<React.ComponentPropsWithoutRef<"textarea">, "state">,
+  VariantProps<typeof textareaVariants> {
+  label?: boolean
+  labelText?: string
+  labelIcon?: boolean | React.ReactNode
+  helper?: boolean
+  helperText?: string
+  units?: boolean
+  unitsText?: string
+}
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, variant, intent, size, radius, state, ...props }, ref) => {
-    const isError = props["aria-invalid"] === "true" || props["aria-invalid"] === true || intent === "error" || state === "error"
-    const effectiveState = (state === "default" && isError) ? "error" : state
+  ({
+    className,
+    variant = "surface",
+    state = "default",
+    label = true,
+    labelText = "Label",
+    labelIcon = false,
+    helper = false,
+    helperText = "Helper",
+    units = false,
+    unitsText,
+    onChange,
+    value,
+    defaultValue,
+    maxLength,
+    ...props
+  }, ref) => {
+    const [internalValue, setInternalValue] = React.useState<string | number | readonly string[]>(value ?? defaultValue ?? "")
+
+    React.useEffect(() => {
+      if (value !== undefined) {
+        setInternalValue(value)
+      }
+    }, [value])
+
+    const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setInternalValue(e.target.value)
+      onChange?.(e)
+    }
+
+    const currentLength = String(internalValue).length
+    const isError = props["aria-invalid"] === "true" || props["aria-invalid"] === true || state === "error"
+    const isFilled = currentLength > 0
+    const isDisabled = props.disabled || state === "disabled"
+    const isReadOnly = props.readOnly || state === "read-only"
+
+    // Derive the effective state for CVA
+    let effectiveState = state
+    if (state === "default") {
+      if (isError) effectiveState = "error"
+      else if (isDisabled) effectiveState = "disabled"
+      else if (isReadOnly) effectiveState = "read-only"
+      else if (isFilled) effectiveState = "filled"
+    }
 
     return (
-      <textarea
-        ref={ref}
-        data-slot="textarea"
-        data-variant={variant}
-        data-intent={intent}
-        data-size={size}
-        data-radius={radius}
-        data-state={effectiveState}
-        className={cn(
-          textareaVariants({ variant, intent, size, radius, state: effectiveState, className }),
-          "placeholder:text-(--color-text-disabled) selection:bg-(--color-surface-selected)"
+      <div className="flex w-full flex-col gap-4">
+        {label && (
+          <div className="flex items-center py-4">
+            <Label className="text-text-secondary text-sm font-medium" icon={labelIcon ? (typeof labelIcon === 'boolean' ? <Info size={14} /> : labelIcon) : undefined}>
+              {labelText}
+            </Label>
+          </div>
         )}
-        {...props}
-      />
+
+        <textarea
+          ref={ref}
+          data-slot="textarea"
+          data-variant={variant}
+          data-state={effectiveState}
+          disabled={isDisabled}
+          readOnly={isReadOnly}
+          value={value}
+          defaultValue={defaultValue}
+          onChange={handleTextareaChange}
+          maxLength={maxLength}
+          className={cn(
+            textareaVariants({ variant, state: effectiveState }),
+            "px-16 py-12 text-sm text-text-primary placeholder:text-text-secondary selection:bg-surface-selected resize-none",
+            className
+          )}
+          {...props}
+        />
+
+        {(helper || units) && (
+          <div className="flex items-start justify-between gap-4 mt-1">
+            {helper && (
+              <span
+                className={cn(
+                  "text-xs leading-tight",
+                  isError ? "text-text-error" : "text-text-secondary"
+                )}
+              >
+                {helperText}
+              </span>
+            )}
+            {units && (
+              <span className="text-text-secondary ml-auto text-xs whitespace-nowrap tabular-nums">
+                {unitsText || `${currentLength}${maxLength ? `/${maxLength}` : ""}`}
+              </span>
+            )}
+          </div>
+        )}
+      </div>
     )
   }
 )

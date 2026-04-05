@@ -254,4 +254,5 @@
   --radius-md: var(--radius-md);
   --radius-lg: var(--radius-lg);
   --radius-rounded: var(--radius-rounded);
+  --background-image-stroke-separator: var(--color-stroke-separator);
 }

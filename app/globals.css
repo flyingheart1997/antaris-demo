@@ -5,6 +5,8 @@
 @import "../styles/src/index.css";
 @import "../styles/src/antaris-theme.css";
 
+@custom-variant dark (&:is(.dark *));
+
 @layer base {
   * {
     @apply border-stroke-primary outline-surface-selected/50;
@@ -12,4 +14,24 @@
   body {
     @apply bg-surface-bg text-text-primary;
   }
+}
+
+@utility mask-fade {
+  mask-image: linear-gradient(to right, black 85%, transparent 100%);
+}
+
+@utility mask-fade-left {
+  mask-image: linear-gradient(to left, black 85%, transparent 100%);
+}
+
+:root {
+  --destructive-foreground: var(--color-red-700);
+}
+
+.dark {
+  --destructive-foreground: var(--color-red-400);
+}
+
+@theme inline {
+  --color-destructive-foreground: var(--destructive-foreground);
 }

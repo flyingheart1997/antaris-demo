@@ -219,7 +219,8 @@ export const tokens = {
       'success': 'oklch(52.315% 0.09811 121.373)',
       'info': 'oklch(53.551% 0.13282 253.399)',
       'warning': 'oklch(53.893% 0.08585 71.345)',
-      'error': 'oklch(44.942% 0.14232 26.726)'
+      'error': 'oklch(44.942% 0.14232 26.726)',
+      'separator': 'linear-gradient(270deg, rgba(240, 240, 240, 0.10) 0%, rgba(240, 240, 240, 0.40) 50%, rgba(240, 240, 240, 0.10) 100%)'
     }
   },
   'opacity': {

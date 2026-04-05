@@ -7,32 +7,23 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const avatarVariants = cva(
-  "inline-flex shrink-0 items-center justify-center overflow-hidden bg-surface-bg border relative",
+  "inline-flex shrink-0 items-center justify-center overflow-hidden bg-surface-bg border relative rounded-sm select-none",
   {
     variants: {
       size: {
-        "0": "size-16 rounded-sm",
-        "1": "size-24 rounded-md",
-        "2": "size-28 rounded-md",
-        "3": "size-32 rounded-md",
-        "4": "size-40 rounded-lg border-lg",
-        "5": "size-48 rounded-lg border-lg",
+        "1": "h-24 w-24",
+        "2": "h-26 w-26",
+        "3": "h-28 w-28",
+        "4": "h-32 w-32",
+        "5": "h-40 w-40",
       },
       color: {
-        green: "border-stroke-success",
-        red: "border-stroke-error",
-        blue: "border-stroke-info",
-        yellow: "border-stroke-warning",
-        gray: "border-gray-9",
+        green: "bg-green-11 border-green-7 text-white",
+        blue: "bg-blue-11 border-blue-7 text-white",
+        yellow: "bg-yellow-9 border-yellow-7 text-black",
+        white: "bg-surface-bg border-stroke-primary text-text-primary",
+        red: "bg-red-11 border-red-7 text-white",
       },
-      radius: {
-        sm: "rounded-sm",
-        md: "rounded-md",
-        lg: "rounded-lg",
-        xl: "rounded-xl",
-        full: "rounded-full",
-        none: "rounded-none",
-      }
     },
     defaultVariants: {
       size: "2",
@@ -42,23 +33,22 @@ const avatarVariants = cva(
 )
 
 const fallbackVariants = cva(
-  "flex h-full w-full items-center justify-center font-heading font-regular",
+  "flex h-full w-full items-center justify-center font-heading font-medium uppercase",
   {
     variants: {
       size: {
-        "0": "size-1.5",
-        "1": "size-2",
-        "2": "size-2.5",
-        "3": "size-3",
-        "4": "size-4",
-        "5": "size-5",
+        "1": "text-[10px]",
+        "2": "text-[11px]",
+        "3": "text-xs",
+        "4": "text-sm",
+        "5": "text-md",
       },
       color: {
-        green: "text-green-9",
-        red: "text-red-9",
-        blue: "text-blue-9",
-        yellow: "text-yellow-9",
-        gray: "text-gray-9",
+        green: "text-white",
+        blue: "text-white",
+        yellow: "text-black",
+        white: "text-text-primary",
+        red: "text-white",
       },
     },
     defaultVariants: {
@@ -72,7 +62,6 @@ const indicatorVariants = cva(
   {
     variants: {
       size: {
-        "0": "size-1.5",
         "1": "size-2",
         "2": "size-2.5",
         "3": "size-3",
@@ -105,12 +94,12 @@ interface AvatarProps
 const Avatar = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Root>,
   AvatarProps
->(({ className, size, color, radius, ...props }, ref) => (
+>(({ className, size, color, ...props }, ref) => (
   <AvatarPrimitive.Root
     ref={ref}
     data-slot="avatar"
-    data-radius={radius}
-    className={cn(avatarVariants({ size, color, radius, className }))}
+    data-size={size}
+    className={cn(avatarVariants({ size, color, className }))}
     {...props}
   />
 ))
@@ -123,7 +112,7 @@ const AvatarImage = React.forwardRef<
   <AvatarPrimitive.Image
     ref={ref}
     data-slot="avatar-image"
-    className={cn("aspect-square h-full w-full", className)}
+    className={cn("aspect-square h-full w-full object-cover", className)}
     {...props}
   />
 ))
@@ -134,12 +123,11 @@ type AvatarFallbackProps = React.ComponentPropsWithoutRef<typeof AvatarPrimitive
 const AvatarFallback = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Fallback>,
   AvatarFallbackProps
->(({ className, size, color, ...props }, ref) => (
+>(({ className, size, ...props }, ref) => (
   <AvatarPrimitive.Fallback
     ref={ref}
     data-slot="avatar-fallback"
-    data-color={color}
-    className={cn(fallbackVariants({ size, color, className }))}
+    className={cn(fallbackVariants({ size, className }))}
     {...props}
   />
 ))
