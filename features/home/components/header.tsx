@@ -38,8 +38,9 @@ export const HeroHeader = () => {
                             <Link
                                 href="/"
                                 aria-label="home"
-                                className="flex items-center space-x-2">
+                                className="flex items-center gap-3 group">
                                 <Logo />
+                                <span className="text-xl font-bold text-text-primary tracking-tight group-hover:text-accent transition-colors">ANTARIS</span>
                             </Link>
 
                             <button

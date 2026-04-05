@@ -10,7 +10,7 @@ import { Avatar, AvatarImage, AvatarFallback, AvatarIndicator } from '@/componen
 import { Button } from '@/components/ui/button'
 import { Mail, Globe, MapPin, Phone, Building2, Briefcase, Trash2, Edit2, ChevronLeft, Calendar, Shield, Zap } from 'lucide-react'
 import Link from 'next/link'
-import Loader from '@/components/loader'
+import { ProfileSkeleton } from '@/components/skeletons'
 import ErrorComponent from '@/components/error'
 import { useUserModal } from '@/features/users'
 
@@ -46,7 +46,7 @@ const UserDetails = () => {
     }
 
     if (isError && !user) return <ErrorComponent />
-    if (isPending || isLoading) return <Loader />
+    if (isPending || isLoading) return <ProfileSkeleton />
 
     return (
         <section className="container mx-auto px-6 max-w-7xl pt-16 pb-32">

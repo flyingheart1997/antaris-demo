@@ -1,0 +1,177 @@
+{
+  "features": {
+    "home": {
+      "description": "Landing page with hero section, navigation header, and Antaris branding",
+      "files": {
+        "page": "app/page.tsx",
+        "components": [
+          "features/home/components/hero-section.tsx",
+          "features/home/components/header.tsx",
+          "features/home/components/logo.tsx"
+        ],
+        "barrel": "features/home/index.ts"
+      },
+      "exports": ["HeroSection", "HeroHeader", "Logo"]
+    },
+    "user-management": {
+      "description": "Full CRUD for user management with list view, detail view, and modal forms",
+      "files": {
+        "pages": [
+          "app/users/page.tsx",
+          "app/users/layout.tsx",
+          "app/users/[userId]/"
+        ],
+        "components": [
+          "features/users/components/users-list.tsx",
+          "features/users/components/user-card.tsx",
+          "features/users/components/user-form.tsx",
+          "features/users/components/user-modal.tsx",
+          "features/users/components/create-user-button.tsx"
+        ],
+        "hooks": [
+          "features/users/hooks/useUserModal.ts"
+        ],
+        "types": [
+          "features/users/types/user-schema.ts"
+        ],
+        "barrel": "features/users/index.ts",
+        "api": [
+          "app/(server)/router/user.ts"
+        ]
+      },
+      "exports": ["UsersList", "UserCard", "UserModal", "CreateUserButton", "UserForm", "useUserModal", "userFormSchema", "UserType"]
+    },
+    "authentication": {
+      "description": "Keycloak OAuth 2.0 + UMA authentication with httpOnly cookie session management",
+      "files": {
+        "api-routes": [
+          "app/api/auth/[...route]/route.ts"
+        ],
+        "lib": [
+          "lib/auth/keycloak.ts",
+          "lib/auth/session.ts"
+        ],
+        "store": "store/auth-store.ts",
+        "provider": "providers/auth-provider.tsx",
+        "hook": "hooks/use-auth.ts",
+        "middleware": "proxy.ts"
+      },
+      "flow": "Keycloak login → OAuth code → token exchange → UMA ticket → httpOnly cookies → Zustand hydration"
+    },
+    "orpc-api": {
+      "description": "Type-safe RPC API layer with server/client isomorphic access",
+      "files": {
+        "server": [
+          "app/(server)/router/index.ts",
+          "app/(server)/router/user.ts",
+          "app/(server)/middlewares/base.ts",
+          "app/(server)/rpc/[[...rest]]/route.ts"
+        ],
+        "client": [
+          "lib/orpc.ts",
+          "lib/orpc.server.ts",
+          "lib/serializer.ts"
+        ],
+        "query": [
+          "lib/query/client.ts",
+          "lib/query/hydration.tsx"
+        ]
+      },
+      "namespaces": {
+        "user": ["list", "details", "create", "update", "delete"],
+        "mission": []
+      }
+    },
+    "security": {
+      "description": "Arcjet-based application security: WAF, bot detection, rate limiting",
+      "files": {
+        "config": "lib/arcjet.ts",
+        "middlewares": [
+          "app/(server)/middlewares/arcjet/standard.ts",
+          "app/(server)/middlewares/arcjet/ratelimit.ts"
+        ]
+      },
+      "rules": {
+        "standard": ["shield (WAF)", "detectBot"],
+        "ratelimit": ["slidingWindow (1 req/min)"]
+      }
+    },
+    "design-system": {
+      "description": "Figma-synced design tokens and 38 UI components",
+      "files": {
+        "tokens": [
+          "styles/src/index.css",
+          "styles/src/antaris-theme.css",
+          "styles/src/tokens.generated.ts",
+          "styles/build.js"
+        ],
+        "figma-source": "styles/figma/",
+        "globals": "app/globals.css",
+        "components": "components/ui/",
+        "config": [
+          "components.json",
+          "tailwind.config.ts"
+        ]
+      },
+      "component-list": [
+        "accordion", "alert-dialog", "animated-group", "avatar", "badge",
+        "button", "card", "checkbox", "collapsible", "combobox",
+        "component-drawer", "dialog", "dropdown-menu", "field", "form",
+        "frame", "icon-button", "input-group", "input", "kbd",
+        "label", "radio-group", "resizable", "scroll-area", "select",
+        "separator", "sheet", "sidebar", "skeleton", "sonner",
+        "spinner", "table", "tabs", "text-effect", "text",
+        "textarea", "toaster", "tooltip"
+      ]
+    },
+    "component-previews": {
+      "description": "Interactive preview pages for each design system component",
+      "files": {
+        "pages": [
+          "app/preview/button/",
+          "app/preview/card/",
+          "app/preview/checkbox/",
+          "app/preview/component-drawer/",
+          "app/preview/custom-text/",
+          "app/preview/input/",
+          "app/preview/radio/",
+          "app/preview/separator-test/",
+          "app/preview/side-nav/",
+          "app/preview/sidebar-test/",
+          "app/preview/tabs/"
+        ]
+      }
+    },
+    "theming": {
+      "description": "Dark/light theme switching with next-themes",
+      "files": {
+        "provider": "providers/theme-provider.tsx",
+        "tokens": "styles/src/index.css"
+      },
+      "default": "dark"
+    },
+    "providers": {
+      "description": "Global provider tree: Theme → Auth → TanStack Query → Modals",
+      "files": {
+        "composition": "providers/index.tsx",
+        "providers": [
+          "providers/theme-provider.tsx",
+          "providers/auth-provider.tsx",
+          "providers/tanstack-query-provider.tsx",
+          "providers/modals-provider.tsx",
+          "providers/background-provider.tsx"
+        ]
+      },
+      "order": ["ThemeProvider", "AuthProvider", "TanstackQueryProvider", "ModalsProvider"]
+    },
+    "icons": {
+      "description": "Custom SVG icon system with build pipeline",
+      "files": {
+        "source": "icons/svg/",
+        "generated": "icons/src/",
+        "build": "icons/build.js",
+        "barrel": "icons/index.ts"
+      }
+    }
+  }
+}

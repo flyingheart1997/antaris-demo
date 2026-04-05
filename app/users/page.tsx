@@ -1,11 +1,15 @@
-import Error from '@/components/error'
-import Loader from '@/components/loader'
+import { Suspense } from 'react'
 import { UsersList } from '@/features/users'
 import { orpc } from '@/lib/orpc'
 import { getQueryClient, HydrateClient } from '@/lib/query/hydration'
+import { CardGridSkeleton } from '@/components/skeletons'
+import { PageShell } from '@/components/page-shell'
+import CreateUserButton from '@/features/users/components/create-user-button'
 
 const Users = async () => {
     const queryClient = getQueryClient()
+
+    // Prefetch on the server for better initial performance
     await queryClient.prefetchQuery(orpc.user.list.queryOptions())
 
     // const { success, data: users } = await queryClient.fetchQuery(orpc.user.list.queryOptions())
@@ -42,7 +46,15 @@ const Users = async () => {
 
     return (
         <HydrateClient client={queryClient}>
-            <UsersList />
+            <PageShell 
+                title="Operators" 
+                description="Manage all system operators and their profiles."
+                actions={<CreateUserButton />}
+            >
+                <Suspense fallback={<CardGridSkeleton count={8} />}>
+                    <UsersList />
+                </Suspense>
+            </PageShell>
         </HydrateClient>
     )
 }

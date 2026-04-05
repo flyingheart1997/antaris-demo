@@ -1,72 +1,202 @@
-# Antaris Demo: Modern SaaS Dashboard
+# Antaris
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app). It features a modern, module-based architecture designed for high scalability and professional-grade performance.
+> Frontend architecture reference for the **Antaris ATMOS** (Antaris Mission Operations System) platform — a satellite operations suite for scheduling, pre-simulation, telemetry, HWIL, and orbit management.
 
 ---
 
-## 🏛️ Project Architecture
+## 🎯 What This Project Does
 
-This application follows a **Feature-Oriented Architecture**. Instead of grouping files by their technical type (e.g., all hooks in one folder), we group them by their **Business Domain** (e.g., Users, Home).
+This is a full-stack enterprise web application that serves as:
 
-### 1. File Structure
-```text
-.
-├── app/                  # NEXT.JS ROUTING (Pages & Layouts only)
-├── features/             # BUSINESS MODULES (The heart of the app)
-│   ├── [feature-name]/
-│   │   ├── components/   # UI specific to this feature
-│   │   ├── hooks/        # Logic specific to this feature
-│   │   ├── types/        # Types & Schemas specific to this feature
-│   │   └── index.ts      # PUBLIC API (The gatekeeper)
-├── components/           # SHARED UI (Stateless Design System atoms)
-├── hooks/                # SHARED HOOKS (Generic logic like useDebounce)
-├── lib/                  # SHARED LIBRARIES (API clients, complex configs)
-├── utils/                # SHARED UTILITIES (Pure functions like formatData)
-├── styles/               # DESIGN SYSTEM (Variables & Tailwind mapping)
-└── icons/                # AUTOMATED ICON LIBRARY
+1. **Design System Engine** — Houses the Antaris Design System: a Figma-synced component library with 38 UI components and design tokens extracted from the Antaris Figma source-of-truth.
+2. **Component Preview Portal** — Interactive preview pages (`/preview/*`) for each UI component where developers can inspect all variants, states, and props.
+3. **User Management CRUD** — Production-grade CRUD application (`/users`) demonstrating the oRPC + TanStack Query data flow pattern.
+4. **Authentication Reference** — Keycloak-based OAuth 2.0 + UMA authentication with httpOnly cookie session management.
+5. **Security Playground** — Arcjet integration for server-side WAF, bot detection, and rate limiting applied as oRPC middleware.
+
+---
+
+## 🛠 Tech Stack
+
+| Layer | Technologies |
+|---|---|
+| **Framework** | Next.js 16 (App Router), React 19, TypeScript 5 |
+| **Styling** | Tailwind CSS v4, CVA, Figma Design Tokens (OKLCH) |
+| **UI Components** | Radix UI, ShadCN (radix-mira), Custom Components |
+| **API** | oRPC (type-safe RPC), Zod v4 validation |
+| **Data Fetching** | TanStack Query v5 (SSR hydration + client cache) |
+| **State** | Zustand (UI/auth state), TanStack Query (server state) |
+| **Authentication** | Keycloak (OAuth 2.0 + UMA), httpOnly Cookies |
+| **Security** | Arcjet (WAF, Bot Detection, Rate Limiting) |
+| **Animation** | Framer Motion |
+| **Forms** | React Hook Form + Zod Resolvers |
+| **Icons** | HugeIcons, Lucide, Tabler, Custom SVG Pipeline |
+| **Package Manager** | pnpm |
+
+---
+
+## 📁 Project Structure
+
+```
+antaris/
+├── app/                    # Next.js App Router (pages, layouts, API routes)
+│   ├── (server)/           # oRPC server layer (router, middlewares, RPC handler)
+│   ├── api/auth/           # Keycloak OAuth routes (login, logout, callback)
+│   ├── users/              # User management pages
+│   ├── preview/            # Component preview pages (11 components)
+│   └── docs/               # Documentation pages
+├── components/ui/          # Design system components (38 components)
+├── features/               # Feature modules (home, users)
+├── hooks/                  # Global hooks (useAuth, useMobile)
+├── lib/                    # Core utilities (oRPC, auth, query, arcjet)
+├── providers/              # React providers (Theme, Auth, Query, Modals)
+├── store/                  # Zustand stores (auth)
+├── styles/                 # Design tokens (Figma → CSS variables → Tailwind)
+├── icons/                  # Custom SVG icon system with build pipeline
+├── docs/                   # Project documentation (AI-context, architecture, features)
+└── public/                 # Static assets
 ```
 
-### 2. The "Expert Promotion" Strategy
-We follow a strict rule for moving code between the **Feature Layer** and the **Shared Layer**:
--   **Start Local**: Every new hook, type, or component starts its life inside a specific feature folder.
--   **Stay Encapsulated**: Other features should only import from a feature's `index.ts` file.
--   **Promote to Shared**: If a piece of logic starts being used by **more than one feature**, it is "promoted" to the global `components/` or `hooks/` directories.
-
 ---
 
-## 🚀 Key Systems
+## 🚀 Getting Started
 
-### Design Token Pipeline (`styles/`)
-Uses a **CSS-First** architecture. Tokens from Figma are automatically transformed into CSS variables and mapped to Tailwind 4 via `antaris-theme.css`.
+### Prerequisites
+- Node.js 20+
+- pnpm
 
-### Icon Automation (`icons/`)
-Raw SVGs are automatically optimized and transformed into React components with a single build command: `pnpm build:icon`.
-
-### Data Layer (ORPC + TanStack Query)
-A fully typed RPC layer ensures that the frontend and backend are always in sync. TanStack Query handles the state, caching, and background synchronization.
-
----
-
-## 🛠️ Getting Started
-
-First, run the development server:
+### Install & Run
 
 ```bash
+# Install dependencies
+pnpm install
+
+# Start development server
 pnpm dev
+
+# Build for production
+pnpm build
+
+# Start production server
+pnpm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Build Scripts
 
-### Development Workflow
--   **Adding a Feature**: Create `features/my-new-feature/` with the standard sub-folders.
--   **Updating Styles**: Modify `styles/figma/*.json` and run `node styles/build.js`.
--   **Adding Icons**: Drop SVGs into `icons/svg/` and run `node icons/build.js`.
+```bash
+# Build design tokens (Figma JSON → CSS/TS)
+pnpm build:token
+
+# Build custom SVG icons (SVG → React components)
+pnpm build:icon
+```
 
 ---
 
-## 🌐 Learn More
+## 🔑 Environment Variables
 
-To learn more about the stack, take a look at the following resources:
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [TanStack Query](https://tanstack.com/query/latest) - powerful asynchronous state management.
-- [ORPC Documentation](https://orpc.sh) - typed RPC for Next.js.
+Create a `.env` file in the root:
+
+```env
+# Arcjet Security
+ARCJET_KEY=your_arcjet_key
+
+# Keycloak Authentication
+NEXT_PUBLIC_KEYCLOAK_URL=https://id.antaris-staging.cloud/
+NEXT_PUBLIC_KEYCLOAK_REALM=ATMOS
+NEXT_PUBLIC_KEYCLOAK_CLIENT_ID=ATMOS-UI-CLIENT
+NEXT_PUBLIC_KEYCLOAK_RESOURCE_CLIENT=ATMOS-RESOURCE-SERVER
+
+# Backend
+NEXT_PUBLIC_BACKEND_BASE_URL=https://app-flatsat.antaris-staging.cloud/api/
+NEXT_PUBLIC_WEBSOCKET_BACKEND_BASE_URL=wss://app-flatsat.antaris-staging.cloud/ws/
+
+# Application
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
+
+---
+
+## 🏗 Architecture Overview
+
+```
+Browser → Next.js Server → Keycloak (SSO)
+                         → CrudCrud API (Data)
+                         → Arcjet Cloud (Security)
+```
+
+### Key Patterns
+
+- **Hybrid Hydration** — Server reads auth cookie → passes to client Zustand store → zero-latency token access
+- **SSR Data Prefetching** — Server Components prefetch via oRPC → hydrate TanStack Query cache → no loading flicker
+- **Isomorphic oRPC Client** — Same interface works on server (direct call) and client (HTTP RPC)
+- **Middleware Chain** — Security (WAF → Bot → Rate Limit) runs before any business logic
+- **Feature Module Encapsulation** — Each feature is self-contained with components, hooks, types, and barrel exports
+
+### Provider Tree
+
+```
+ThemeProvider → AuthProvider → TanstackQueryProvider → ModalsProvider → {pages}
+```
+
+---
+
+## 📚 Documentation
+
+All project documentation lives in the `/docs` directory:
+
+| Directory | Purpose |
+|---|---|
+| `docs/ai-context/` | AI context layer: system overview, tech stack, folder structure, coding rules, feature map, AI rules |
+| `docs/architecture/` | System design, data flow diagrams, API architecture |
+| `docs/features/` | Feature-level docs: user management, authentication, design system, security, home |
+| `docs/modules/` | Module docs: oRPC API, state management, providers |
+| `docs/decisions/` | Architectural decisions and documentation sync rules |
+
+---
+
+## 🎨 Design System
+
+The Antaris Design System is synced from Figma and includes:
+
+- **38 UI components** in `components/ui/` (Button, Input, Tabs, Sidebar, etc.)
+- **Design tokens** via CSS variables (OKLCH colors, spacing, typography, radii)
+- **Token pipeline**: Figma JSON → `styles/build.js` → CSS variables → Tailwind utilities
+- **CVA variants** for component size, color, and variant management
+
+### Key Commands
+```bash
+# Preview components
+open http://localhost:3000/preview/button
+open http://localhost:3000/preview/input
+open http://localhost:3000/preview/tabs
+```
+
+---
+
+## 🔐 Authentication Flow
+
+1. User visits protected page → redirected to Keycloak login
+2. Keycloak returns OAuth code → exchanged for tokens
+3. UMA ticket exchange for fine-grained authorization
+4. Tokens stored in httpOnly cookies (7-day expiry)
+5. Server reads cookie → hydrates Zustand auth store on every page load
+6. Client components access via `useAuth()` hook
+
+---
+
+## 🛡 Security
+
+Arcjet provides application-level security as oRPC middleware:
+
+| Rule | Applied To | Mode |
+|---|---|---|
+| Shield (WAF) | Create, Update, Delete | LIVE |
+| Bot Detection | Create, Update, Delete | LIVE |
+| Rate Limiting (1 req/min) | Create, Update | LIVE |
+
+---
+
+## 📄 License
+
+Private — Antaris Inc.
