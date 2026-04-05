@@ -20,30 +20,26 @@ export const userFormSchema = z.object({
     address: z.object({
         street: z.string().min(2, "Street is required"),
         city: z.string().min(2, "City is required"),
-        suite: z.string().min(2, "Suite is required"),
+        suite: z.string().optional().default("Suite 100"),
         zipcode: z
             .string()
             .regex(/^\d{5,6}$/, "Zipcode must be 5 or 6 digits"),
 
         geo: z.object({
-            lat: z
-                .string()
-                .regex(/^[-+]?\d+(\.\d+)?$/, "Invalid latitude"),
-            lng: z
-                .string()
-                .regex(/^[-+]?\d+(\.\d+)?$/, "Invalid longitude"),
-        }),
+            lat: z.string().optional().default("0"),
+            lng: z.string().optional().default("0"),
+        }).optional().default({ lat: "0", lng: "0" }),
     }),
 
     phone: z
         .string()
         .regex(/^[0-9+\-\s()]{7,20}$/, "Invalid phone number"),
 
-    website: z.string("Invalid website URL"),
+    website: z.string().optional().default("example.com"),
     company: z.object({
         name: z.string().min(2, "Company name is required"),
-        catchPhrase: z.string().min(2, "Catch phrase is required"),
-        bs: z.string().min(2, "BS is required"),
+        catchPhrase: z.string().optional().default("Leading the way"),
+        bs: z.string().optional().default("Innovation"),
     }),
 });
 

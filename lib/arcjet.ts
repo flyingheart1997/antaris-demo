@@ -26,6 +26,6 @@ export default arcjet({
     characteristics: ["userId"],
     rules: [
         // You can include one or more rules base rules. We don't include any here
-        // so they can be set on each sub-page for the demo.
+        // so they can be set on each sub-page.
     ],
 });

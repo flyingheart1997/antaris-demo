@@ -29,45 +29,52 @@ const iconButtonVariants = cva(
         xl: "h-48 w-48 rounded-lg",
       },
       radius: {
+        none: "rounded-none",
         md: "rounded-md",
+        full: "rounded-full",
         lg: "rounded-lg",
+        xl: "rounded-xl",
       },
     },
     compoundVariants: [
-      // Accent (Primary)
-      { variant: "solid", color: "accent", className: "bg-green-9 text-white hover:bg-green-10 active:bg-green-11 shadow-sm" },
-      { variant: "soft", color: "accent", className: "bg-green-alpha-2 text-green-11 hover:bg-green-alpha-3 active:bg-green-alpha-4" },
+      // Accent (Primary/Green)
+      { variant: "solid", color: "accent", className: "bg-green-9 text-gray-1 hover:bg-green-10 active:bg-green-11 shadow-sm" },
+      { variant: "soft", color: "accent", className: "bg-green-alpha-3 text-green-11 hover:bg-green-alpha-4 active:bg-green-alpha-5" },
       { variant: "surface", color: "accent", className: "bg-green-alpha-2 border-green-7 text-green-11 hover:bg-green-alpha-3 active:bg-green-alpha-4" },
       { variant: "outline", color: "accent", className: "border-green-7 text-green-11 hover:bg-green-alpha-2 active:bg-green-alpha-3" },
       { variant: "ghost", color: "accent", className: "text-green-11 hover:bg-green-alpha-2 active:bg-green-alpha-3" },
 
-      // Neutral
-      { variant: "solid", color: "neutral", className: "bg-gray-9 text-white hover:bg-gray-10 active:bg-gray-11 shadow-sm" },
-      { variant: "soft", color: "neutral", className: "bg-gray-alpha-2 text-gray-11 hover:bg-gray-alpha-3 active:bg-gray-alpha-4" },
-      { variant: "surface", color: "neutral", className: "bg-gray-alpha-2 border-gray-7 text-gray-11 hover:bg-gray-alpha-3 active:bg-gray-alpha-4" },
-      { variant: "outline", color: "neutral", className: "border-gray-7 text-gray-11 hover:bg-gray-alpha-2 active:bg-gray-alpha-3" },
-      { variant: "ghost", color: "neutral", className: "text-gray-11 hover:bg-gray-alpha-2 active:bg-gray-alpha-3" },
+      // Neutral (Gray)
+      { variant: "solid", color: "neutral", className: "bg-gray-12 text-gray-1 hover:bg-gray-11 active:bg-gray-10 shadow-sm" },
+      { variant: "soft", color: "neutral", className: "bg-gray-alpha-3 text-gray-12 hover:bg-gray-alpha-4 active:bg-gray-alpha-5" },
+      { variant: "surface", color: "neutral", className: "bg-gray-alpha-2 border-gray-7 text-gray-12 hover:bg-gray-alpha-3 active:bg-gray-alpha-4" },
+      { variant: "outline", color: "neutral", className: "border-gray-7 text-gray-12 hover:bg-gray-alpha-2 active:bg-gray-alpha-3" },
+      { variant: "ghost", color: "neutral", className: "text-gray-12 hover:bg-gray-alpha-2 active:bg-gray-alpha-3" },
 
-      // Error
-      { variant: "solid", color: "error", className: "bg-red-9 text-white hover:bg-red-10 active:bg-red-11 shadow-sm" },
+      // Error (Red)
+      { variant: "solid", color: "error", className: "bg-red-9 text-gray-1 hover:bg-red-10 active:bg-red-11 shadow-sm" },
       { variant: "soft", color: "error", className: "bg-red-alpha-3 text-red-11 hover:bg-red-alpha-4 active:bg-red-alpha-5" },
       { variant: "surface", color: "error", className: "bg-red-alpha-2 border-red-7 text-red-11 hover:bg-red-alpha-3 active:bg-red-alpha-4" },
       { variant: "outline", color: "error", className: "border-red-7 text-red-11 hover:bg-red-alpha-2 active:bg-red-alpha-3" },
       { variant: "ghost", color: "error", className: "text-red-11 hover:bg-red-alpha-2 active:bg-red-alpha-3" },
 
-      // Warning
-      { variant: "solid", color: "warning", className: "bg-yellow-9 text-white hover:bg-yellow-10 active:bg-yellow-11 shadow-sm" },
+      // Warning (Yellow/Orange)
+      { variant: "solid", color: "warning", className: "bg-yellow-9 text-gray-1 hover:bg-yellow-10 active:bg-yellow-11 shadow-sm" },
       { variant: "soft", color: "warning", className: "bg-yellow-alpha-3 text-yellow-11 hover:bg-yellow-alpha-4 active:bg-yellow-alpha-5" },
       { variant: "surface", color: "warning", className: "bg-yellow-alpha-2 border-yellow-7 text-yellow-11 hover:bg-yellow-alpha-3 active:bg-yellow-alpha-4" },
       { variant: "outline", color: "warning", className: "border-yellow-7 text-yellow-11 hover:bg-yellow-alpha-2 active:bg-yellow-alpha-3" },
       { variant: "ghost", color: "warning", className: "text-yellow-11 hover:bg-yellow-alpha-2 active:bg-yellow-alpha-3" },
 
-      // Info
-      { variant: "solid", color: "info", className: "bg-blue-9 text-white hover:bg-blue-10 active:bg-blue-11 shadow-sm" },
+      // Info (Blue)
+      { variant: "solid", color: "info", className: "bg-blue-9 text-gray-1 hover:bg-blue-10 active:bg-blue-11 shadow-sm" },
       { variant: "soft", color: "info", className: "bg-blue-alpha-3 text-blue-11 hover:bg-blue-alpha-4 active:bg-blue-alpha-5" },
       { variant: "surface", color: "info", className: "bg-blue-alpha-2 border-blue-7 text-blue-11 hover:bg-blue-alpha-3 active:bg-blue-alpha-4" },
       { variant: "outline", color: "info", className: "border-blue-7 text-blue-11 hover:bg-blue-alpha-2 active:bg-blue-alpha-3" },
       { variant: "ghost", color: "info", className: "text-blue-11 hover:bg-blue-alpha-2 active:bg-blue-alpha-3" },
+
+      // Selected State (mimicking the 'Selected' logic from Figma)
+      { variant: "soft", color: "accent", className: "aria-selected:bg-green-alpha-5" },
+      { variant: "surface", color: "accent", className: "aria-selected:bg-green-alpha-4 border-green-8 shadow-[inset_0_1px_2px_rgba(0,0,0,0.1)]" },
     ],
     defaultVariants: {
       variant: "surface",
