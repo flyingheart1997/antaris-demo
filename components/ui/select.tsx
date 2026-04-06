@@ -7,40 +7,28 @@ import { ChevronDown, ChevronUp } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
-const SelectContext = React.createContext<{ size?: "md" | "lg" }>({
+const SelectContext = React.createContext<{ size?: "md" | "lg"; readOnly?: boolean }>({
   size: "md",
+  readOnly: false,
 })
 
 const selectTriggerVariants = cva(
-  "group/select relative flex items-center justify-between w-auto min-w-0 transition-all outline-none disabled:pointer-events-none disabled:opacity-50 rounded-md select-none",
+  "group/select relative flex items-center justify-between w-auto min-w-0 transition-all outline-none disabled:pointer-events-none disabled:opacity-50 rounded-md select-none border border-solid",
   {
     variants: {
       variant: {
-        surface: "bg-surface-bg border border-stroke-primary text-text-secondary data-[placeholder]:text-text-secondary/70",
-        solid: "bg-surface-secondary border border-transparent text-text-secondary",
+        surface: "bg-surface-primary/0 backdrop-blur-40 border-gray-11 data-[placeholder]:border-gray-8 hover:!border-gray-11 group-hover/select:!border-gray-11 data-[state=open]:border-stroke-selected data-[read-only=true]:bg-gray-2 data-[read-only=true]:border-gray-11",
+        solid: "bg-surface-bg border-gray-11 data-[placeholder]:border-gray-8 hover:!border-gray-11 group-hover/select:!border-gray-11 data-[state=open]:border-stroke-selected data-[read-only=true]:bg-gray-2 data-[read-only=true]:border-gray-11",
       },
       color: {
-        primary: "data-[state=open]:border-stroke-selected data-[state=open]:ring-3 data-[state=open]:ring-surface-selected",
-        info: "border-stroke-info data-[state=open]:ring-3 data-[state=open]:ring-stroke-info/20",
-        success: "border-stroke-success data-[state=open]:ring-3 data-[state=open]:ring-stroke-success/20",
-        warning: "border-stroke-warning data-[state=open]:ring-3 data-[state=open]:ring-stroke-warning/20",
-        error: "border-stroke-error !ring-3 !ring-stroke-error/20",
+        primary: "",
+        error: "!border-stroke-error",
       },
       size: {
-        md: "h-28 px-12 gap-8 text-md",
-        lg: "h-36 px-12 gap-8 text-lg",
+        md: "h-24 text-xs font-regular",
+        lg: "h-28 text-xs font-regular",
       },
     },
-    compoundVariants: [
-      {
-        variant: "surface",
-        className: "hover:bg-surface-hover"
-      },
-      {
-        variant: "solid",
-        className: "hover:bg-surface-secondary/80 data-[state=open]:bg-surface-bg"
-      }
-    ],
     defaultVariants: {
       variant: "surface",
       color: "primary",
@@ -51,12 +39,14 @@ const selectTriggerVariants = cva(
 
 function Select({
   size = "md",
+  readOnly = false,
   ...props
 }: React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root> & {
   size?: "md" | "lg"
+  readOnly?: boolean
 }) {
   return (
-    <SelectContext.Provider value={{ size }}>
+    <SelectContext.Provider value={{ size, readOnly }}>
       <SelectPrimitive.Root {...props} />
     </SelectContext.Provider>
   )
@@ -79,35 +69,41 @@ const SelectTrigger = React.forwardRef<
 >(({ className, variant, color, size, leadingIcon, trailingIcon = true, children, ...props }, ref) => {
   const context = React.useContext(SelectContext)
   const effectiveSize = size || context.size
+  const isReadOnly = context.readOnly
   const isError = props["aria-invalid"] === "true" || props["aria-invalid"] === true || color === "error"
-  const effectiveColor = (isError ? "error" : (color ?? "primary")) as "primary" | "info" | "success" | "warning" | "error"
+  const effectiveColor = (isError ? "error" : (color ?? "primary")) as "primary" | "error"
 
   return (
     <SelectPrimitive.Trigger
       ref={ref}
+      disabled={isReadOnly || props.disabled}
       className={cn(selectTriggerVariants({ variant, color: effectiveColor, size: effectiveSize, className }))}
       data-size={effectiveSize}
+      data-color={effectiveColor}
+      data-read-only={isReadOnly}
       {...props}
     >
-      <div className="flex items-center gap-[inherit] min-w-0">
+      <div className="flex items-center gap-[inherit] h-full min-w-0 font-[inherit]">
         {leadingIcon && (
-          <span className="flex shrink-0 items-center justify-center pointer-events-none text-icon-secondary group-data-[state=open]/select:text-icon-primary group-data-[color=error]/select:text-text-error">
+          <span className="flex shrink-0 items-center justify-center px-4 pointer-events-none text-icon-secondary group-data-state-open/select:text-icon-primary group-data-[color=error]/select:text-text-error-subtle! font-[inherit]">
             {leadingIcon}
           </span>
         )}
-        <span className="truncate text-text-primary group-data-placeholder/select:text-text-secondary group-data-[state=open]/select:text-text-primary">
+        <span className="flex-1 truncate px-6 text-text-primary opacity-100 group-data-placeholder/select:opacity-60 group-data-state-open/select:opacity-100 group-data-[read-only=true]/select:opacity-100 group-data-[color=error]/select:text-text-error-subtle! font-[inherit]">
           {children}
         </span>
       </div>
       {trailingIcon !== false && (
         <SelectPrimitive.Icon asChild>
-          {trailingIcon === true ? (
-            <ChevronDown className="size-14 shrink-0 text-icon-secondary group-data-[state=open]/select:text-icon-primary group-data-[color=error]/select:text-text-error" />
-          ) : (
-            <span className="flex shrink-0 items-center justify-center pointer-events-none">
-              {trailingIcon}
-            </span>
-          )}
+          <div className="flex shrink-0 items-center justify-center px-4 font-[inherit]">
+            {trailingIcon === true ? (
+              <ChevronDown className="size-12 shrink-0 text-icon-secondary transition-transform duration-300 ease-in-out group-data-[state=open]/select:rotate-180 group-data-[state=open]/select:text-icon-primary group-data-[color=error]/select:text-text-error-subtle! " />
+            ) : (
+              <span className="flex shrink-0 items-center justify-center pointer-events-none font-[inherit]">
+                {trailingIcon}
+              </span>
+            )}
+          </div>
         </SelectPrimitive.Icon>
       )}
     </SelectPrimitive.Trigger>
@@ -162,7 +158,7 @@ const SelectContent = React.forwardRef<
         <SelectPrimitive.Content
           ref={ref}
           className={cn(
-            "relative z-50 max-h-96 min-w-50 overflow-hidden rounded-lg border border-stroke-primary bg-surface-bg text-text-primary shadow-xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 duration-100 p-6",
+            "relative z-50 max-h-96 min-w-50 overflow-hidden rounded-md border border-stroke-selected bg-surface-primary/0 backdrop-blur-60 text-text-primary shadow-xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 duration-100 p-4",
             position === "popper" &&
             "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
             className
@@ -173,12 +169,12 @@ const SelectContent = React.forwardRef<
           <SelectScrollUpButton />
           <SelectPrimitive.Viewport
             className={cn(
-              "p-0",
+              "p-0 font-[inherit]",
               position === "popper" &&
               "h-(--radix-select-content-available-height) w-full min-w-[inherit]"
             )}
           >
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-4 font-[inherit]">
               {children}
             </div>
           </SelectPrimitive.Viewport>
@@ -213,16 +209,25 @@ const SelectItem = React.forwardRef<
     <SelectPrimitive.Item
       ref={ref}
       className={cn(
-        "group/select-item relative flex w-full cursor-default select-none items-center rounded-md px-12 outline-none transition-colors duration-100 hover:bg-surface-hover focus:bg-surface-hover focus:text-text-primary data-disabled:pointer-events-none data-disabled:opacity-50",
-        "h-28 text-md data-[size=lg]:h-36 data-[size=lg]:text-lg",
+        "group/select-item relative flex w-full h-24 cursor-default select-none items-center rounded-md px-4 outline-none transition-colors duration-100 hover:bg-surface-hover focus:bg-surface-hover focus:text-text-primary data-disabled:pointer-events-none data-disabled:opacity-50 text-xs font-[inherit]",
         className
       )}
       data-size={effectiveSize}
       {...props}
     >
-      <SelectPrimitive.ItemText>
-        <span className="truncate flex-1">{children}</span>
-      </SelectPrimitive.ItemText>
+      <div className="flex items-center gap-4 w-full font-[inherit]">
+        <SelectPrimitive.ItemIndicator className="flex shrink-0 items-center justify-center">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="size-12 text-icon-primary">
+            <path d="M10 3L4.5 8.5L2 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </SelectPrimitive.ItemIndicator>
+        {!props.asChild && (
+          <SelectPrimitive.ItemText>
+            <span className="truncate flex-1">{children}</span>
+          </SelectPrimitive.ItemText>
+        )}
+        {props.asChild && children}
+      </div>
     </SelectPrimitive.Item>
   )
 })

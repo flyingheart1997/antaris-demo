@@ -167,6 +167,18 @@ export default function SelectPreview() {
           </div>
 
           <div className="space-y-8">
+            <p className="text-xs font-mono text-text-secondary uppercase italic">Read-Only State</p>
+            <Select readOnly defaultValue="read-only">
+              <SelectTrigger >
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="read-only">Static value</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-8">
             <p className="text-xs font-mono text-text-info uppercase italic">Filled State</p>
             <Select defaultValue="active">
               <SelectTrigger >
