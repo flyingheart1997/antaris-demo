@@ -3,12 +3,16 @@
 import * as React from "react"
 import * as SelectPrimitive from "@radix-ui/react-select"
 import { cva, type VariantProps } from "class-variance-authority"
-import { Check, ChevronDown, ChevronUp } from "lucide-react"
+import { ChevronDown, ChevronUp } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
+const SelectContext = React.createContext<{ size?: "md" | "lg" }>({
+  size: "md",
+})
+
 const selectTriggerVariants = cva(
-  "group/select relative flex items-center justify-between w-full min-w-0 transition-all outline-none disabled:pointer-events-none disabled:opacity-50 rounded-md select-none",
+  "group/select relative flex items-center justify-between w-auto min-w-0 transition-all outline-none disabled:pointer-events-none disabled:opacity-50 rounded-md select-none",
   {
     variants: {
       variant: {
@@ -23,8 +27,8 @@ const selectTriggerVariants = cva(
         error: "border-stroke-error !ring-3 !ring-stroke-error/20",
       },
       size: {
-        md: "h-32 px-10 gap-4 text-md",
-        lg: "h-40 px-12 gap-6 text-lg",
+        md: "h-28 px-12 gap-8 text-md",
+        lg: "h-36 px-12 gap-8 text-lg",
       },
     },
     compoundVariants: [
@@ -45,7 +49,18 @@ const selectTriggerVariants = cva(
   }
 )
 
-const Select = SelectPrimitive.Root
+function Select({
+  size = "md",
+  ...props
+}: React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root> & {
+  size?: "md" | "lg"
+}) {
+  return (
+    <SelectContext.Provider value={{ size }}>
+      <SelectPrimitive.Root {...props} />
+    </SelectContext.Provider>
+  )
+}
 
 const SelectGroup = SelectPrimitive.Group
 
@@ -62,13 +77,16 @@ const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   SelectTriggerProps
 >(({ className, variant, color, size, leadingIcon, trailingIcon = true, children, ...props }, ref) => {
+  const context = React.useContext(SelectContext)
+  const effectiveSize = size || context.size
   const isError = props["aria-invalid"] === "true" || props["aria-invalid"] === true || color === "error"
   const effectiveColor = (isError ? "error" : (color ?? "primary")) as "primary" | "info" | "success" | "warning" | "error"
 
   return (
     <SelectPrimitive.Trigger
       ref={ref}
-      className={cn(selectTriggerVariants({ variant, color: effectiveColor, size, className }))}
+      className={cn(selectTriggerVariants({ variant, color: effectiveColor, size: effectiveSize, className }))}
+      data-size={effectiveSize}
       {...props}
     >
       <div className="flex items-center gap-[inherit] min-w-0">
@@ -133,34 +151,43 @@ SelectScrollDownButton.displayName = "SelectScrollDownButton"
 
 const SelectContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>
->(({ className, children, position = "popper", ...props }, ref) => (
-  <SelectPrimitive.Portal>
-    <SelectPrimitive.Content
-      ref={ref}
-      className={cn(
-        "relative z-50 max-h-96 min-w-32 overflow-hidden rounded-md border border-stroke-primary bg-surface-bg text-text-primary shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-        position === "popper" &&
-        "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
-        className
-      )}
-      position={position}
-      {...props}
-    >
-      <SelectScrollUpButton />
-      <SelectPrimitive.Viewport
-        className={cn(
-          "p-1",
-          position === "popper" &&
-          "h-(--radix-select-trigger-height) w-full min-w-(--radix-select-trigger-width)"
-        )}
-      >
-        {children}
-      </SelectPrimitive.Viewport>
-      <SelectScrollDownButton />
-    </SelectPrimitive.Content>
-  </SelectPrimitive.Portal>
-))
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content> & { size?: "md" | "lg" }
+>(({ className, children, position = "popper", size, ...props }, ref) => {
+  const context = React.useContext(SelectContext)
+  const effectiveSize = size || context.size
+
+  return (
+    <SelectPrimitive.Portal>
+      <SelectContext.Provider value={{ size: effectiveSize }}>
+        <SelectPrimitive.Content
+          ref={ref}
+          className={cn(
+            "relative z-50 max-h-96 min-w-50 overflow-hidden rounded-lg border border-stroke-primary bg-surface-bg text-text-primary shadow-xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 duration-100 p-6",
+            position === "popper" &&
+            "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
+            className
+          )}
+          position={position}
+          {...props}
+        >
+          <SelectScrollUpButton />
+          <SelectPrimitive.Viewport
+            className={cn(
+              "p-0",
+              position === "popper" &&
+              "h-(--radix-select-content-available-height) w-full min-w-[inherit]"
+            )}
+          >
+            <div className="flex flex-col gap-2">
+              {children}
+            </div>
+          </SelectPrimitive.Viewport>
+          <SelectScrollDownButton />
+        </SelectPrimitive.Content>
+      </SelectContext.Provider>
+    </SelectPrimitive.Portal>
+  )
+})
 SelectContent.displayName = "SelectContent"
 
 const SelectLabel = React.forwardRef<
@@ -169,7 +196,7 @@ const SelectLabel = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Label
     ref={ref}
-    className={cn("py-6 px-10 text-sm font-semibold text-text-secondary uppercase tracking-wider", className)}
+    className={cn("text-text-secondary px-2 py-0.5 text-xs font-medium uppercase tracking-wider", className)}
     {...props}
   />
 ))
@@ -177,25 +204,28 @@ SelectLabel.displayName = "SelectLabel"
 
 const SelectItem = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>
->(({ className, children, ...props }, ref) => (
-  <SelectPrimitive.Item
-    ref={ref}
-    className={cn(
-      "relative flex w-full cursor-default select-none items-center rounded-md py-8 pl-32 pr-8 text-md outline-none hover:bg-surface-hover focus:bg-surface-hover focus:text-text-primary data-disabled:pointer-events-none data-disabled:opacity-50",
-      className
-    )}
-    {...props}
-  >
-    <span className="absolute left-10 flex h-16 w-16 items-center justify-center text-text-selected">
-      <SelectPrimitive.ItemIndicator>
-        <Check className="size-4" />
-      </SelectPrimitive.ItemIndicator>
-    </span>
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item> & { size?: "md" | "lg" }
+>(({ className, children, size, ...props }, ref) => {
+  const context = React.useContext(SelectContext)
+  const effectiveSize = size || context.size
 
-    <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
-  </SelectPrimitive.Item>
-))
+  return (
+    <SelectPrimitive.Item
+      ref={ref}
+      className={cn(
+        "group/select-item relative flex w-full cursor-default select-none items-center rounded-md px-12 outline-none transition-colors duration-100 hover:bg-surface-hover focus:bg-surface-hover focus:text-text-primary data-disabled:pointer-events-none data-disabled:opacity-50",
+        "h-28 text-md data-[size=lg]:h-36 data-[size=lg]:text-lg",
+        className
+      )}
+      data-size={effectiveSize}
+      {...props}
+    >
+      <SelectPrimitive.ItemText>
+        <span className="truncate flex-1">{children}</span>
+      </SelectPrimitive.ItemText>
+    </SelectPrimitive.Item>
+  )
+})
 SelectItem.displayName = "SelectItem"
 
 const SelectSeparator = React.forwardRef<
@@ -204,7 +234,7 @@ const SelectSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Separator
     ref={ref}
-    className={cn("-mx-4 my-4 h-px bg-stroke-primary/30", className)}
+    className={cn("-mx-1 my-1 h-px bg-stroke-primary/30", className)}
     {...props}
   />
 ))

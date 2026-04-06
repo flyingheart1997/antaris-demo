@@ -36,7 +36,7 @@ const radioCircleVariants = cva(
         solid: [
           "border-stroke-primary bg-transparent",
           "group-hover/radio-item:bg-surface-hover",
-          "group-data-[state=checked]/radio-item:bg-surface-bg group-data-[state=checked]/radio-item:border-transparent",
+          "group-data-[state=checked]/radio-item:bg-surface-bg group-data-[state=checked]/radio-item:border-gray-12",
           "group-disabled/radio-item:border-stroke-disabled group-disabled/radio-item:bg-surface-disabled",
         ],
       },
