@@ -12,8 +12,8 @@ const checkboxVariants = cva(
   {
     variants: {
       variant: {
-        surface: "bg-surface-primary/10 backdrop-blur-40 border-gray-10 data-[state=checked]:border-green-7 data-[state=indeterminate]:border-green-7 hover:bg-surface-primary/20",
-        solid: "bg-surface-secondary border-gray-10 data-[state=checked]:border-green-7 data-[state=indeterminate]:border-green-7 hover:bg-surface-hover",
+        surface: "bg-surface-primary/10 backdrop-blur-40 border-gray-10 data-[state=checked]:border-gray-10 data-[state=indeterminate]:border-gray-10 hover:bg-surface-primary/20",
+        solid: "bg-surface-secondary border-gray-10 data-[state=checked]:border-gray-10 data-[state=indeterminate]:border-gray-10 hover:bg-surface-hover",
       },
     },
     defaultVariants: {
@@ -44,7 +44,7 @@ const Checkbox = React.forwardRef<
       {...props}
     >
       <CheckboxPrimitive.Indicator
-        className={cn("flex items-center justify-center text-green-7")}
+        className={cn("flex items-center justify-center text-gray-10")}
       >
         {props.checked === "indeterminate" ? (
           <Minus className="size-10" strokeWidth={3} />

@@ -14,7 +14,7 @@ const badgeVariants = cva(
         surface: "border",
         outline: "border bg-transparent",
       },
-      state: {
+      color: {
         accent: "",
         neutral: "",
         success: "",
@@ -29,45 +29,40 @@ const badgeVariants = cva(
       },
     },
     compoundVariants: [
-      // Accent
-      { variant: "solid", state: "accent", className: "bg-green-9 text-white shadow-xs" },
-      { variant: "soft", state: "accent", className: "bg-green-alpha-2 text-green-11" },
-      { variant: "surface", state: "accent", className: "bg-green-alpha-2 border-green-7 text-green-11" },
-      { variant: "outline", state: "accent", className: "border-green-7 text-green-11" },
+      // Accent (Primary/Green)
+      { variant: "solid", color: "accent", className: "bg-green-9 text-gray-1 hover:bg-green-10 active:bg-green-11 shadow-sm" },
+      { variant: "soft", color: "accent", className: "bg-green-alpha-3 text-green-11 hover:bg-green-alpha-4 active:bg-green-alpha-5" },
+      { variant: "surface", color: "accent", className: "bg-green-alpha-2 border-green-7 text-green-11 hover:bg-green-alpha-3 active:bg-green-alpha-4" },
+      { variant: "outline", color: "accent", className: "border-green-7 text-green-11 hover:bg-green-alpha-2 active:bg-green-alpha-3" },
 
-      // Neutral
-      { variant: "solid", state: "neutral", className: "bg-gray-9 text-white shadow-xs" },
-      { variant: "soft", state: "neutral", className: "bg-gray-alpha-2 text-gray-11" },
-      { variant: "surface", state: "neutral", className: "bg-gray-alpha-2 border-gray-7 text-gray-11" },
-      { variant: "outline", state: "neutral", className: "border-gray-7 text-gray-11" },
+      // Neutral (Gray)
+      { variant: "solid", color: "neutral", className: "bg-gray-12 text-gray-1 hover:bg-gray-11 active:bg-gray-10 shadow-sm" },
+      { variant: "soft", color: "neutral", className: "bg-gray-alpha-3 text-gray-12 hover:bg-gray-alpha-4 active:bg-gray-alpha-5" },
+      { variant: "surface", color: "neutral", className: "bg-gray-alpha-2 border-gray-7 text-gray-12 hover:bg-gray-alpha-3 active:bg-gray-alpha-4" },
+      { variant: "outline", color: "neutral", className: "border-gray-7 text-gray-12 hover:bg-gray-alpha-2 active:bg-gray-alpha-3" },
 
-      // Success
-      { variant: "solid", state: "success", className: "bg-green-9 text-white shadow-xs" },
-      { variant: "soft", state: "success", className: "bg-green-alpha-3 text-green-11" },
-      { variant: "surface", state: "success", className: "bg-green-alpha-3 border-green-7 text-green-11" },
-      { variant: "outline", state: "success", className: "border-green-7 text-green-11" },
+      // Error (Red)
+      { variant: "solid", color: "error", className: "bg-red-9 text-gray-1 hover:bg-red-10 active:bg-red-11 shadow-sm" },
+      { variant: "soft", color: "error", className: "bg-red-alpha-3 text-red-11 hover:bg-red-alpha-4 active:bg-red-alpha-5" },
+      { variant: "surface", color: "error", className: "bg-red-alpha-2 border-red-7 text-red-11 hover:bg-red-alpha-3 active:bg-red-alpha-4" },
+      { variant: "outline", color: "error", className: "border-red-7 text-red-11 hover:bg-red-alpha-2 active:bg-red-alpha-3" },
 
-      // Warning
-      { variant: "solid", state: "warning", className: "bg-yellow-9 text-black shadow-xs" },
-      { variant: "soft", state: "warning", className: "bg-yellow-alpha-3 text-yellow-11" },
-      { variant: "surface", state: "warning", className: "bg-yellow-alpha-3 border-yellow-7 text-yellow-11" },
-      { variant: "outline", state: "warning", className: "border-yellow-7 text-yellow-11" },
+      // Warning (Yellow/Orange)
+      { variant: "solid", color: "warning", className: "bg-yellow-9 text-gray-1 hover:bg-yellow-10 active:bg-yellow-11 shadow-sm" },
+      { variant: "soft", color: "warning", className: "bg-yellow-alpha-3 text-yellow-11 hover:bg-yellow-alpha-4 active:bg-yellow-alpha-5" },
+      { variant: "surface", color: "warning", className: "bg-yellow-alpha-2 border-yellow-7 text-yellow-11 hover:bg-yellow-alpha-3 active:bg-yellow-alpha-4" },
+      { variant: "outline", color: "warning", className: "border-yellow-7 text-yellow-11 hover:bg-yellow-alpha-2 active:bg-yellow-alpha-3" },
 
-      // Error
-      { variant: "solid", state: "error", className: "bg-red-9 text-white shadow-xs" },
-      { variant: "soft", state: "error", className: "bg-red-alpha-3 text-red-11" },
-      { variant: "surface", state: "error", className: "bg-red-alpha-3 border-red-7 text-red-11" },
-      { variant: "outline", state: "error", className: "border-red-7 text-red-11" },
+      // Info (Blue)
+      { variant: "solid", color: "info", className: "bg-blue-9 text-gray-1 hover:bg-blue-10 active:bg-blue-11 shadow-sm" },
+      { variant: "soft", color: "info", className: "bg-blue-alpha-3 text-blue-11 hover:bg-blue-alpha-4 active:bg-blue-alpha-5" },
+      { variant: "surface", color: "info", className: "bg-blue-alpha-2 border-blue-7 text-blue-11 hover:bg-blue-alpha-3 active:bg-blue-alpha-4" },
+      { variant: "outline", color: "info", className: "border-blue-7 text-blue-11 hover:bg-blue-alpha-2 active:bg-blue-alpha-3" },
 
-      // Info
-      { variant: "solid", state: "info", className: "bg-blue-9 text-white shadow-xs" },
-      { variant: "soft", state: "info", className: "bg-blue-alpha-3 text-blue-11" },
-      { variant: "surface", state: "info", className: "bg-blue-alpha-3 border-blue-7 text-blue-11" },
-      { variant: "outline", state: "info", className: "border-blue-7 text-blue-11" },
     ],
     defaultVariants: {
       variant: "soft",
-      state: "accent",
+      color: "accent",
       size: "md",
     },
   }
@@ -85,7 +80,7 @@ const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
   ({
     className,
     variant,
-    state,
+    color,
     size,
     asChild = false,
     iconStart,
@@ -100,9 +95,9 @@ const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
         ref={ref}
         data-slot="badge"
         data-variant={variant}
-        data-state={state}
+        data-color={color}
         data-size={size}
-        className={cn(badgeVariants({ variant, state, size }), className)}
+        className={cn(badgeVariants({ variant, color, size }), className)}
         {...props}
       >
         {asChild ? (
