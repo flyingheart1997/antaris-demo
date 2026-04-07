@@ -1,9 +1,10 @@
 "use client"
 
 import { Avatar, AvatarFallback, AvatarImage, AvatarIndicator } from "@/components/ui/avatar"
+import React from "react"
 
-const COLORS = ["green", "blue", "yellow", "red", "white"] as const
-const SIZES = ["1", "2", "3", "4", "5"] as const
+const COLORS = ["green", "blue", "yellow", "white", "red"] as const
+const SIZES = ["1", "2", "3", "4", "5", "6"] as const
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -19,73 +20,111 @@ export default function AvatarPreview() {
     <div className="p-40 space-y-40 bg-surface-bg min-h-screen">
       <h1 className="text-xxxl font-bold text-text-primary">Avatar System Showcase</h1>
 
-      <Section title="Colors (Fallback Initials)">
-        <div className="flex flex-wrap items-center gap-16">
+      <Section title="Sizes & Colors Matrix (With Status Indicators)">
+        <div className="flex flex-col gap-24 overflow-x-auto">
+          <div className="flex items-center justify-between gap-24 min-w-max pb-8 border-b border-stroke-primary">
+            <div className="min-w-40 text-sm font-medium text-text-secondary whitespace-nowrap">Color \ Size</div>
+            {SIZES.map((size) => (
+              <div key={size} className="flex min-w-40 justify-center text-sm font-medium text-text-secondary">
+                Size {size}
+              </div>
+            ))}
+          </div>
+
           {COLORS.map((color) => (
-            <div key={color} className="flex flex-col items-center gap-6">
-              <Avatar size="4" color={color}>
-                <AvatarFallback size="4">{color.slice(0, 2).toUpperCase()}</AvatarFallback>
-              </Avatar>
-              <span className="text-xs text-text-disabled">{color}</span>
+            <div key={color} className="flex items-center justify-between gap-24 min-w-max">
+              <div className="min-w-40 text-md font-medium text-text-primary capitalize whitespace-nowrap">{color}</div>
+              {SIZES.map((size) => (
+                <div key={size} className="flex flex-col items-center justify-center min-w-40">
+                  <Avatar size={size} color={color} className="relative">
+                    <AvatarFallback size={size}>{color.slice(0, 2).toUpperCase()}</AvatarFallback>
+                  </Avatar>
+                </div>
+              ))}
             </div>
           ))}
         </div>
       </Section>
 
-      <Section title="Sizes (Blue)">
-        <div className="flex flex-wrap items-end gap-16">
-          {SIZES.map((size) => (
-            <div key={size} className="flex flex-col items-center gap-6">
-              <Avatar size={size} color="blue">
-                <AvatarFallback size={size}>AB</AvatarFallback>
-              </Avatar>
-              <span className="text-xs text-text-disabled">Size {size}</span>
+      <Section title="Avatar Fallback Matrix (Color \ Size)">
+        <div className="flex flex-col gap-24 overflow-x-auto">
+          <div className="flex items-center justify-between gap-24 min-w-max pb-8 border-b border-stroke-primary">
+            <div className="min-w-40 text-sm font-medium text-text-secondary whitespace-nowrap">Color \ Size</div>
+            {SIZES.map((size) => (
+              <div key={size} className="flex min-w-40 justify-center text-sm font-medium text-text-secondary">
+                Size {size}
+              </div>
+            ))}
+          </div>
+
+          {COLORS.map((color) => (
+            <div key={color} className="flex items-center justify-between gap-24 min-w-max">
+              <div className="min-w-40 text-md font-medium text-text-primary capitalize whitespace-nowrap">{color}</div>
+              {SIZES.map((size) => (
+                <div key={size} className="flex flex-col items-center justify-center min-w-40">
+                  <Avatar size={size} color={color}>
+                    <AvatarFallback size={size}>{color.slice(0, 2).toUpperCase()}</AvatarFallback>
+                  </Avatar>
+                </div>
+              ))}
             </div>
           ))}
         </div>
       </Section>
 
-      <Section title="With Image">
-        <div className="flex flex-wrap items-center gap-16">
-          <Avatar size="4">
+      <Section title="Avatar Indicator Matrix (Color \ Size)">
+        <div className="flex flex-col gap-24 overflow-x-auto">
+          <div className="flex items-center justify-between gap-24 min-w-max pb-8 border-b border-stroke-primary">
+            <div className="min-w-40 text-sm font-medium text-text-secondary whitespace-nowrap">Color \ Size</div>
+            {SIZES.map((size) => (
+              <div key={size} className="flex min-w-40 justify-center text-sm font-medium text-text-secondary">
+                Size {size}
+              </div>
+            ))}
+          </div>
+
+          {COLORS.map((color) => (
+            <div key={color} className="flex items-center justify-between gap-24 min-w-max">
+              <div className="min-w-40 text-md font-medium text-text-primary capitalize whitespace-nowrap">{color}</div>
+              {SIZES.map((size) => (
+                <div key={size} className="flex flex-col items-center justify-center min-w-40">
+                  {/* We mount the indicator inside an empty Avatar component to show how it scales natively */}
+                  <Avatar size={size} color="white" className="relative items-center justify-center flex">
+                    <AvatarIndicator color={color} size={size} className="relative" />
+                  </Avatar>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      <Section title="With Image Support (Size 5)">
+        <div className="flex flex-wrap items-center gap-24">
+          <Avatar size="5">
             <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Felix" />
-            <AvatarFallback size="4" color="blue">FX</AvatarFallback>
           </Avatar>
-          <Avatar size="4">
+          <Avatar size="5">
             <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka" alt="Aneka" />
-            <AvatarFallback size="4" color="green">AN</AvatarFallback>
+            <AvatarFallback size="5" color="green">AN</AvatarFallback>
           </Avatar>
-          <Avatar size="4">
+          <Avatar size="5">
             {/* Intentionally broken src for fallback demo */}
             <AvatarImage src="/broken-image.jpg" alt="Fallback" />
-            <AvatarFallback size="4" color="red">FB</AvatarFallback>
+            <AvatarFallback size="5" color="red">FB</AvatarFallback>
           </Avatar>
         </div>
       </Section>
 
-      <Section title="With Status Indicator">
-        <div className="flex flex-wrap items-center gap-24">
-          {(["green", "red", "yellow", "blue", "gray"] as const).map((color) => (
-            <div key={color} className="flex flex-col items-center gap-6">
-              <Avatar size="4" color="blue" className="relative">
-                <AvatarFallback size="4">AB</AvatarFallback>
-                <AvatarIndicator color={color} size="4" position="bottom-right" />
-              </Avatar>
-              <span className="text-xs text-text-disabled">{color}</span>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      <Section title="Avatar Group (Stacked)">
-        <div className="flex -space-x-8">
-          {["AB", "CD", "EF", "GH"].map((initials, i) => (
-            <Avatar key={initials} size="4" color={["blue", "green", "yellow", "red"][i] as "blue" | "green" | "yellow" | "red"} className="ring-2 ring-surface-bg">
-              <AvatarFallback size="4">{initials}</AvatarFallback>
+      <Section title="Avatar Group (Stacked Overlapping)">
+        <div className="flex -space-x-12">
+          {["KD", "JS", "MC", "RN"].map((initials, i) => (
+            <Avatar key={initials} size="5" color={["blue", "green", "yellow", "red"][i] as "blue" | "green" | "yellow" | "red"} className="ring-2 ring-surface-bg shadow-sm">
+              <AvatarFallback size="5">{initials}</AvatarFallback>
             </Avatar>
           ))}
-          <Avatar size="4" color="white" className="ring-2 ring-surface-bg">
-            <AvatarFallback size="4">+3</AvatarFallback>
+          <Avatar size="5" color="white" className="ring-2 ring-surface-bg shadow-sm">
+            <AvatarFallback size="5">+4</AvatarFallback>
           </Avatar>
         </div>
       </Section>

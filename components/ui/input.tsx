@@ -95,7 +95,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             className={cn(inputVariants({ variant, size, state: isError ? "error" : effectiveState }))}
           >
             {leadingIcon && (
-              <span className="flex shrink-0 items-center justify-center pointer-events-none text-icon-secondary group-focus-within/input-field:text-icon-primary group-data-[state=error]/input-field:text-text-error">
+              <span className="flex shrink-0 items-center justify-center pointer-events-none text-icon-secondary group-focus-within/input-field:text-icon-primary group-data-[state=error]/input-field:text-text-error opacity-60">
                 {leadingIcon}
               </span>
             )}
@@ -123,20 +123,20 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             />
 
             {units && unitsText && (
-              <span className="text-md text-text-secondary pointer-events-none shrink-0 pr-4">
+              <span className="text-sm text-green-9 pointer-events-none shrink-0 pr-4">
                 {unitsText}
               </span>
             )}
 
             {trailingIcon && (
-              <span className="flex shrink-0 items-center justify-center pointer-events-none text-icon-secondary group-focus-within/input-field:text-icon-primary group-data-[state=error]/input-field:text-text-error">
+              <span className="flex shrink-0 items-center justify-center pointer-events-none text-icon-secondary group-focus-within/input-field:text-icon-primary group-data-[state=error]/input-field:text-text-error opacity-60">
                 {trailingIcon}
               </span>
             )}
           </div>
 
           {(helperText || hintText || counter) && (
-            <div className="flex justify-between items-start text-xs leading-tight min-h-16" data-slot="input-assistive-container">
+            <div className="flex justify-between items-start text-sm leading-tight min-h-16" data-slot="input-assistive-container">
               <div
                 className={cn(
                   "flex-1",
@@ -150,7 +150,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 {hintText && <span className="text-text-disabled">{hintText}</span>}
                 {counter && (
                   <span className={cn(
-                    "tabular-nums text-xs",
+                    "tabular-nums",
                     max > 0 && count >= max ? "text-text-error" : "text-text-disabled"
                   )}>
                     {count}{max > 0 ? `/${max}` : ""}

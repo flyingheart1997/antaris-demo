@@ -166,15 +166,15 @@ async function build() {
         let themeKey = null;
 
         if (/font-size/i.test(name)) {
-            themeKey = `--font-size-${name.replace(/.*font-size-/i, '')}`;
+            themeKey = `--text-${name.replace(/.*font-size-/i, '')}`;
         } else if (/font-weight/i.test(name)) {
             themeKey = `--font-weight-${name.replace(/.*font-weight-/i, '')}`;
         } else if (/font-family/i.test(name)) {
-            themeKey = `--font-family-${name.replace(/.*font-family-/i, '')}`;
+            themeKey = `--font-${name.replace(/.*font-family-/i, '')}`;
         } else if (/line-height/i.test(name)) {
-            themeKey = `--line-height-${name.replace(/.*line-height-/i, '')}`;
+            themeKey = `--leading-${name.replace(/.*line-height-/i, '')}`;
         } else if (/letter-spacing/i.test(name)) {
-            themeKey = `--letter-spacing-${name.replace(/.*letter-spacing-/i, '')}`;
+            themeKey = `--tracking-${name.replace(/.*letter-spacing-/i, '')}`;
         } else if (/color/i.test(name)) {
             const val = allResolvedFlat[name];
             if (val && val.includes('linear-gradient')) {
@@ -190,7 +190,7 @@ async function build() {
         } else if (/opacity/i.test(name)) {
             themeKey = `--opacity-${name.replace(/^opacity-/i, '')}`;
         } else if (/effects-bg_blur/i.test(name)) {
-            themeKey = `--backdrop-blur-${name.replace(/.*bg_blur-/i, '')}`;
+            themeKey = `--blur-${name.replace(/.*bg_blur-/i, '')}`;
         }
 
         if (themeKey && !seenThemeKeys.has(themeKey)) {

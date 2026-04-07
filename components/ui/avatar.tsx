@@ -7,22 +7,23 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const avatarVariants = cva(
-  "inline-flex shrink-0 items-center justify-center overflow-hidden bg-surface-bg border relative rounded-sm select-none",
+  "inline-flex shrink-0 items-center justify-center overflow-hidden bg-surface-bg border relative rounded-md text-text-primary select-none",
   {
     variants: {
       size: {
-        "1": "h-24 w-24",
-        "2": "h-26 w-26",
-        "3": "h-28 w-28",
-        "4": "h-32 w-32",
-        "5": "h-40 w-40",
+        "1": "h-16 w-16 text-sm",
+        "2": "h-24 w-24 text-md",
+        "3": "h-26 w-26 text-md",
+        "4": "h-28 w-28 text-lg",
+        "5": "h-32 w-32 text-xl",
+        "6": "h-40 w-40 text-xxl",
       },
       color: {
-        green: "bg-green-11 border-green-7 text-white",
-        blue: "bg-blue-11 border-blue-7 text-white",
-        yellow: "bg-yellow-9 border-yellow-7 text-black",
-        white: "bg-surface-bg border-stroke-primary text-text-primary",
-        red: "bg-red-11 border-red-7 text-white",
+        green: "border-stroke-success",
+        blue: "border-stroke-info",
+        yellow: "border-stroke-warning",
+        white: "border-stroke-primary",
+        red: "border-stroke-error",
       },
     },
     defaultVariants: {
@@ -37,18 +38,19 @@ const fallbackVariants = cva(
   {
     variants: {
       size: {
-        "1": "text-[10px]",
-        "2": "text-[11px]",
-        "3": "text-xs",
-        "4": "text-sm",
-        "5": "text-md",
+        "1": "text-sm",
+        "2": "text-md",
+        "3": "text-md",
+        "4": "text-lg",
+        "5": "text-xl",
+        "6": "text-xxl",
       },
       color: {
-        green: "text-white",
-        blue: "text-white",
-        yellow: "text-black",
+        green: "text-text-primary",
+        blue: "text-text-primary",
+        yellow: "text-text-primary",
         white: "text-text-primary",
-        red: "text-white",
+        red: "text-text-primary",
       },
     },
     defaultVariants: {
@@ -58,22 +60,23 @@ const fallbackVariants = cva(
 )
 
 const indicatorVariants = cva(
-  "absolute rounded-full border-2 border-surface-bg",
+  "absolute rounded-full",
   {
     variants: {
       size: {
-        "1": "size-2",
-        "2": "size-2.5",
-        "3": "size-3",
-        "4": "size-4",
-        "5": "size-5",
+        "1": "size-6",
+        "2": "size-8",
+        "3": "size-10",
+        "4": "size-12",
+        "5": "size-14",
+        "6": "size-16",
       },
       color: {
-        green: "bg-green-9",
-        red: "bg-red-9",
-        yellow: "bg-yellow-9",
-        blue: "bg-blue-9",
-        gray: "bg-gray-9",
+        green: "bg-stroke-success",
+        blue: "bg-stroke-info",
+        yellow: "bg-stroke-warning",
+        white: "bg-stroke-primary",
+        red: "bg-stroke-error",
       },
       position: {
         "top-right": "top-0 right-0 translate-x-1/4 -translate-y-1/4",

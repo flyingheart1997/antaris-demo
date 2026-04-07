@@ -1,14 +1,18 @@
 'use client'
 import { useState } from "react";
+import { ChevronLeft } from "lucide-react";
 import svgPaths from "./svg-1wg6eylchp";
 import { imgSideNav, imgSideNav1, imgSideNav2, imgSideNav3, imgSideNav4, imgSideNav5, imgSideNav6, imgSideNav7 } from "./svg-yqlih";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
 
 export default function AntarisSidebar() {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div className="relative h-screen">
-      <div className={`h-screen flex flex-col gap-[24px] py-7 items-center relative rounded-[4px] transition-all duration-300 ${isExpanded ? 'w-[240px]' : 'w-[88px]'}`}>
+    <div className="relative flex h-screen bg-[#0E1015] overflow-hidden font-['Space_Grotesk',sans-serif]">
+      {/* Sidebar Content */}
+      <div className={`h-screen border-r border-[#202428] bg-[#0A0D10] flex flex-col gap-[24px] py-7 items-center relative shrink-0 transition-all duration-300 ${isExpanded ? 'w-[240px]' : 'w-[88px]'}`}>
         {/* Sidebar Background */}
         <div className="absolute h-full left-0 top-0 w-full pointer-events-none">
           <div className="absolute inset-0">
@@ -116,206 +120,88 @@ export default function AntarisSidebar() {
           <div className={`content-stretch flex flex-col gap-[8px] items-start relative shrink-0 transition-all duration-300 ${isExpanded ? 'w-[176px]' : 'w-full'}`}>
             {/* Dashboard */}
             <div className={`content-stretch flex flex-col gap-[8px] items-start relative shrink-0 ${isExpanded ? 'w-[176px]' : 'w-full'}`}>
-              <div className={`h-[32px] relative rounded-[4px] shrink-0 ${isExpanded ? 'min-w-24.5 w-full' : 'w-full'}`}>
-                <div className="flex flex-row items-center justify-center min-w-[inherit] size-full">
-                  <div className={`content-stretch flex gap-[4px] items-center min-w-[inherit] relative size-full ${isExpanded ? 'justify-center px-3' : 'justify-center'
-                    }`}>
-                    <div className="relative shrink-0 size-[16px]">
-                      <div className="absolute inset-[8.3%_8.42%_8.38%_8.45%] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-[-1.352px_-1.328px] mask-size-[16px_16px]" style={{ maskImage: `url('${imgSideNav}')` }}>
-                        <svg className="absolute block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 13.3018 13.3311">
-                          <g>
-                            <path d={svgPaths.p2296ef40} fill="#B4B4B4" />
-                          </g>
-                        </svg>
-                      </div>
-                    </div>
-                    {isExpanded && (
-                      <div className="flex flex-[1_0_0] flex-col font-['Space_Grotesk',sans-serif] font-normal justify-center leading-[0] min-h-px min-w-px relative text-[#b4b4b4] text-[12px] tracking-[0.096px]">
-                        <p className="leading-[16px]">Dashboard</p>
-                      </div>
-                    )}
-                  </div>
+              <div className={cn(`flex w-full gap-4 relative rounded-[4px] shrink-0 items-center`, isExpanded ? 'justify-start pr-3' : 'justify-center')}>
+                <div className=" bg-white shrink-0 h-40 w-40">
+
                 </div>
+                {isExpanded && (
+                  <div className="flex flex-[1_0_0] flex-col font-['Space_Grotesk',sans-serif] font-normal justify-center leading-[0] min-h-px min-w-px relative text-[#b4b4b4] text-[12px] tracking-[0.096px]">
+                    <p className="leading-[16px]">Dashboard</p>
+                  </div>
+                )}
               </div>
-              {isExpanded && (
-                <div className="content-stretch flex flex-col items-start relative shrink-0 w-full">
-                  <div className="h-0 relative shrink-0 w-full">
-                    <div className="absolute inset-[-0.25px_-0.14%]">
-                      <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 176.496 0.496">
-                        <path d="M0.248 0.248H176.248" opacity="0.4" stroke="url(#paint0_linear_sep1)" strokeLinecap="round" strokeWidth="0.496" />
-                        <defs>
-                          <linearGradient gradientUnits="userSpaceOnUse" id="paint0_linear_sep1" x1="176.248" x2="0.248" y1="0.748" y2="0.748">
-                            <stop stopColor="#F0F0F0" stopOpacity="0.1" />
-                            <stop offset="0.5" stopColor="#F0F0F0" stopOpacity="0.4" />
-                            <stop offset="1" stopColor="#F0F0F0" stopOpacity="0.1" />
-                          </linearGradient>
-                        </defs>
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-              )}
+              <Separator />
             </div>
 
             {/* Mission Group */}
             <div className={`content-stretch flex flex-col gap-[8px] items-start relative shrink-0 ${isExpanded ? 'w-[176px]' : 'w-full'}`}>
               {/* Mission Objective */}
-              <div className={`h-[32px] relative rounded-[4px] shrink-0 ${isExpanded ? 'min-w-24.5 w-full' : 'w-full'}`}>
-                <div className="flex flex-row items-center justify-center min-w-[inherit] size-full">
-                  <div className={`content-stretch flex gap-[4px] items-center min-w-[inherit] relative size-full ${isExpanded ? 'justify-center px-3' : 'justify-center'
-                    }`}>
-                    <div className="relative shrink-0 size-[16px]">
-                      <div className="absolute inset-[12.5%_11.73%_10%_10.77%] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-[-1.724px_-2px] mask-size-[16px_16px]" style={{ maskImage: `url('${imgSideNav1}')` }}>
-                        <svg className="absolute block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 12.3993 12.4004">
-                          <g>
-                            <g />
-                            <path d={svgPaths.p3b331180} fill="#B4B4B4" />
-                          </g>
-                        </svg>
-                      </div>
-                    </div>
-                    {isExpanded && (
-                      <div className="flex flex-[1_0_0] flex-col font-['Space_Grotesk',sans-serif] font-normal justify-center leading-[0] min-h-px min-w-px relative text-[#b4b4b4] text-[12px] tracking-[0.096px]">
-                        <p className="leading-[16px]">Mission Objective</p>
-                      </div>
-                    )}
-                  </div>
+              <div className={cn(`flex w-full gap-4 relative rounded-[4px] shrink-0 items-center`, isExpanded ? 'justify-start pr-3' : 'justify-center')}>
+                <div className=" bg-white shrink-0 h-40 w-40">
+
                 </div>
+                {isExpanded && (
+                  <div className="flex flex-[1_0_0] flex-col font-['Space_Grotesk',sans-serif] font-normal justify-center leading-[0] min-h-px min-w-px relative text-[#b4b4b4] text-[12px] tracking-[0.096px]">
+                    <p className="leading-[16px]">Dashboard</p>
+                  </div>
+                )}
               </div>
 
               {/* Mission Modelling */}
-              <div className={`h-[32px] relative rounded-[4px] shrink-0 ${isExpanded ? 'min-w-24.5 w-full' : 'w-full'}`}>
-                <div className="flex flex-row items-center justify-center min-w-[inherit] size-full">
-                  <div className={`content-stretch flex gap-[4px] items-center min-w-[inherit] relative size-full ${isExpanded ? 'justify-center px-3' : 'justify-center'
-                    }`}>
-                    <div className="overflow-clip relative shrink-0 size-[16px]">
-                      <div className="absolute inset-[10%] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-[-1.6px_-1.6px] mask-size-[16px_16px]" style={{ maskImage: `url('${imgSideNav2}')` }}>
-                        <svg className="absolute block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 12.8008 12.8008">
-                          <g>
-                            <path d={svgPaths.p10a4e600} fill="#B4B4B4" />
-                          </g>
-                        </svg>
-                      </div>
-                    </div>
-                    {isExpanded && (
-                      <div className="flex flex-[1_0_0] flex-col font-['Space_Grotesk',sans-serif] font-normal justify-center leading-[0] min-h-px min-w-px relative text-[#b4b4b4] text-[12px] tracking-[0.096px]">
-                        <p className="leading-[16px]">Mission Modelling</p>
-                      </div>
-                    )}
-                  </div>
+              <div className={cn(`flex w-full gap-4 relative rounded-[4px] shrink-0 items-center`, isExpanded ? 'justify-start pr-3' : 'justify-center')}>
+                <div className=" bg-white shrink-0 h-40 w-40">
+
                 </div>
+                {isExpanded && (
+                  <div className="flex flex-[1_0_0] flex-col font-['Space_Grotesk',sans-serif] font-normal justify-center leading-[0] min-h-px min-w-px relative text-[#b4b4b4] text-[12px] tracking-[0.096px]">
+                    <p className="leading-[16px]">Dashboard</p>
+                  </div>
+                )}
               </div>
 
-              {isExpanded && (
-                <div className="content-stretch flex flex-col items-start relative shrink-0 w-full">
-                  <div className="h-0 relative shrink-0 w-full">
-                    <div className="absolute inset-[-0.25px_-0.14%]">
-                      <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 176.496 0.496">
-                        <path d="M0.248 0.248H176.248" opacity="0.4" stroke="url(#paint0_linear_sep2)" strokeLinecap="round" strokeWidth="0.496" />
-                        <defs>
-                          <linearGradient gradientUnits="userSpaceOnUse" id="paint0_linear_sep2" x1="176.248" x2="0.248" y1="0.748" y2="0.748">
-                            <stop stopColor="#F0F0F0" stopOpacity="0.1" />
-                            <stop offset="0.5" stopColor="#F0F0F0" stopOpacity="0.4" />
-                            <stop offset="1" stopColor="#F0F0F0" stopOpacity="0.1" />
-                          </linearGradient>
-                        </defs>
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-              )}
+              <Separator />
             </div>
 
             {/* Satellites & Ground Station Group */}
             <div className={`content-stretch flex flex-col gap-[8px] items-start relative shrink-0 ${isExpanded ? 'w-[176px]' : 'w-full'}`}>
               {/* Satellites */}
-              <div className={`h-[32px] relative rounded-[4px] shrink-0 ${isExpanded ? 'min-w-24.5 w-full' : 'w-full'}`}>
-                <div className="flex flex-row items-center justify-center min-w-[inherit] size-full">
-                  <div className={`content-stretch flex gap-[4px] items-center min-w-[inherit] relative size-full ${isExpanded ? 'justify-center px-3' : 'justify-center'
-                    }`}>
-                    <div className="relative shrink-0 size-[16px]">
-                      <div className="absolute inset-[10%] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-[-1.6px_-1.6px] mask-size-[16px_16px]" style={{ maskImage: `url('${imgSideNav3}')` }}>
-                        <svg className="absolute block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 12.7997 12.7999">
-                          <g>
-                            <path d={svgPaths.p9481580} fill="#B4B4B4" />
-                          </g>
-                        </svg>
-                      </div>
-                    </div>
-                    {isExpanded && (
-                      <div className="flex flex-[1_0_0] flex-col font-['Space_Grotesk',sans-serif] font-normal justify-center leading-[0] min-h-px min-w-px relative text-[#b4b4b4] text-[12px] tracking-[0.096px]">
-                        <p className="leading-[16px]">Satellites</p>
-                      </div>
-                    )}
-                  </div>
+              <div className={cn(`flex w-full gap-4 relative rounded-[4px] shrink-0 items-center`, isExpanded ? 'justify-start pr-3' : 'justify-center')}>
+                <div className=" bg-white shrink-0 h-40 w-40">
+
                 </div>
+                {isExpanded && (
+                  <div className="flex flex-[1_0_0] flex-col font-['Space_Grotesk',sans-serif] font-normal justify-center leading-[0] min-h-px min-w-px relative text-[#b4b4b4] text-[12px] tracking-[0.096px]">
+                    <p className="leading-[16px]">Dashboard</p>
+                  </div>
+                )}
               </div>
 
               {/* Ground Station */}
-              <div className={`h-[32px] relative rounded-[4px] shrink-0 ${isExpanded ? 'min-w-24.5 w-full' : 'w-full'}`}>
-                <div className="flex flex-row items-center justify-center min-w-[inherit] size-full">
-                  <div className={`content-stretch flex gap-[4px] items-center min-w-[inherit] relative size-full ${isExpanded ? 'justify-center px-3' : 'justify-center'
-                    }`}>
-                    <div className="relative shrink-0 size-[16px]">
-                      <div className="absolute inset-[12.94%_12.82%_11.7%_14.63%] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-[-2.341px_-2.071px] mask-size-[16px_16px]" style={{ maskImage: `url('${imgSideNav4}')` }}>
-                        <svg className="absolute block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 11.6084 12.0567">
-                          <g>
-                            <path d={svgPaths.p398d280} fill="#B4B4B4" />
-                          </g>
-                        </svg>
-                      </div>
-                    </div>
-                    {isExpanded && (
-                      <div className="flex flex-[1_0_0] flex-col font-['Space_Grotesk',sans-serif] font-normal justify-center leading-[0] min-h-px min-w-px relative text-[#b4b4b4] text-[12px] tracking-[0.096px]">
-                        <p className="leading-[16px]">Ground Station</p>
-                      </div>
-                    )}
-                  </div>
+              <div className={cn(`flex w-full gap-4 relative rounded-[4px] shrink-0 items-center`, isExpanded ? 'justify-start pr-3' : 'justify-center')}>
+                <div className=" bg-white shrink-0 h-40 w-40">
+
                 </div>
+                {isExpanded && (
+                  <div className="flex flex-[1_0_0] flex-col font-['Space_Grotesk',sans-serif] font-normal justify-center leading-[0] min-h-px min-w-px relative text-[#b4b4b4] text-[12px] tracking-[0.096px]">
+                    <p className="leading-[16px]">Dashboard</p>
+                  </div>
+                )}
               </div>
 
-              {isExpanded && (
-                <div className="content-stretch flex flex-col items-start relative shrink-0 w-full">
-                  <div className="h-0 relative shrink-0 w-full">
-                    <div className="absolute inset-[-0.25px_-0.14%]">
-                      <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 176.496 0.496">
-                        <path d="M0.248 0.248H176.248" opacity="0.4" stroke="url(#paint0_linear_sep3)" strokeLinecap="round" strokeWidth="0.496" />
-                        <defs>
-                          <linearGradient gradientUnits="userSpaceOnUse" id="paint0_linear_sep3" x1="176.248" x2="0.248" y1="0.748" y2="0.748">
-                            <stop stopColor="#F0F0F0" stopOpacity="0.1" />
-                            <stop offset="0.5" stopColor="#F0F0F0" stopOpacity="0.4" />
-                            <stop offset="1" stopColor="#F0F0F0" stopOpacity="0.1" />
-                          </linearGradient>
-                        </defs>
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-              )}
+              <Separator />
             </div>
 
             {/* Catalog Group */}
             <div className={`content-stretch flex flex-col gap-[8px] items-start relative shrink-0 ${isExpanded ? 'w-[176px]' : 'w-full'}`}>
-              <div className={`h-[32px] relative rounded-[4px] shrink-0 ${isExpanded ? 'min-w-24.5 w-full' : 'w-full'}`}>
-                <div className="flex flex-row items-center justify-center min-w-[inherit] size-full">
-                  <div className={`content-stretch flex gap-[4px] items-center min-w-[inherit] relative size-full ${isExpanded ? 'justify-center px-3' : 'justify-center'
-                    }`}>
-                    <div className="overflow-clip relative shrink-0 size-[16px]">
-                      <div className="absolute inset-[7.5%_17.5%_7.5%_12.5%] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-[-2px_-1.199px] mask-size-[16px_16px]" style={{ maskImage: `url('${imgSideNav5}')` }}>
-                        <svg className="absolute block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 11.2001 13.6006">
-                          <g>
-                            <path d={svgPaths.p3ae75a00} fill="#B4B4B4" />
-                          </g>
-                        </svg>
-                      </div>
-                    </div>
-                    {isExpanded && (
-                      <div className="flex flex-[1_0_0] flex-col font-['Space_Grotesk',sans-serif] font-normal justify-center leading-[0] min-h-px min-w-px relative text-[#b4b4b4] text-[12px] tracking-[0.096px]">
-                        <p className="leading-[16px]">Catalog</p>
-                      </div>
-                    )}
-                  </div>
+              <div className={cn(`flex w-full gap-4 relative rounded-[4px] shrink-0 items-center`, isExpanded ? 'justify-start pr-3' : 'justify-center')}>
+                <div className=" bg-white shrink-0 h-40 w-40">
+
                 </div>
+                {isExpanded && (
+                  <div className="flex flex-[1_0_0] flex-col font-['Space_Grotesk',sans-serif] font-normal justify-center leading-[0] min-h-px min-w-px relative text-[#b4b4b4] text-[12px] tracking-[0.096px]">
+                    <p className="leading-[16px]">Dashboard</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -323,94 +209,146 @@ export default function AntarisSidebar() {
           {/* Section 2 - Bottom Navigation */}
           <div className={`content-stretch flex flex-col gap-[8px] items-start relative shrink-0 transition-all duration-300 ${isExpanded ? 'w-[176px]' : 'w-full'}`}>
             <div className={`content-stretch flex flex-col gap-[8px] items-start relative shrink-0 ${isExpanded ? 'w-[176px]' : 'w-full'}`}>
-              {isExpanded && (
-                <div className="h-0 relative shrink-0 w-full">
-                  <div className="absolute inset-[-0.25px_-0.14%]">
-                    <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 176.496 0.496">
-                      <path d="M0.248 0.248H176.248" opacity="0.4" stroke="url(#paint0_linear_sep4)" strokeLinecap="round" strokeWidth="0.496" />
-                      <defs>
-                        <linearGradient gradientUnits="userSpaceOnUse" id="paint0_linear_sep4" x1="176.248" x2="0.248" y1="0.748" y2="0.748">
-                          <stop stopColor="#F0F0F0" stopOpacity="0.1" />
-                          <stop offset="0.5" stopColor="#F0F0F0" stopOpacity="0.4" />
-                          <stop offset="1" stopColor="#F0F0F0" stopOpacity="0.1" />
-                        </linearGradient>
-                      </defs>
-                    </svg>
-                  </div>
-                </div>
-              )}
+              <Separator />
 
               {/* Notification */}
-              <div className={`h-[32px] relative rounded-[4px] shrink-0 ${isExpanded ? 'min-w-24.5 w-full' : 'w-full'}`}>
-                <div className="flex flex-row items-center justify-center min-w-[inherit] size-full">
-                  <div className={`content-stretch flex gap-[4px] items-center min-w-[inherit] relative size-full ${isExpanded ? 'justify-center px-3' : 'justify-center'
-                    }`}>
-                    <div className="relative shrink-0 size-[16px]">
-                      <div className="absolute inset-[6.25%_6.25%_68.75%_68.75%]">
-                        <svg className="absolute block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 4 4">
-                          <circle cx="2" cy="2" fill="#E79E2C" r="2" />
-                        </svg>
-                      </div>
-                      <div className="absolute inset-[10%_14.89%_6.64%_14.89%] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-[-2.383px_-1.8px] mask-size-[16px_16px]" style={{ maskImage: `url('${imgSideNav6}')` }}>
-                        <svg className="absolute block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 11.234 13.3379">
-                          <g>
-                            <path d={svgPaths.p3ea53c80} fill="#B4B4B4" />
-                          </g>
-                        </svg>
-                      </div>
-                    </div>
-                    {isExpanded && (
-                      <div className="flex flex-[1_0_0] flex-col font-['Space_Grotesk',sans-serif] font-normal justify-center leading-[0] min-h-px min-w-px relative text-[#b4b4b4] text-[12px] tracking-[0.096px]">
-                        <p className="leading-[16px]">Notification</p>
-                      </div>
-                    )}
-                  </div>
+              <div className={cn(`flex w-full gap-4 relative rounded-[4px] shrink-0 items-center`, isExpanded ? 'justify-start pr-3' : 'justify-center')}>
+                <div className=" bg-white shrink-0 h-40 w-40">
+
                 </div>
+                {isExpanded && (
+                  <div className="flex flex-[1_0_0] flex-col font-['Space_Grotesk',sans-serif] font-normal justify-center leading-[0] min-h-px min-w-px relative text-[#b4b4b4] text-[12px] tracking-[0.096px]">
+                    <p className="leading-[16px]">Dashboard</p>
+                  </div>
+                )}
               </div>
 
               {/* User Management */}
-              <div className={`h-[32px] relative rounded-[4px] shrink-0 ${isExpanded ? 'min-w-24.5 w-full' : 'w-full'}`}>
-                <div className="flex flex-row items-center justify-center min-w-[inherit] size-full">
-                  <div className={`content-stretch flex gap-[4px] items-center min-w-[inherit] relative size-full ${isExpanded ? 'justify-center px-3' : 'justify-center'
-                    }`}>
-                    <div className="overflow-clip relative shrink-0 size-[16px]">
-                      <div className="absolute inset-[24.12%_10.09%_24.39%_9.34%] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-[-1.495px_-4.059px] mask-size-[16px_16px]" style={{ maskImage: `url('${imgSideNav7}')` }}>
-                        <svg className="absolute block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 12.8911 8.23915">
-                          <g>
-                            <path d={svgPaths.paadd480} fill="#B4B4B4" />
-                          </g>
-                        </svg>
-                      </div>
-                    </div>
-                    {isExpanded && (
-                      <div className="flex flex-[1_0_0] flex-col font-['Space_Grotesk',sans-serif] font-normal justify-center leading-[0] min-h-px min-w-px relative text-[#b4b4b4] text-[12px] tracking-[0.096px]">
-                        <p className="leading-[16px]">User Management</p>
-                      </div>
-                    )}
-                  </div>
+              <div className={cn(`flex w-full gap-4 relative rounded-[4px] shrink-0 items-center`, isExpanded ? 'justify-start pr-3' : 'justify-center')}>
+                <div className=" bg-white shrink-0 h-40 w-40">
+
                 </div>
+                {isExpanded && (
+                  <div className="flex flex-[1_0_0] flex-col font-['Space_Grotesk',sans-serif] font-normal justify-center leading-[0] min-h-px min-w-px relative text-[#b4b4b4] text-[12px] tracking-[0.096px]">
+                    <p className="leading-[16px]">Dashboard</p>
+                  </div>
+                )}
               </div>
 
               {/* Settings */}
-              <div className={`h-[32px] relative rounded-[4px] shrink-0 ${isExpanded ? 'min-w-24.5 w-full' : 'w-full'}`}>
-                <div className="flex flex-row items-center justify-center min-w-[inherit] size-full">
-                  <div className={`content-stretch flex gap-[4px] items-center min-w-[inherit] relative size-full ${isExpanded ? 'justify-center px-3' : 'justify-center'
-                    }`}>
-                    <div className="bg-[#080e12] content-stretch flex items-center justify-center relative rounded-xs shrink-0 size-[16px]">
-                      <div aria-hidden="true" className="absolute border-[#60732b] border-[0.496px] border-solid inset-[-0.248px] pointer-events-none rounded-[2.248px]" />
-                      <p className="font-['Space_Grotesk',sans-serif] font-normal leading-3.5 relative shrink-0 text-[#b4b4b4] text-[10px] tracking-[0.208px] whitespace-nowrap">AF</p>
-                    </div>
-                    {isExpanded && (
-                      <div className="flex flex-[1_0_0] flex-col font-['Space_Grotesk',sans-serif] font-normal justify-center leading-[0] min-h-px min-w-px relative text-[#b4b4b4] text-[12px] tracking-[0.096px]">
-                        <p className="leading-[16px]">Settings</p>
-                      </div>
-                    )}
-                  </div>
+              <div className={cn(`flex w-full gap-4 relative rounded-[4px] shrink-0 items-center`, isExpanded ? 'justify-start pr-3' : 'justify-center')}>
+                <div className=" bg-white shrink-0 h-40 w-40">
+
                 </div>
+                {isExpanded && (
+                  <div className="flex flex-[1_0_0] flex-col font-['Space_Grotesk',sans-serif] font-normal justify-center leading-[0] min-h-px min-w-px relative text-[#b4b4b4] text-[12px] tracking-[0.096px]">
+                    <p className="leading-[16px]">Dashboard</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col h-screen overflow-y-auto">
+        {/* Header */}
+        <header className="flex items-center gap-4 px-8 h-[64px] border-b border-[#202428] shrink-0 bg-[#0A0D10]">
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="flex items-center justify-center size-[32px] rounded-full bg-[#1C2024] hover:bg-[#2A2F34] transition-colors border border-[#2B3035] text-[#B4B4B4]"
+          >
+            <ChevronLeft size={16} className={!isExpanded ? "rotate-180 transition-transform" : "transition-transform"} />
+          </button>
+          <span className="text-[14px] font-bold text-white tracking-wide">Antaris Design System</span>
+        </header>
+
+        {/* Content */}
+        <main className="p-8 md:p-12 max-w-300 w-full mx-auto relative bg-[#0E1015] flex-1">
+          <h1 className="text-[28px] font-bold text-white mb-2 tracking-tight">Sidebar Demo</h1>
+          <p className="text-[15px] text-[#A0A5AA] mb-10 tracking-wide">This is a pixel-perfect implementation of the Antaris Design System sidebar based on the Figma design.</p>
+
+          {/* Cards */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
+            <div className="p-6 rounded-xl bg-[#161A1F] border border-[#202428] hover:bg-[#1C2025] transition-colors">
+              <h3 className="text-[16px] font-bold text-white mb-3">Extended Sidebar</h3>
+              <p className="text-[14px] text-[#868C93] leading-relaxed">Width: 206px with full menu labels<br />and Antaris logo</p>
+            </div>
+            <div className="p-6 rounded-xl bg-[#161A1F] border border-[#202428] hover:bg-[#1C2025] transition-colors">
+              <h3 className="text-[16px] font-bold text-white mb-3">Collapsed Sidebar</h3>
+              <p className="text-[14px] text-[#868C93] leading-relaxed">Width: 64px with icons only and<br />satellite logo</p>
+            </div>
+            <div className="p-6 rounded-xl bg-[#161A1F] border border-[#202428] hover:bg-[#1C2025] transition-colors">
+              <h3 className="text-[16px] font-bold text-white mb-3">Glass Morphism</h3>
+              <p className="text-[14px] text-[#868C93] leading-relaxed">Backdrop blur with gradient<br />borders and shadows</p>
+            </div>
+          </div>
+
+          {/* Features */}
+          <div className="p-8 rounded-xl bg-[#161A1F] border border-[#202428] mb-10">
+            <h3 className="text-[18px] font-bold text-white mb-6">Features</h3>
+            <ul className="space-y-4">
+              <li className="flex items-center gap-3 text-[14px] text-[#A0A5AA]">
+                <div className="size-1.5 rounded-full bg-[#E79E2C] ring-2 ring-[#E79E2C]/20 shadow-[0_0_8px_#E79E2C]"></div>
+                Notification badge indicator (orange dot)
+              </li>
+              <li className="flex items-center gap-3 text-[14px] text-[#A0A5AA]">
+                <div className="size-1.5 rounded-full bg-[#565B62]"></div>
+                Space Grotesk font at 12px with 0.096px letter spacing
+              </li>
+              <li className="flex items-center gap-3 text-[14px] text-[#A0A5AA]">
+                <div className="size-1.5 rounded-full bg-[#565B62]"></div>
+                Gradient separators between menu sections
+              </li>
+              <li className="flex items-center gap-3 text-[14px] text-[#A0A5AA]">
+                <div className="size-1.5 rounded-full bg-[#565B62]"></div>
+                User avatar badge with initials "AF" at the bottom
+              </li>
+              <li className="flex items-center gap-3 text-[14px] text-[#A0A5AA]">
+                <div className="size-1.5 rounded-full bg-[#565B62]"></div>
+                Smooth transitions between collapsed and expanded states
+              </li>
+              <li className="flex items-center gap-3 text-[14px] text-[#A0A5AA]">
+                <div className="size-1.5 rounded-full bg-[#565B62]"></div>
+                Exact spacing: 12px horizontal padding, 8px vertical padding, 24px gap between sections
+              </li>
+            </ul>
+          </div>
+
+          {/* Menu Sections */}
+          <div className="p-8 rounded-xl bg-[#161A1F] border border-[#202428] mb-10 relative">
+            <h3 className="text-[18px] font-bold text-white mb-8">Menu Sections</h3>
+            <div className="flex flex-col md:flex-row gap-16 md:gap-[160px]">
+              <div>
+                <h4 className="text-[15px] font-bold text-white mb-4">Main Navigation</h4>
+                <ul className="space-y-3">
+                  {['Dashboard', 'Mission Objective', 'Mission Modelling', 'Satellites', 'Ground Station', 'Catalog'].map(item => (
+                    <li key={item} className="flex items-center gap-3 text-[14px] text-[#A0A5AA]">
+                      <div className="size-0.75 rounded-full bg-[#565B62]"></div>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h4 className="text-[15px] font-bold text-white mb-4">Bottom Section</h4>
+                <ul className="space-y-3">
+                  {['Notification (with badge)', 'User Management', 'Settings (with avatar)'].map(item => (
+                    <li key={item} className="flex items-center gap-3 text-[14px] text-[#A0A5AA]">
+                      <div className="size-0.75 rounded-full bg-[#565B62]"></div>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            {/* Help Button */}
+            <button className="absolute bottom-8 right-8 flex items-center justify-center size-10 rounded-full bg-[#1C2024] hover:bg-[#2A2F34] transition-colors border border-[#2B3035] text-[#868C93] text-sm font-bold">
+              ?
+            </button>
+          </div>
+        </main>
       </div>
     </div>
   );

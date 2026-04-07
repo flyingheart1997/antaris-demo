@@ -89,7 +89,7 @@ const RadioGroupItem = React.forwardRef<
         >
           <div className={cn(
             "size-1.75 rounded-full",
-            variant === "surface" ? "bg-gray-12" : "bg-white"
+            variant === "surface" ? "bg-gray-12" : "bg-text-primary"
           )} />
         </RadioGroupPrimitive.Indicator>
       </div>

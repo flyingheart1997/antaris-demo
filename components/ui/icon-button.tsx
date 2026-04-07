@@ -38,43 +38,39 @@ const iconButtonVariants = cva(
     },
     compoundVariants: [
       // Accent (Primary/Green)
-      { variant: "solid", color: "accent", className: "bg-green-9 text-gray-1 hover:bg-green-10 active:bg-green-11 shadow-sm" },
-      { variant: "soft", color: "accent", className: "bg-green-alpha-3 text-green-11 hover:bg-green-alpha-4 active:bg-green-alpha-5" },
-      { variant: "surface", color: "accent", className: "bg-green-alpha-2 border-green-7 text-green-11 hover:bg-green-alpha-3 active:bg-green-alpha-4" },
-      { variant: "outline", color: "accent", className: "border-green-7 text-green-11 hover:bg-green-alpha-2 active:bg-green-alpha-3" },
-      { variant: "ghost", color: "accent", className: "text-green-11 hover:bg-green-alpha-2 active:bg-green-alpha-3" },
+      { variant: "solid", color: "accent", className: "bg-green-9 text-gray-1 hover:bg-green-10 active:bg-green-5 active:text-text-selected disabled:bg-gray-3 disabled:text-text-disabled" },
+      { variant: "soft", color: "accent", className: "bg-green-alpha-2 text-text-primary hover:bg-green-alpha-4 hover:text-text-selected active:bg-green-alpha-3 active:text-text-selected disabled:bg-gray-alpha-3 disabled:text-text-disabled" },
+      { variant: "surface", color: "accent", className: "bg-green-alpha-2 text-text-primary border border-stroke-selected hover:bg-green-alpha-4 hover:text-text-selected active:border-stroke-primary active:bg-green-alpha-3 active:text-text-selected disabled:bg-gray-alpha-3 disabled:text-text-disabled disabled:border-stroke-primary" },
+      { variant: "outline", color: "accent", className: "border border-stroke-selected text-text-secondary hover:bg-green-alpha-3 hover:text-text-selected active:border-stroke-primary active:bg-green-alpha-2 active:text-text-selected disabled:bg-gray-alpha-2 disabled:text-text-disabled disabled:border-stroke-primary" },
+      { variant: "ghost", color: "accent", className: "text-text-secondary hover:bg-green-alpha-4 hover:text-text-primary active:bg-green-alpha-3 active:text-text-selected disabled:bg-gray-alpha-2 disabled:text-text-disabled" },
 
       // Neutral (Gray)
-      { variant: "solid", color: "neutral", className: "bg-gray-12 text-gray-1 hover:bg-gray-11 active:bg-gray-10 shadow-sm" },
-      { variant: "soft", color: "neutral", className: "bg-gray-alpha-3 text-gray-12 hover:bg-gray-alpha-4 active:bg-gray-alpha-5" },
-      { variant: "surface", color: "neutral", className: "bg-gray-alpha-2 border-gray-7 text-gray-12 hover:bg-gray-alpha-3 active:bg-gray-alpha-4" },
-      { variant: "outline", color: "neutral", className: "border-gray-7 text-gray-12 hover:bg-gray-alpha-2 active:bg-gray-alpha-3" },
-      { variant: "ghost", color: "neutral", className: "text-gray-12 hover:bg-gray-alpha-2 active:bg-gray-alpha-3" },
+      { variant: "solid", color: "neutral", className: "bg-gray-11 text-gray-1 hover:bg-gray-10 active:bg-gray-6 active:text-text-primary disabled:bg-gray-3 disabled:text-text-disabled" },
+      { variant: "soft", color: "neutral", className: "bg-gray-alpha-2 text-text-primary hover:bg-gray-alpha-4 active:bg-gray-alpha-3 disabled:bg-gray-alpha-3 disabled:text-text-disabled" },
+      { variant: "surface", color: "neutral", className: "bg-gray-alpha-2 text-text-primary border border-stroke-primary hover:bg-gray-alpha-6 active:bg-gray-alpha-4 disabled:bg-gray-alpha-3 disabled:text-text-disabled" },
+      { variant: "outline", color: "neutral", className: "border border-stroke-primary text-text-secondary hover:bg-gray-alpha-4 hover:text-text-primary active:bg-gray-alpha-3 active:text-text-primary disabled:bg-gray-alpha-2 disabled:text-text-disabled" },
+      { variant: "ghost", color: "neutral", className: "text-text-secondary hover:bg-gray-alpha-5 hover:text-text-primary active:bg-gray-alpha-3 active:text-text-primary disabled:bg-gray-alpha-2 disabled:text-text-disabled" },
 
       // Error (Red)
-      { variant: "solid", color: "error", className: "bg-red-9 text-gray-1 hover:bg-red-10 active:bg-red-11 shadow-sm" },
-      { variant: "soft", color: "error", className: "bg-red-alpha-3 text-red-11 hover:bg-red-alpha-4 active:bg-red-alpha-5" },
-      { variant: "surface", color: "error", className: "bg-red-alpha-2 border-red-7 text-red-11 hover:bg-red-alpha-3 active:bg-red-alpha-4" },
-      { variant: "outline", color: "error", className: "border-red-7 text-red-11 hover:bg-red-alpha-2 active:bg-red-alpha-3" },
-      { variant: "ghost", color: "error", className: "text-red-11 hover:bg-red-alpha-2 active:bg-red-alpha-3" },
+      { variant: "solid", color: "error", className: "bg-red-9 text-text-primary hover:bg-red-10 active:bg-red-4 active:text-text-error-subtle disabled:bg-gray-3 disabled:text-text-disabled" },
+      { variant: "soft", color: "error", className: "bg-red-alpha-2 text-text-primary hover:bg-red-alpha-4 hover:text-text-error active:bg-red-alpha-3 active:text-text-error disabled:bg-gray-alpha-3 disabled:text-text-disabled" },
+      { variant: "surface", color: "error", className: "bg-red-alpha-2 text-text-primary border border-stroke-error hover:bg-red-alpha-4 hover:text-text-error active:bg-red-alpha-3 active:text-text-error disabled:bg-gray-alpha-3 disabled:text-text-disabled disabled:border-stroke-primary" },
+      { variant: "outline", color: "error", className: "border border-stroke-error text-text-secondary hover:bg-red-alpha-3 hover:text-text-error active:bg-red-alpha-2 active:text-text-error disabled:bg-gray-alpha-2 disabled:text-text-disabled disabled:border-stroke-primary" },
+      { variant: "ghost", color: "error", className: "text-text-secondary hover:bg-red-alpha-4 hover:text-text-primary active:bg-red-alpha-3 active:text-text-error disabled:bg-gray-alpha-2 disabled:text-text-disabled" },
 
       // Warning (Yellow/Orange)
-      { variant: "solid", color: "warning", className: "bg-yellow-9 text-gray-1 hover:bg-yellow-10 active:bg-yellow-11 shadow-sm" },
-      { variant: "soft", color: "warning", className: "bg-yellow-alpha-3 text-yellow-11 hover:bg-yellow-alpha-4 active:bg-yellow-alpha-5" },
-      { variant: "surface", color: "warning", className: "bg-yellow-alpha-2 border-yellow-7 text-yellow-11 hover:bg-yellow-alpha-3 active:bg-yellow-alpha-4" },
-      { variant: "outline", color: "warning", className: "border-yellow-7 text-yellow-11 hover:bg-yellow-alpha-2 active:bg-yellow-alpha-3" },
-      { variant: "ghost", color: "warning", className: "text-yellow-11 hover:bg-yellow-alpha-2 active:bg-yellow-alpha-3" },
+      { variant: "solid", color: "warning", className: "bg-yellow-9 text-gray-1 hover:bg-yellow-10 active:bg-yellow-5 active:text-text-warning disabled:bg-gray-3 disabled:text-text-disabled" },
+      { variant: "soft", color: "warning", className: "bg-yellow-alpha-2 text-text-primary hover:bg-yellow-alpha-4 hover:text-text-warning active:bg-yellow-alpha-3 active:text-text-warning disabled:bg-gray-alpha-3 disabled:text-text-disabled" },
+      { variant: "surface", color: "warning", className: "bg-yellow-alpha-2 text-text-primary border border-stroke-warning hover:bg-yellow-alpha-4 hover:text-text-warning active:bg-yellow-alpha-3 active:text-text-warning disabled:bg-gray-alpha-3 disabled:text-text-disabled disabled:border-stroke-primary" },
+      { variant: "outline", color: "warning", className: "border border-stroke-warning text-text-secondary hover:bg-yellow-alpha-3 hover:text-text-warning active:bg-yellow-alpha-2 active:text-text-warning disabled:bg-gray-alpha-2 disabled:text-text-disabled disabled:border-stroke-primary" },
+      { variant: "ghost", color: "warning", className: "text-text-secondary hover:bg-yellow-alpha-4 hover:text-text-primary active:bg-yellow-alpha-3 active:text-text-warning disabled:bg-gray-alpha-2 disabled:text-text-disabled" },
 
       // Info (Blue)
-      { variant: "solid", color: "info", className: "bg-blue-9 text-gray-1 hover:bg-blue-10 active:bg-blue-11 shadow-sm" },
-      { variant: "soft", color: "info", className: "bg-blue-alpha-3 text-blue-11 hover:bg-blue-alpha-4 active:bg-blue-alpha-5" },
-      { variant: "surface", color: "info", className: "bg-blue-alpha-2 border-blue-7 text-blue-11 hover:bg-blue-alpha-3 active:bg-blue-alpha-4" },
-      { variant: "outline", color: "info", className: "border-blue-7 text-blue-11 hover:bg-blue-alpha-2 active:bg-blue-alpha-3" },
-      { variant: "ghost", color: "info", className: "text-blue-11 hover:bg-blue-alpha-2 active:bg-blue-alpha-3" },
-
-      // Selected State (mimicking the 'Selected' logic from Figma)
-      { variant: "soft", color: "accent", className: "aria-selected:bg-green-alpha-5" },
-      { variant: "surface", color: "accent", className: "aria-selected:bg-green-alpha-4 border-green-8 shadow-[inset_0_1px_2px_rgba(0,0,0,0.1)]" },
+      { variant: "solid", color: "info", className: "bg-blue-9 text-gray-1 hover:bg-blue-10 active:bg-blue-5 active:text-text-info disabled:bg-gray-3 disabled:text-text-disabled" },
+      { variant: "soft", color: "info", className: "bg-blue-alpha-2 text-text-primary hover:bg-blue-alpha-4 hover:text-text-info active:bg-blue-alpha-3 active:text-text-info disabled:bg-gray-alpha-3 disabled:text-text-disabled" },
+      { variant: "surface", color: "info", className: "bg-blue-alpha-2 text-text-primary border border-stroke-info hover:bg-blue-alpha-4 hover:text-text-info active:bg-blue-alpha-3 active:text-text-info disabled:bg-gray-alpha-3 disabled:text-text-disabled disabled:border-stroke-primary" },
+      { variant: "outline", color: "info", className: "border border-stroke-info text-text-secondary hover:bg-blue-alpha-3 hover:text-text-info active:bg-blue-alpha-2 active:text-text-info disabled:bg-gray-alpha-2 disabled:text-text-disabled disabled:border-stroke-primary" },
+      { variant: "ghost", color: "info", className: "text-text-secondary hover:bg-blue-alpha-4 hover:text-text-primary active:bg-blue-alpha-3 active:text-text-info disabled:bg-gray-alpha-2 disabled:text-text-disabled" },
     ],
     defaultVariants: {
       variant: "surface",
@@ -89,10 +85,11 @@ interface IconButtonProps
   extends Omit<React.ComponentProps<"button">, "color">,
   VariantProps<typeof iconButtonVariants> {
   asChild?: boolean
+  selected?: boolean
 }
 
 const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
-  ({ className, variant, color, size, radius, asChild = false, ...props }, ref) => {
+  ({ className, variant, color, size, radius, asChild = false, selected, ...props }, ref) => {
     const Comp = asChild ? Slot : "button"
 
     return (
@@ -100,6 +97,8 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
         ref={ref}
         data-slot="icon-button"
         data-variant={variant}
+        data-selected={selected ? "true" : undefined}
+        aria-pressed={selected}
         data-color={color}
         data-size={size}
         data-radius={radius}
