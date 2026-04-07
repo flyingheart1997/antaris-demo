@@ -13,13 +13,16 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar"
+import { SidebarLogo } from "@/components/ui/sidebar/sidebar-background"
 import { Input } from "@/components/ui/input"
 import { Search, Layers } from "lucide-react"
 import {
   getComponentsByCategory,
   type ComponentCategory,
 } from "../config/components"
+import { Separator } from "@/components/ui/separator"
 
 const CATEGORY_ORDER: ComponentCategory[] = ["UI", "Forms", "Layout", "Feedback"]
 
@@ -58,6 +61,8 @@ export function DocsSidebar() {
   const pathname = usePathname()
   const [query, setQuery] = React.useState("")
   const grouped = React.useMemo(() => getComponentsByCategory(), [])
+  const { state } = useSidebar()
+  const isCollapsed = state === "collapsed"
 
   const filtered = React.useMemo(() => {
     if (!query.trim()) return grouped
@@ -74,49 +79,40 @@ export function DocsSidebar() {
   }, [grouped, query])
 
   return (
-    <Sidebar collapsible="none" className="border-r border-stroke-primary bg-surface-primary h-full">
-      {/* ── Logo / Header ── */}
-      <SidebarHeader className="border-b border-stroke-primary px-16 py-14">
-        <Link
-          href="/component-docs"
-          className="flex items-center gap-10 group"
-        >
-          <div className="size-28 rounded-md bg-green-9 flex items-center justify-center shrink-0 shadow-sm group-hover:bg-green-10 transition-colors">
-            <Layers size={16} className="text-gray-1" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-md font-bold text-text-primary leading-tight font-heading">
-              Antaris UI
-            </span>
-            <span className="text-xs text-text-disabled leading-tight">
-              Component Library
-            </span>
-          </div>
+    <Sidebar collapsible="icon">
+      {/* ── Brand Logo Header ── */}
+      <SidebarHeader className="w-full flex flex-col items-center">
+        <Link href="/component-docs" className="block w-full">
+          <SidebarLogo />
         </Link>
 
-        {/* Search */}
-        <div className="mt-12">
-          <Input
-            leadingIcon={<Search size={14} />}
-            placeholder="Search components..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            className="h-32 text-sm"
-          />
-        </div>
+        {/* Search - only visible in expanded state */}
+        {!isCollapsed && (
+          <div className="w-full mt-24">
+            <Input
+              leadingIcon={<Search size={14} />}
+              placeholder="Search components..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="h-32 text-sm bg-surface-primary border-stroke-primary"
+            />
+          </div>
+        )}
       </SidebarHeader>
 
-      {/* ── Nav ── */}
-      <SidebarContent className="px-8 py-8">
+      {/* ── Component Navigation ── */}
+      <SidebarContent className="w-full">
         {CATEGORY_ORDER.map((category) => {
           const items = filtered[category]
           if (items.length === 0) return null
           return (
-            <SidebarGroup key={category} className="mb-8 p-0">
-              <SidebarGroupLabel className="flex items-center gap-6 px-8 py-6 mb-4 text-xs font-semibold uppercase tracking-widest text-text-disabled">
+            <SidebarGroup key={category} className="p-0">
+              <Separator className="my-4" />
+              <SidebarGroupLabel className="flex items-center gap-6 py-3 text-md font-semibold uppercase tracking-widest text-text-disabled">
                 <span className="text-icon-secondary">{CATEGORY_ICONS[category]}</span>
                 {category}
               </SidebarGroupLabel>
+              <Separator className="mt-4" />
               <SidebarGroupContent>
                 <SidebarMenu>
                   {items.map((component) => {
@@ -124,22 +120,12 @@ export function DocsSidebar() {
                     const isActive = pathname === href
                     return (
                       <SidebarMenuItem key={component.slug}>
-                        <SidebarMenuButton
-                          asChild
-                          isActive={isActive}
-                          className={`
-                            h-32 rounded-md px-8 text-sm transition-all
-                            ${isActive
-                              ? "bg-green-alpha-3 text-green-11 border border-green-7 font-medium"
-                              : "text-text-secondary hover:bg-surface-hover hover:text-text-primary border border-transparent"
-                            }
-                          `}
-                        >
-                          <Link href={href} className="flex items-center gap-8">
-                            <span className={`size-6 rounded-full shrink-0 ${isActive ? "bg-green-9" : "bg-gray-alpha-4"}`} />
+                        <SidebarMenuButton asChild isActive={isActive}>
+                          <Link href={href} className="flex items-center gap-8 w-full">
+                            <Layers size={14} className={isActive ? "text-green-9" : "text-text-disabled"} />
                             <span className="truncate">{component.name}</span>
                             {component.badge && (
-                              <span className="ml-auto text-xs bg-green-alpha-3 text-green-11 px-4 py-0.5 rounded-sm font-medium shrink-0">
+                              <span className="ml-auto text-[10px] bg-green-alpha-3 text-green-11 px-4 py-0.5 rounded-sm font-medium shrink-0 uppercase tracking-wider">
                                 {component.badge}
                               </span>
                             )}
@@ -166,12 +152,13 @@ export function DocsSidebar() {
       </SidebarContent>
 
       {/* ── Footer ── */}
-      <div className="mt-auto border-t border-stroke-primary px-16 py-12">
-        <p className="text-xs text-text-disabled">
-          {/* Count of registered components */}
-          {Object.values(grouped).flat().length} components · Antaris DS
-        </p>
-      </div>
+      {!isCollapsed && (
+        <div className="w-full flex items-center justify-center py-12">
+          <p className="text-[10px] text-text-disabled uppercase tracking-widest font-medium opacity-60">
+            {Object.values(grouped).flat().length} components · Antaris DS
+          </p>
+        </div>
+      )}
     </Sidebar>
   )
 }
