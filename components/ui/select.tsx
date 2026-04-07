@@ -25,8 +25,8 @@ const selectTriggerVariants = cva(
         error: "!border-stroke-error",
       },
       size: {
-        md: "h-24 text-xs font-regular",
-        lg: "h-28 text-xs font-regular",
+        md: "h-24 text-md font-regular",
+        lg: "h-28 text-lg font-regular",
       },
     },
     defaultVariants: {
@@ -89,7 +89,11 @@ const SelectTrigger = React.forwardRef<
             {leadingIcon}
           </span>
         )}
-        <span className="flex-1 truncate px-6 text-text-primary opacity-100 group-data-placeholder/select:opacity-60 group-data-state-open/select:opacity-100 group-data-[read-only=true]/select:opacity-100 group-data-[color=error]/select:text-text-error-subtle! font-[inherit]">
+        <span className={
+          cn("flex-1 truncate text-text-primary opacity-100 group-data-placeholder/select:opacity-60 group-data-state-open/select:opacity-100 group-data-[read-only=true]/select:opacity-100 group-data-[color=error]/select:text-text-error-subtle! font-[inherit]",
+            leadingIcon ? 'pr-6' : 'px-6'
+          )
+        }>
           {children}
         </span>
       </div>
@@ -192,7 +196,7 @@ const SelectLabel = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Label
     ref={ref}
-    className={cn("text-text-secondary px-2 py-0.5 text-xs font-medium uppercase tracking-wider", className)}
+    className={cn("text-text-secondary px-2 py-0.5 text-lg font-medium uppercase tracking-wider", className)}
     {...props}
   />
 ))
@@ -209,7 +213,8 @@ const SelectItem = React.forwardRef<
     <SelectPrimitive.Item
       ref={ref}
       className={cn(
-        "group/select-item relative flex w-full h-24 cursor-default select-none items-center rounded-md px-4 outline-none transition-colors duration-100 hover:bg-surface-hover focus:bg-surface-hover focus:text-text-primary data-disabled:pointer-events-none data-disabled:opacity-50 text-xs font-[inherit]",
+        "group/select-item relative flex w-full h-24 cursor-default select-none items-center rounded-md px-4 outline-none transition-colors duration-100 hover:bg-surface-hover focus:bg-surface-hover focus:text-text-primary data-disabled:pointer-events-none data-disabled:opacity-50 font-[inherit]",
+        size === "lg" ? "text-lg" : "text-md",
         className
       )}
       data-size={effectiveSize}

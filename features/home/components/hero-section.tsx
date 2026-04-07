@@ -127,7 +127,7 @@ export default function HeroSection() {
                                     </Link>
                                 </Button>
                                 <Link
-                                    href="/docs/tech-stacks"
+                                    href="/component-docs"
                                     className="text-text-secondary hover:text-text-primary flex items-center gap-2 text-sm font-medium transition-colors">
                                     <span>Learn more</span>
                                     <ChevronRight className="size-4" />

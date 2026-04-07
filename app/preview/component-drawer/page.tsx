@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Drawer, DrawerTrigger, DrawerContainer, DrawerItem } from "@/components/ui/component-drawer"
+import { Drawer, DrawerTrigger, DrawerContainer, DrawerItem } from "@/components/ui/drawer"
 import { IconButton } from "@/components/ui/icon-button"
 import { Search, Settings, Sun, Thermometer, Rocket, Upload, Users } from "lucide-react"
 
@@ -16,11 +16,7 @@ export default function ComponentDrawerPreview() {
           <span className="text-sm font-medium text-gray-500">Expanded (state="on")</span>
           <Drawer defaultOpen={true}>
             <DrawerTrigger>
-              <IconButton asChild variant="ghost" className="text-icon-primary hover:bg-surface-hover">
-                <span className="inline-flex">
-                  <Settings />
-                </span>
-              </IconButton>
+              <Settings />
             </DrawerTrigger>
             <DrawerContainer>
               <DrawerItem active>
@@ -50,11 +46,7 @@ export default function ComponentDrawerPreview() {
           <span className="text-sm font-medium text-gray-500">Collapsed (state="off")</span>
           <Drawer defaultOpen={false}>
             <DrawerTrigger>
-              <IconButton asChild variant="ghost" className="text-icon-primary hover:bg-surface-hover">
-                <span className="inline-flex">
-                  <Settings />
-                </span>
-              </IconButton>
+              <Settings />
             </DrawerTrigger>
             <DrawerContainer>
               <DrawerItem active>

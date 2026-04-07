@@ -66,14 +66,14 @@ All colors use **OKLCH** color space for perceptual uniformity.
 
 | Token | Value | Usage |
 |---|---|---|
-| `font-family-heading` | Space Grotesk | Headings |
-| `font-family-body` | Montserrat | Body text |
-| `font-family-code` | Fira Mono | Code blocks |
+| `font-heading` | Space Grotesk | Headings |
+| `font-body` | Montserrat | Body text |
+| `font-code` | Fira Mono | Code blocks |
 | `font-weight-light` | 300 | - |
 | `font-weight-regular` | 400 | - |
 | `font-weight-medium` | 500 | - |
 | `font-weight-bold` | 700 | - |
-| `font-size-xxxl` → `font-size-xs` | 1.5rem → 0.5rem | Size scale |
+| `text-xxxl` → `text-xs` | 1.5rem → 0.5rem | Size scale |
 
 ### Spacing
 

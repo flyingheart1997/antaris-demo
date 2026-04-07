@@ -109,7 +109,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       <div className="flex w-full flex-col gap-4">
         {label && (
           <div className="flex items-center py-4">
-            <Label className="text-text-secondary text-sm font-medium" icon={labelIcon ? (typeof labelIcon === 'boolean' ? <Info size={14} /> : labelIcon) : undefined}>
+            <Label className="text-text-secondary text-md font-medium" icon={labelIcon ? (typeof labelIcon === 'boolean' ? <Info size={14} /> : labelIcon) : undefined}>
               {labelText}
             </Label>
           </div>
@@ -139,7 +139,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
             {helper && (
               <span
                 className={cn(
-                  "text-xs leading-tight",
+                  "text-sm leading-tight",
                   isError ? "text-text-error" : "text-text-secondary"
                 )}
               >
@@ -147,7 +147,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
               </span>
             )}
             {units && (
-              <span className="text-text-secondary ml-auto text-xs whitespace-nowrap tabular-nums">
+              <span className="text-text-secondary ml-auto text-sm whitespace-nowrap tabular-nums">
                 {unitsText || `${currentLength}${maxLength ? `/${maxLength}` : ""}`}
               </span>
             )}

@@ -8,7 +8,7 @@ import { Check, Minus } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const checkboxVariants = cva(
-  "peer relative shrink-0 transition-all outline-none disabled:pointer-events-none disabled:opacity-50 size-16 rounded-sm border",
+  "peer relative shrink-0 transition-all outline-none disabled:pointer-events-none disabled:opacity-50 size-16 rounded-md border",
   {
     variants: {
       variant: {
@@ -44,7 +44,7 @@ const Checkbox = React.forwardRef<
       {...props}
     >
       <CheckboxPrimitive.Indicator
-        className={cn("flex items-center justify-center text-gray-10")}
+        className={cn("flex items-center justify-center text-text-primary")}
       >
         {props.checked === "indeterminate" ? (
           <Minus className="size-10" strokeWidth={3} />
@@ -62,7 +62,7 @@ const Checkbox = React.forwardRef<
   return (
     <label
       data-disabled={props.disabled}
-      className="flex items-start gap-4 cursor-pointer group data-[disabled=true]:opacity-50 data-[disabled=true]:pointer-events-none"
+      className="flex items-center gap-4 cursor-pointer group data-[disabled=true]:opacity-50 data-[disabled=true]:pointer-events-none"
     >
       {checkbox}
       <span className="text-md font-regular text-text-primary leading-none select-none">

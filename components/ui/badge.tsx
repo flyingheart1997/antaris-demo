@@ -23,41 +23,47 @@ const badgeVariants = cva(
         info: "",
       },
       size: {
-        sm: "h-20 px-5 py-1 text-[11px] rounded-sm",
-        md: "h-24 px-6 py-1 text-xs rounded-sm",
-        lg: "h-28 px-8 py-1 text-xs rounded-md",
+        sm: "px-4 py-2 text-md rounded-md gap-4",
+        md: "px-6 py-4 text-md rounded-md gap-4",
+        lg: "px-8 py-6 text-lg rounded-md gap-4",
       },
     },
     compoundVariants: [
       // Accent (Primary/Green)
-      { variant: "solid", color: "accent", className: "bg-green-9 text-gray-1 hover:bg-green-10 active:bg-green-11 shadow-sm" },
-      { variant: "soft", color: "accent", className: "bg-green-alpha-3 text-green-11 hover:bg-green-alpha-4 active:bg-green-alpha-5" },
-      { variant: "surface", color: "accent", className: "bg-green-alpha-2 border-green-7 text-green-11 hover:bg-green-alpha-3 active:bg-green-alpha-4" },
-      { variant: "outline", color: "accent", className: "border-green-7 text-green-11 hover:bg-green-alpha-2 active:bg-green-alpha-3" },
+      { variant: "solid", color: "accent", className: "bg-surface-focus text-text-primary" },
+      { variant: "soft", color: "accent", className: "bg-surface-selected text-text-primary" },
+      { variant: "surface", color: "accent", className: "border border-stroke-selected text-text-primary" },
+      { variant: "outline", color: "accent", className: "bg-surface-selected border border-stroke-selected text-text-primary" },
+
+      // Success (Primary/Green)
+      { variant: "solid", color: "success", className: "bg-surface-success text-text-focus-subtle" },
+      { variant: "soft", color: "success", className: "bg-surface-selected text-text-focus-subtle" },
+      { variant: "surface", color: "success", className: "border border-stroke-success text-text-focus-subtle" },
+      { variant: "outline", color: "success", className: "bg-surface-selected border border-stroke-success text-text-focus-subtle" },
 
       // Neutral (Gray)
-      { variant: "solid", color: "neutral", className: "bg-gray-12 text-gray-1 hover:bg-gray-11 active:bg-gray-10 shadow-sm" },
-      { variant: "soft", color: "neutral", className: "bg-gray-alpha-3 text-gray-12 hover:bg-gray-alpha-4 active:bg-gray-alpha-5" },
-      { variant: "surface", color: "neutral", className: "bg-gray-alpha-2 border-gray-7 text-gray-12 hover:bg-gray-alpha-3 active:bg-gray-alpha-4" },
-      { variant: "outline", color: "neutral", className: "border-gray-7 text-gray-12 hover:bg-gray-alpha-2 active:bg-gray-alpha-3" },
+      { variant: "solid", color: "neutral", className: "bg-gray-3 text-text-secondary" },
+      { variant: "soft", color: "neutral", className: "bg-surface-tertiary text-text-secondary" },
+      { variant: "surface", color: "neutral", className: "border border-stroke-primary text-text-secondary" },
+      { variant: "outline", color: "neutral", className: "border border-stroke-primary bg-surface-bg text-text-secondary" },
 
       // Error (Red)
-      { variant: "solid", color: "error", className: "bg-red-9 text-gray-1 hover:bg-red-10 active:bg-red-11 shadow-sm" },
-      { variant: "soft", color: "error", className: "bg-red-alpha-3 text-red-11 hover:bg-red-alpha-4 active:bg-red-alpha-5" },
-      { variant: "surface", color: "error", className: "bg-red-alpha-2 border-red-7 text-red-11 hover:bg-red-alpha-3 active:bg-red-alpha-4" },
-      { variant: "outline", color: "error", className: "border-red-7 text-red-11 hover:bg-red-alpha-2 active:bg-red-alpha-3" },
+      { variant: "solid", color: "error", className: "bg-surface-error-hover text-text-error" },
+      { variant: "soft", color: "error", className: "bg-surface-error text-text-error" },
+      { variant: "surface", color: "error", className: "border border-stroke-error text-text-error" },
+      { variant: "outline", color: "error", className: "border border-stroke-error bg-surface-error text-text-error" },
 
       // Warning (Yellow/Orange)
-      { variant: "solid", color: "warning", className: "bg-yellow-9 text-gray-1 hover:bg-yellow-10 active:bg-yellow-11 shadow-sm" },
-      { variant: "soft", color: "warning", className: "bg-yellow-alpha-3 text-yellow-11 hover:bg-yellow-alpha-4 active:bg-yellow-alpha-5" },
-      { variant: "surface", color: "warning", className: "bg-yellow-alpha-2 border-yellow-7 text-yellow-11 hover:bg-yellow-alpha-3 active:bg-yellow-alpha-4" },
-      { variant: "outline", color: "warning", className: "border-yellow-7 text-yellow-11 hover:bg-yellow-alpha-2 active:bg-yellow-alpha-3" },
+      { variant: "solid", color: "warning", className: "bg-surface-warning-hover text-text-warning" },
+      { variant: "soft", color: "warning", className: "bg-surface-warning text-text-warning" },
+      { variant: "surface", color: "warning", className: "border border-stroke-warning text-text-warning" },
+      { variant: "outline", color: "warning", className: "border border-stroke-warning bg-surface-warning-hover text-text-warning" },
 
       // Info (Blue)
-      { variant: "solid", color: "info", className: "bg-blue-9 text-gray-1 hover:bg-blue-10 active:bg-blue-11 shadow-sm" },
-      { variant: "soft", color: "info", className: "bg-blue-alpha-3 text-blue-11 hover:bg-blue-alpha-4 active:bg-blue-alpha-5" },
-      { variant: "surface", color: "info", className: "bg-blue-alpha-2 border-blue-7 text-blue-11 hover:bg-blue-alpha-3 active:bg-blue-alpha-4" },
-      { variant: "outline", color: "info", className: "border-blue-7 text-blue-11 hover:bg-blue-alpha-2 active:bg-blue-alpha-3" },
+      { variant: "solid", color: "info", className: "bg-surface-info-hover text-text-info" },
+      { variant: "soft", color: "info", className: "bg-surface-info text-text-info" },
+      { variant: "surface", color: "info", className: "border border-stroke-info text-text-info" },
+      { variant: "outline", color: "info", className: "border border-stroke-info bg-surface-info text-text-info" },
 
     ],
     defaultVariants: {
@@ -109,7 +115,7 @@ const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
                 {iconStart}
               </span>
             )}
-            <span className="truncate" data-slot="badge-text">
+            <span className="truncate text-font-size-md" data-slot="badge-text">
               {children}
             </span>
             {iconEnd && (

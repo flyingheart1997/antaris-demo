@@ -14,22 +14,43 @@ export default function ButtonPreview() {
     <div className="p-40 space-y-40 bg-surface-bg min-h-screen">
       <h1 className="text-xxxl font-bold mb-20 text-text-primary">Antaris Button System Showcase</h1>
 
-      {/* Main Grid: Variant x Color */}
+      {/* Main Grid: Variant x Color x State */}
       <div className="space-y-32">
         {VARIANTS.map((variant) => (
           <div key={variant} className="space-y-16">
             <h2 className="text-xl font-semibold capitalize text-text-secondary border-b border-stroke-primary pb-8">
               Variant: {variant}
             </h2>
-            <div className="flex flex-wrap gap-16">
-              {COLORS.map((color) => (
-                <div key={color} className="flex flex-col items-center gap-8">
-                  <Button variant={variant} color={color} size="md">
-                    {color.charAt(0).toUpperCase() + color.slice(1)}
-                  </Button>
-                  <span className="text-xs text-text-disabled">{color}</span>
-                </div>
-              ))}
+            <div className="overflow-x-auto">
+              <div className="grid grid-cols-4 gap-y-12 gap-x-16 items-center min-w-175">
+                <div className="text-sm font-medium text-text-secondary">Color</div>
+                <div className="text-sm font-medium text-text-secondary">Default (Hover / Click)</div>
+                <div className="text-sm font-medium text-text-secondary">Selected Prop</div>
+                <div className="text-sm font-medium text-text-secondary">Disabled Prop</div>
+
+                {COLORS.map((color) => (
+                  <React.Fragment key={color}>
+                    <div className="text-sm font-medium capitalize text-text-primary">
+                      {color}
+                    </div>
+                    <div>
+                      <Button variant={variant} color={color} size="md">
+                        Normal
+                      </Button>
+                    </div>
+                    <div>
+                      <Button variant={variant} color={color} size="md" selected>
+                        Selected
+                      </Button>
+                    </div>
+                    <div>
+                      <Button variant={variant} color={color} size="md" disabled>
+                        Disabled
+                      </Button>
+                    </div>
+                  </React.Fragment>
+                ))}
+              </div>
             </div>
           </div>
         ))}

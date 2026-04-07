@@ -445,7 +445,7 @@
           "com.figma.isOverride": true
         }
       },
-      "focus-subltle": {
+      "focus-subtle": {
         "$type": "color",
         "$value": {
           "colorSpace": "srgb",
@@ -845,7 +845,7 @@
           "com.figma.isOverride": true
         }
       },
-      "warnig": {
+      "warning": {
         "$type": "color",
         "$value": {
           "colorSpace": "srgb",
@@ -871,7 +871,7 @@
           "com.figma.isOverride": true
         }
       },
-      "warnig-hover": {
+      "warning-hover": {
         "$type": "color",
         "$value": {
           "colorSpace": "srgb",
