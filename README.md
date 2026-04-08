@@ -9,7 +9,7 @@
 This is a full-stack enterprise web application that serves as:
 
 1. **Design System Engine** — Houses the Antaris Design System: a Figma-synced component library with 38 UI components and design tokens extracted from the Antaris Figma source-of-truth.
-2. **Component Preview Portal** — Interactive preview pages (`/preview/*`) for each UI component where developers can inspect all variants, states, and props.
+2. **Component Preview Portal** — Interactive preview pages (`/preview/*`) for 20+ UI components and a structured docs portal at `/component-docs` with props tables, variants, and live previews.
 3. **User Management CRUD** — Production-grade CRUD application (`/users`) demonstrating the oRPC + TanStack Query data flow pattern.
 4. **Authentication Reference** — Keycloak-based OAuth 2.0 + UMA authentication with httpOnly cookie session management.
 5. **Security Playground** — Arcjet integration for server-side WAF, bot detection, and rate limiting applied as oRPC middleware.

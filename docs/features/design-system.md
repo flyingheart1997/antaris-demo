@@ -159,8 +159,39 @@ Reads SVG files from `icons/svg/` → generates React components in `icons/src/`
 
 ---
 
-## Edge Cases
+## Edge Cases & Known Issues
 
-1. **Dark mode**: Only dark mode tokens are currently defined in `index.css`. Light mode would need additional `:root` overrides or a `.light` class block.
-2. **Token naming**: Some tokens have typos (`surface-warnig` instead of `surface-warning`, `icon-focus-subltle` instead of `icon-focus-subtle`) — inherited from Figma.
-3. **Separator gradient**: `stroke-separator` is a `linear-gradient`, not a solid color — used via `background-image`, not `border-color`.
+### 1. Dark Mode Only
+Only dark mode tokens are currently defined in `styles/src/index.css`. The `:root` block contains only the dark palette.
+
+**Light mode status:** Not planned for the current demo phase. If needed, add a `.light` class block to `index.css` and override the semantic tokens (`text-primary`, `surface-bg`, etc.) with light equivalents. The `ThemeProvider` already supports the `class` strategy via `next-themes`.
+
+---
+
+### 2. Token Name Typos (Inherited from Figma)
+
+These typos exist in the generated CSS and TypeScript tokens. They are inherited from the Figma source file and carried through the build pipeline as-is:
+
+| Typo token | Correct name | Impact |
+|---|---|---|
+| `surface-warnig` | `surface-warning` | Warning surface backgrounds may not resolve correctly |
+| `icon-focus-subltle` | `icon-focus-subtle` | Focus icon color may not apply |
+
+**Why not fixed:** Changing the token names would require updating the Figma source and re-syncing. Any component that already uses the typo'd name would break silently if renamed without a codebase-wide find-and-replace.
+
+**How to use:** If you need `surface-warning`, check whether `surface-warnig` (typo) is the token that actually exists in `index.css`. Use the typo'd name in your className to match the generated CSS variable.
+
+**Fix plan:** When Figma tokens are next re-exported, fix the names in the Figma file before running `pnpm build:token`.
+
+---
+
+### 3. Separator Gradient
+`stroke-separator` is a `linear-gradient`, not a solid color. It cannot be used as `border-color`. Instead use:
+
+```typescript
+// ✅ Correct
+className="bg-(image:--color-stroke-separator)"
+
+// or via background-image utility if mapped in @theme
+className="bg-image-stroke-separator"
+```

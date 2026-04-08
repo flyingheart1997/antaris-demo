@@ -44,4 +44,22 @@ User visits / → app/page.tsx → HeroSection component
 ---
 
 ## Edge Cases
-- HeroHeader is currently **commented out** in `app/layout.tsx` — can be re-enabled by uncommenting `{/* <HeroHeader /> */}`
+
+### HeroHeader — Intentionally Commented Out
+
+`HeroHeader` is commented out in `app/layout.tsx`:
+
+```typescript
+// app/layout.tsx
+<AllProviders token={token ?? null}>
+    <Toaster />
+    {/* <HeroHeader /> */}   ← commented out
+    {children}
+</AllProviders>
+```
+
+**Why:** The header navigation was removed from the global layout while the app is in demo/development mode. The current focus is the `/users` CRUD flow and the component preview system — a persistent nav header adds visual noise without a real multi-page navigation structure to support yet.
+
+**To re-enable:** Uncomment `{/* <HeroHeader /> */}` in [app/layout.tsx](../../app/layout.tsx).
+
+**When to re-enable:** When the real ATMOS navigation structure (missions, ground stations, scheduling, telemetry) is designed and implemented. The header component itself ([features/home/components/header.tsx](../../features/home/components/header.tsx)) is the correct place to build that nav.

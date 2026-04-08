@@ -16,6 +16,13 @@ antaris/
 ├── styles/                 # Design tokens (Figma-synced CSS variables)
 ├── utils/                  # General-purpose utility functions (currently empty)
 ├── docs/                   # Project documentation
+│   ├── ai-context/         # AI context layer: system overview, rules, feature map
+│   ├── architecture/       # System design, data flow, API, component system, token pipeline
+│   ├── features/           # Feature docs: users, auth, design system, home, security
+│   ├── modules/            # Module docs: oRPC server, oRPC client, state management, providers
+│   ├── decisions/          # Architectural decisions and documentation sync rules
+│   ├── setup/              # Developer setup: environment variables, onboarding guide
+│   └── ai-workflows/       # AI task execution workflows
 ├── .env                    # Environment variables
 ├── components.json         # ShadCN UI configuration
 ├── next.config.ts          # Next.js configuration

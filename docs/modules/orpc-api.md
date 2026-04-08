@@ -2,6 +2,10 @@
 
 ## Purpose
 Type-safe RPC API system using @orpc that provides:
+
+> **Deep Dive Docs:**
+> - [orpc-server.md](orpc-server.md) — Full server-side breakdown: router, handlers, Arcjet middleware, auth token flow
+> - [orpc-client-tanstack.md](orpc-client-tanstack.md) — Full client-side breakdown: oRPC client, TanStack Query, SSR hydration, queries, mutations
 - Server-side route definitions with Zod validation
 - Automatic TypeScript client generation
 - TanStack Query integration for caching

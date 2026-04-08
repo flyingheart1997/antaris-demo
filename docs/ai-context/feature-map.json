@@ -98,8 +98,28 @@
           "update",
           "delete"
         ],
-        "mission": []
+        "mission": [],
+        "_mission_note": "Placeholder — satellite mission operations. Empty until ATMOS mission API is integrated."
       }
+    },
+    "component-docs": {
+      "description": "Interactive component documentation portal with live previews, props tables, and code examples",
+      "files": {
+        "pages": [
+          "app/component-docs/page.tsx",
+          "app/component-docs/layout.tsx",
+          "app/component-docs/[slug]/page.tsx"
+        ],
+        "config": "app/component-docs/config/components.ts",
+        "internal-components": [
+          "app/component-docs/_components/DocsSidebar.tsx",
+          "app/component-docs/_components/DocsTabs.tsx",
+          "app/component-docs/_components/ComponentPreview.tsx",
+          "app/component-docs/_components/CodeBlock.tsx",
+          "app/component-docs/_components/PropsTable.tsx"
+        ]
+      },
+      "note": "Separate from /preview/* pages — this is the structured docs portal. /preview/* are raw showcase pages."
     },
     "security": {
       "description": "Arcjet-based application security: WAF, bot detection, rate limiting",
