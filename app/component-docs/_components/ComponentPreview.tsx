@@ -68,12 +68,12 @@ export function ComponentPreview({ slug, height = 480, title }: ComponentPreview
 
         {/* URL pill */}
         <div className="flex-1 mx-16 max-w-xs">
-          <div className="flex items-center gap-6 h-24 px-10 rounded-md bg-surface-secondary border border-stroke-primary">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-text-disabled shrink-0">
+          <div className="flex items-center gap-6 h-24 px-10 rounded-md bg-surface-primary border border-stroke-primary">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-text-secondary shrink-0">
               <rect x="3" y="11" width="18" height="11" rx="2" />
               <path d="M7 11V7a5 5 0 0 1 10 0v4" />
             </svg>
-            <span className="text-xs text-text-disabled truncate font-code">
+            <span className="text-sm text-text-secondary truncate font-code">
               /preview/{slug}
             </span>
           </div>

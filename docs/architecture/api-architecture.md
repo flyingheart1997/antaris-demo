@@ -90,7 +90,7 @@ All routes extend from the base middleware which provides:
 
 ## Security Middleware Stack
 
-### Standard Security (`requireStandardSequrityMiddleware`)
+### Standard Security (`requireStandardSequrityMiddleware` — note: typo in source, actual function name kept as-is)
 
 Applied to: `create`, `update`, `delete` operations
 
@@ -103,7 +103,7 @@ Includes:
 allow: ["CATEGORY:SEARCH_ENGINE", "CATEGORY:MONITOR", "CATEGORY:PREVIEW"]
 ```
 
-### Rate Limiting (`requireRatelimitSequrityMiddleware`)
+### Rate Limiting (`requireRatelimitSequrityMiddleware` — note: typo in source, actual function name kept as-is)
 
 Applied to: `create`, `update` operations
 

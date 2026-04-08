@@ -120,18 +120,23 @@ export default function HeroSection() {
                                 className="mt-12 flex flex-col items-center justify-center gap-6 md:flex-row">
                                 <Button
                                     asChild
-                                    size="lg"
-                                    className="rounded-md px-10 py-4 text-base font-medium shadow-2xl shadow-surface-brand/30 hover:scale-105 active:scale-95 transition-all duration-300">
+                                    size="md"
+                                    variant='surface'
+                                    color='info'
+                                    radius='lg'
+                                >
                                     <Link href="/users">
                                         <span className="text-nowrap">Get Started</span>
                                     </Link>
                                 </Button>
-                                <Link
-                                    href="/component-docs"
-                                    className="text-text-secondary hover:text-text-primary flex items-center gap-2 text-sm font-medium transition-colors">
-                                    <span>Learn more</span>
-                                    <ChevronRight className="size-4" />
-                                </Link>
+                                <Button asChild variant='ghost' size='md' radius='lg'>
+                                    <Link
+                                        href="/component-docs"
+                                        className="text-text-secondary hover:text-text-primary flex items-center gap-2 text-md font-medium transition-colors">
+                                        <span>Preview Components</span>
+                                        <ChevronRight className="size-4" />
+                                    </Link>
+                                </Button>
                             </AnimatedGroup>
                         </div>
                     </div>
