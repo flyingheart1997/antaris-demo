@@ -3,14 +3,31 @@ import { AUTH_COOKIE_KEY } from '@/lib/auth/session'
 
 export function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl
-    
-    // 1. Define Public routes
-    const isPublicRoute = 
-        pathname.startsWith('/_next') || 
-        pathname.startsWith('/api/auth') || 
-        pathname.startsWith('/favicon.ico') ||
+    const publicRoutes = [
+        '/',         // ✅ home page
+        '/login',
+        '/preview',
+        '/component-docs'
+    ]
+
+    // Allow public assets with extensions (images, etc.)
+    const isStaticAsset = /\.(png|jpg|jpeg|gif|webp|svg|ico)$/i.test(pathname)
+
+    const isPublicRoute =
+        pathname.startsWith('/_next') ||
+        pathname.startsWith('/api/auth') ||
         pathname.startsWith('/public') ||
-        pathname === '/login'
+        isStaticAsset ||
+        publicRoutes.some(route =>
+            pathname === route || pathname.startsWith(route + '/')
+        )
+    // 1. Define Public routes // THIS IS REQUIRED IN FUTURE
+    // const isPublicRoute =
+    //     pathname.startsWith('/_next') ||
+    //     pathname.startsWith('/api/auth') ||
+    //     pathname.startsWith('/icon.svg') ||
+    //     pathname.startsWith('/public') ||
+    //     pathname === '/login'
 
     // 2. Get the token from cookies
     const token = request.cookies.get(AUTH_COOKIE_KEY)?.value

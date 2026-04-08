@@ -125,7 +125,8 @@ export default function HeroSection() {
                                     color='info'
                                     radius='lg'
                                 >
-                                    <Link href="/users">
+                                    {/* <Link href="/users"> */}
+                                    <Link href="/component-docs">
                                         <span className="text-nowrap">Get Started</span>
                                     </Link>
                                 </Button>
