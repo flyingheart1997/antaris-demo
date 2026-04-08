@@ -17,31 +17,43 @@ interface DocsTabsProps {
   previewHeight?: number
 }
 
-export function DocsTabs({ slug, code, previewHeight = 480 }: DocsTabsProps) {
+export function DocsTabs({ slug, code, previewHeight = 560 }: DocsTabsProps) {
   return (
     <Tabs defaultValue="preview" className="w-full">
-      <TabsList variant="underline" size="md" className="mb-0 w-full rounded-none border-b border-stroke-primary px-0">
-        <TabsTrigger
-          value="preview"
-          iconStart={<Eye size={14} />}
-          className="rounded-none"
-        >
-          Preview
-        </TabsTrigger>
-        <TabsTrigger
-          value="code"
-          iconStart={<Code2 size={14} />}
-          className="rounded-none"
-        >
-          Code
-        </TabsTrigger>
-      </TabsList>
+      {/* ── Premium Integrated Header ── */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-16 px-24 py-10 bg-surface-bg/40 border-b border-stroke-primary backdrop-blur-xl">
+        <div className="flex items-center gap-12">
+          <div className="flex items-center justify-center size-28 rounded-lg bg-green-9 text-gray-1 text-[13px] font-extrabold shadow-lg shadow-green-alpha-4">
+            01
+          </div>
+          <h2 className="text-xl font-bold text-text-primary tracking-tight">
+            Live Preview
+          </h2>
+        </div>
 
-      <TabsContent value="preview" className="mt-0 pt-20">
+        <TabsList className="bg-surface-bg border border-stroke-primary p-4 rounded-xl h-40 shadow-inner">
+          <TabsTrigger
+            value="preview"
+            iconStart={<Eye size={16} />}
+            className="rounded-lg px-20 font-bold text-sm tracking-tight data-[state=active]:bg-green-alpha-3 data-[state=active]:text-green-11 data-[state=active]:shadow-sm transition-all"
+          >
+            Visual
+          </TabsTrigger>
+          <TabsTrigger
+            value="code"
+            iconStart={<Code2 size={16} />}
+            className="rounded-lg px-20 font-bold text-sm tracking-tight data-[state=active]:bg-green-alpha-3 data-[state=active]:text-green-11 data-[state=active]:shadow-sm transition-all"
+          >
+            Code
+          </TabsTrigger>
+        </TabsList>
+      </div>
+
+      <TabsContent value="preview" className="mt-0 p-20 bg-surface-bg/20">
         <ComponentPreview slug={slug} height={previewHeight} />
       </TabsContent>
 
-      <TabsContent value="code" className="mt-0 pt-20">
+      <TabsContent value="code" className="mt-0 p-20 bg-surface-bg/20">
         <CodeBlock code={code} language="tsx" />
       </TabsContent>
     </Tabs>

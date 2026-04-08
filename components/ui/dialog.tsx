@@ -54,7 +54,7 @@ function DialogContent({
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
-          "bg-surface-bg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 border border-stroke-primary/50 shadow-lg grid max-w-[calc(100%-2rem)] gap-4 rounded-lg p-6 text-xs/relaxed duration-150 sm:max-w-3xl fixed top-1/2 left-1/2 z-50 w-full -translate-x-1/2 -translate-y-1/2",
+          "bg-surface-bg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 border border-stroke-primary/50 shadow-lg grid max-w-[calc(100%-2rem)] gap-12 rounded-lg p-12 text-xs/relaxed duration-150 sm:max-w-3xl fixed top-1/2 left-1/2 z-50 w-full -translate-x-1/2 -translate-y-1/2",
           className
         )}
         {...props}
@@ -69,7 +69,7 @@ function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-header"
-      className={cn("gap-1 flex", className)}
+      className={cn("gap-4 flex flex-col", className)}
       {...props}
     />
   )
@@ -87,7 +87,7 @@ function DialogFooter({
     <div
       data-slot="dialog-footer"
       className={cn(
-        "gap-2 flex flex-col-reverse sm:flex-row sm:justify-end",
+        "gap-6 flex flex-col-reverse sm:flex-row sm:justify-end",
         className
       )}
       {...props}
@@ -109,7 +109,7 @@ function DialogTitle({
   return (
     <DialogPrimitive.Title
       data-slot="dialog-title"
-      className={cn("text-sm font-medium text-text-primary", className)}
+      className={cn("text-lg font-medium text-text-primary", className)}
       {...props}
     />
   )
@@ -122,7 +122,7 @@ function DialogDescription({
   return (
     <DialogPrimitive.Description
       data-slot="dialog-description"
-      className={cn("text-text-secondary text-xs/relaxed *:[a]:underline *:[a]:underline-offset-4", className)}
+      className={cn("text-text-secondary text-sm/relaxed *:[a]:underline *:[a]:underline-offset-4", className)}
       {...props}
     />
   )

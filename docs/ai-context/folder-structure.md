@@ -68,7 +68,7 @@ app/
 │   ├── button/             # Button component preview
 │   ├── card/               # Card component preview
 │   ├── checkbox/           # Checkbox component preview
-│   ├── component-drawer/   # Component drawer preview
+│   ├── drawer/   # drawer preview
 │   ├── custom-text/        # Custom text preview
 │   ├── input/              # Input component preview
 │   ├── radio/              # Radio group preview
@@ -104,7 +104,7 @@ components/
     ├── checkbox.tsx         # Checkbox inputs
     ├── collapsible.tsx      # Collapsible sections
     ├── combobox.tsx         # Searchable select/combobox
-    ├── component-drawer.tsx # Side drawer for component docs
+    ├── drawer.tsx # Side drawer for component docs
     ├── dialog.tsx           # Modal dialogs
     ├── dropdown-menu.tsx    # Dropdown menus
     ├── field.tsx            # Form field wrapper

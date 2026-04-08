@@ -136,9 +136,9 @@ function DropdownMenuItem({
       data-size={effectiveSize}
       data-color={color}
       className={cn(
-        "group/dropdown-menu-item relative flex cursor-default select-none items-center rounded-md px-12 outline-hidden transition-colors duration-100 gap-8",
-        "data-[size=md]:h-28 data-[size=md]:text-md",
-        "data-[size=lg]:h-36 data-[size=lg]:text-lg",
+        "group/dropdown-menu-item relative flex cursor-default select-none items-center rounded-md pl-6 pr-4 outline-hidden transition-colors duration-100",
+        "data-[size=md]:h-28 data-[size=md]:text-md gap-4",
+        "data-[size=lg]:h-36 data-[size=lg]:text-lg gap-6",
         "data-[color=accent]:text-text-primary focus:bg-surface-hover data-[state=checked]:bg-surface-selected",
         "data-[color=error]:text-text-error focus:bg-surface-error-hover",
         "data-disabled:pointer-events-none data-disabled:opacity-50 data-disabled:text-text-disabled",
@@ -181,9 +181,9 @@ function DropdownMenuCheckboxItem({
       data-slot="dropdown-menu-checkbox-item"
       data-size={effectiveSize}
       className={cn(
-        "group/dropdown-menu-checkbox-item relative flex cursor-default select-none items-center rounded-md px-12 outline-hidden transition-colors duration-100 focus:bg-surface-hover data-[state=checked]:bg-surface-selected gap-8",
-        "data-[size=md]:h-28 data-[size=md]:text-md",
-        "data-[size=lg]:h-36 data-[size=lg]:text-lg",
+        "group/dropdown-menu-checkbox-item relative flex cursor-default select-none items-center rounded-md pr-4 pl-6 outline-hidden transition-colors duration-100 focus:bg-surface-hover data-[state=checked]:bg-surface-selected",
+        "data-[size=md]:h-28 data-[size=md]:text-md gap-4",
+        "data-[size=lg]:h-36 data-[size=lg]:text-lg gap-6",
         "data-disabled:pointer-events-none data-disabled:opacity-50 data-disabled:text-text-disabled",
         className
       )}
@@ -206,7 +206,7 @@ function DropdownMenuRadioGroup({
   return (
     <DropdownMenuPrimitive.RadioGroup
       data-slot="dropdown-menu-radio-group"
-      className={cn("flex flex-col gap-2", props.className)}
+      className={cn("flex flex-col gap-4", props.className)}
       {...props}
     />
   )
@@ -228,9 +228,9 @@ function DropdownMenuRadioItem({
       data-slot="dropdown-menu-radio-item"
       data-size={effectiveSize}
       className={cn(
-        "group/dropdown-menu-radio-item relative flex cursor-default select-none items-center rounded-md px-12 outline-hidden transition-colors duration-100 focus:bg-surface-hover data-[state=checked]:bg-surface-selected gap-8",
-        "data-[size=md]:h-28 data-[size=md]:text-md",
-        "data-[size=lg]:h-36 data-[size=lg]:text-lg",
+        "group/dropdown-menu-radio-item relative flex cursor-default select-none items-center rounded-md pl-6 pr-4 outline-hidden transition-colors duration-100 focus:bg-surface-hover data-[state=checked]:bg-surface-selected",
+        "data-[size=md]:h-28 data-[size=md]:text-md gap-4",
+        "data-[size=lg]:h-36 data-[size=lg]:text-lg gap-6",
         "data-disabled:pointer-events-none data-disabled:opacity-50 data-disabled:text-text-disabled",
         className
       )}
@@ -238,7 +238,7 @@ function DropdownMenuRadioItem({
     >
       <span className="flex size-16 items-center justify-center shrink-0 border border-stroke-primary rounded-full group-data-[state=checked]:border-white/40">
         <DropdownMenuPrimitive.ItemIndicator className="flex items-center justify-center">
-          <div className="size-6 rounded-full bg-white" />
+          <div className="size-6 rounded-full" />
         </DropdownMenuPrimitive.ItemIndicator>
       </span>
       <span className="flex-1 truncate">{children}</span>
@@ -258,7 +258,7 @@ function DropdownMenuLabel({
       data-slot="dropdown-menu-label"
       data-inset={inset}
       className={cn(
-        "text-text-secondary px-2 py-0.5 text-xs font-medium",
+        "text-text-secondary px-2 py-0.5 text-lg font-medium",
         "data-inset:pl-8",
         className
       )}
@@ -323,9 +323,9 @@ function DropdownMenuSubTrigger({
       data-inset={inset}
       data-size={effectiveSize}
       className={cn(
-        "group/dropdown-menu-sub-trigger relative flex cursor-default select-none items-center rounded-md px-12 outline-hidden transition-colors duration-100 data-open:bg-surface-hover focus:bg-surface-hover gap-8",
-        "data-[size=md]:h-28 data-[size=md]:text-md",
-        "data-[size=lg]:h-36 data-[size=lg]:text-lg",
+        "group/dropdown-menu-sub-trigger relative flex cursor-default select-none items-center rounded-md pl-6 pr-4 outline-hidden transition-colors duration-100 data-open:bg-surface-hover focus:bg-surface-hover",
+        "data-[size=md]:h-28 data-[size=md]:text-md gap-4",
+        "data-[size=lg]:h-36 data-[size=lg]:text-lg gap-6",
         "data-inset:pl-32 text-text-primary",
         className
       )}

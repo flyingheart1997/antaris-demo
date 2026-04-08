@@ -464,8 +464,8 @@ import { Home, Settings } from "lucide-react"
   },
 
   {
-    slug: "component-drawer",
-    name: "Component Drawer",
+    slug: "drawer",
+    name: "Drawer",
     category: "UI",
     summary: "Slide-out drawer panel for contextual detail views and side panels.",
     description:
@@ -479,7 +479,7 @@ import { Home, Settings } from "lucide-react"
       { name: "title", type: "string", default: "—", description: "Header title of the drawer." },
       { name: "children", type: "React.ReactNode", default: "—", description: "Drawer body content." },
     ],
-    codeExample: `import { ComponentDrawer } from "@/components/ui/component-drawer"
+    codeExample: `import { ComponentDrawer } from "@/components/ui/drawer"
 import { useState } from "react"
 
 function Example() {
@@ -595,38 +595,35 @@ import { CheckCircle } from "lucide-react"
     slug: "tooltip",
     name: "Tooltip",
     category: "UI",
-    summary: "Lightweight floating tooltip that appears on hover with configurable side and delay.",
+    summary: "Unified floating tooltip component with a simplified API for easy integration.",
     description:
-      "Tooltip is built on Radix UI Tooltip with Antaris surface tokens. Wraps TooltipProvider at the root, Tooltip + TooltipTrigger around the target, and TooltipContent for the popup. Supports all four sides and entry/exit animations.",
+      "Tooltip is built on Radix UI Tooltip with Antaris surface tokens. This unified component handles the trigger and content internally, offering props for side, alignment, and visibility. Wraps TooltipProvider at the root of your application.",
     variants: [
-      { label: "Top", description: "Default — tooltip appears above the trigger." },
-      { label: "Bottom / Left / Right", description: "Controlled by the side prop on TooltipContent." },
+      { label: "Side & Align", description: "Use side (top, bottom, left, right) and align (start, center, end) to position the tooltip." },
+      { label: "Visibility", description: "The hidden prop can be used to manually control tooltip visibility (e.g. in sidebars)." },
+      { label: "Arrow", description: "All tooltips now feature a sleek arrow by default; use showArrow={false} to hide it." },
     ],
     props: [
-      { name: "side", type: "'top' | 'bottom' | 'left' | 'right'", default: "'top'", description: "Side the tooltip appears on relative to the trigger." },
-      { name: "sideOffset", type: "number", default: "4", description: "Gap in pixels between trigger and tooltip." },
-      { name: "delayDuration (Provider)", type: "number", default: "200", description: "Hover delay in ms before tooltip shows." },
-      { name: "children (Content)", type: "React.ReactNode", default: "—", description: "Tooltip popup content.", required: true },
+      { name: "children", type: "React.ReactNode", default: "—", description: "The trigger element (anchor) for the tooltip.", required: true },
+      { name: "content", type: "React.ReactNode | string", default: "—", description: "The content to display inside the tooltip." },
+      { name: "side", type: "'top' | 'bottom' | 'left' | 'right'", default: "'top'", description: "Side the tooltip appears on." },
+      { name: "align", type: "'start' | 'center' | 'end'", default: "'center'", description: "Alignment relative to the trigger." },
+      { name: "hidden", type: "boolean", default: "false", description: "Manually hide the tooltip." },
+      { name: "showArrow", type: "boolean", default: "true", description: "Whether to show the tooltip arrow." },
+      { name: "contentClassName", type: "string", default: "—", description: "Additional classes for the tooltip content." },
+      { name: "delayDuration", type: "number", default: "200", description: "Hover delay in ms before showing." },
+      { name: "sideOffset", type: "number", default: "6", description: "Gap in pixels between trigger and tooltip." },
     ],
     codeExample: `import {
   Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { Button } from "@/components/ui/button"
 
-// Wrap your app (or page) with TooltipProvider once
-<TooltipProvider>
-  <Tooltip>
-    <TooltipTrigger asChild>
-      <Button variant="surface" color="neutral">Hover me</Button>
-    </TooltipTrigger>
-    <TooltipContent side="top">
-      This is a tooltip
-    </TooltipContent>
+
+  <Tooltip content="This is a tooltip" side="top">
+    <Button variant="surface" color="neutral">Hover me</Button>
   </Tooltip>
-</TooltipProvider>`,
+`,
     badge: "New",
   },
 

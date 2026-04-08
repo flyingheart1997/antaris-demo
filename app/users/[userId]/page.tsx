@@ -132,7 +132,7 @@ const UserDetails = () => {
                 <div className="lg:col-span-8 space-y-8 space-x-8">
                     {/* Information Grid Section */}
                     <Card className="bg-surface-primary border-stroke-primary/50 shadow-md rounded-3xl overflow-hidden" stroke={true}>
-                        <CardHeader className="px-10 pt-10 pb-6 border-b border-stroke-primary/30">
+                        <CardHeader className="px-10 pt-10 pb-6 border-b border-stroke-primary">
                             <CardTitle className="text-xl font-bold text-text-primary">Contact & Communication</CardTitle>
                         </CardHeader>
                         <CardContent className="px-10 py-10">
@@ -167,7 +167,7 @@ const UserDetails = () => {
 
                     {/* Deployment / Address Section */}
                     <Card className="bg-surface-primary border-stroke-primary/50 shadow-md rounded-3xl overflow-hidden" stroke={true}>
-                        <CardHeader className="px-10 pt-10 pb-6 border-b border-stroke-primary/30">
+                        <CardHeader className="px-10 pt-10 pb-6 border-b border-stroke-primary">
                             <CardTitle className="text-xl font-bold text-text-primary">Operational Hub</CardTitle>
                         </CardHeader>
                         <CardContent className="px-10 py-10">
@@ -191,7 +191,7 @@ const UserDetails = () => {
 
                     {/* Association Section */}
                     <Card className="bg-surface-primary border-stroke-primary/50 shadow-md rounded-3xl overflow-hidden" stroke={true}>
-                        <CardHeader className="px-10 pt-10 pb-6 border-b border-stroke-primary/30">
+                        <CardHeader className="px-10 pt-10 pb-6 border-b border-stroke-primary">
                             <CardTitle className="text-xl font-bold text-text-primary">Entity Association</CardTitle>
                         </CardHeader>
                         <CardContent className="px-10 py-10">

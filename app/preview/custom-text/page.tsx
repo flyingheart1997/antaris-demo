@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Text } from '@/components/ui/text';
+import { Separator } from '@/components/ui/separator';
 
 export default function TextShowcase() {
   const [testText, setTestText] = React.useState(
@@ -16,7 +17,7 @@ export default function TextShowcase() {
           Text Component
         </Text>
         <Text type="body" size="lg" color="secondary" className="block max-w-2xl leading-relaxed">
-          A versatile typography system that strictly adheres to Figma design tokens, 
+          A versatile typography system that strictly adheres to Figma design tokens,
           featuring polymorphic rendering and advanced masking interactions.
         </Text>
       </header>
@@ -29,12 +30,12 @@ export default function TextShowcase() {
           </Text>
           <div className="space-y-6 bg-surface-secondary/5 p-8 rounded-xl border border-stroke-primary/50 backdrop-blur-sm shadow-xl shadow-black/10">
             {(['xxxl', 'xxl', 'xl', 'lg', 'md', 'sm', 'xs'] as const).map((size) => (
-              <div key={size} className="flex items-baseline gap-4 border-b border-stroke-primary/20 pb-4 last:border-0 last:pb-0">
-                <Text type="code" size="xs" color="disabled" className="w-12 uppercase opacity-50">
+              <div key={size} className="flex items-baseline gap-10 border-b border-stroke-primary/20 pb-4 last:border-0 last:pb-0">
+                <Text type="code" size="sm" color="disabled" className="w-24 uppercase">
                   {size}
                 </Text>
                 <div className="flex-1">
-                   <Text type="body" size={size}>
+                  <Text type="body" size={size}>
                     Antaris Design System ({size})
                   </Text>
                 </div>
@@ -49,8 +50,8 @@ export default function TextShowcase() {
             Styles & Variants
           </Text>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="space-y-4 bg-surface-secondary/5 p-6 rounded-xl border border-stroke-primary/50">
-              <Text type="code" size="xs" color="disabled" className="block mb-2 uppercase tracking-widest opacity-50">Weights</Text>
+            <div className="space-y-4 bg-surface-secondary/5 p-6 rounded-xl border border-stroke-primary/50 flex flex-col gap-3">
+              <Text type="code" size="lg" color="disabled" className="block mb-2 uppercase tracking-widest opacity-80">Weights</Text>
               <div className="space-y-3">
                 <Text type="body" weight="light" className="block">Light Weight</Text>
                 <Text type="body" weight="regular" className="block">Regular Weight</Text>
@@ -59,8 +60,8 @@ export default function TextShowcase() {
                 <Text type="body" weight="italic" className="block italic">Italic Style</Text>
               </div>
             </div>
-            <div className="space-y-4 bg-surface-secondary/5 p-6 rounded-xl border border-stroke-primary/50">
-              <Text type="code" size="xs" color="disabled" className="block mb-2 uppercase tracking-widest opacity-50">Semantic Colors</Text>
+            <div className="space-y-4 bg-surface-secondary/5 p-6 rounded-xl border border-stroke-primary/50 flex flex-col gap-3">
+              <Text type="code" size="lg" color="disabled" className="block mb-2 uppercase tracking-widest opacity-80">Semantic Colors</Text>
               <div className="space-y-3">
                 <Text type="body" color="primary" className="block">Primary Text Content</Text>
                 <Text type="body" color="secondary" className="block">Secondary Text Content</Text>
@@ -80,20 +81,20 @@ export default function TextShowcase() {
             Advanced Mask Interaction
           </Text>
           <div className="flex items-center gap-2">
-             <div className="w-2 h-2 rounded-full bg-surface-info animate-pulse" />
-             <Text type="code" size="xs" color="info" className="px-2 py-1 bg-surface-info/10 rounded-sm border border-stroke-info/20">
-                1s Hover Delay
-             </Text>
+            <div className="w-2 h-2 rounded-full bg-surface-info animate-pulse" />
+            <Text type="code" size="sm" color="info" className="py-4 px-6 bg-surface-info-hover rounded-lg border border-stroke-info">
+              1s Hover Delay
+            </Text>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           <div className="space-y-6">
-             <Text type="body" size="md" color="secondary" className="block leading-relaxed">
-              The mask effect uses a dynamic CSS gradient fade and handles overflow automatically via ResizeObserver. 
+            <Text type="body" size="md" color="secondary" className="block leading-relaxed">
+              The mask effect uses a dynamic CSS gradient fade and handles overflow automatically via ResizeObserver.
               Hover over the boxes to see the smooth, premium reveal animation.
             </Text>
-            <textarea 
+            <textarea
               value={testText}
               onChange={(e) => setTestText(e.target.value)}
               className="w-full h-32 bg-surface-secondary/5 border border-stroke-primary rounded-lg p-4 text-sm focus:ring-1 focus:ring-text-focus outline-none transition-all placeholder:opacity-30"
@@ -104,7 +105,7 @@ export default function TextShowcase() {
           <div className="space-y-8 p-10 bg-surface-secondary/5 rounded-2xl border border-dashed border-stroke-primary flex flex-col items-center">
             {/* Left Aligned Mask */}
             <div className="w-full max-w-sm space-y-3">
-              <Text type="code" size="xs" color="disabled" className="block mb-1 uppercase tracking-tighter opacity-50">Variant: Left Aligned Mask</Text>
+              <Text type="code" size="xs" color="disabled" className="block mb-1 uppercase tracking-tighter opacity-80">Variant: Left Aligned Mask</Text>
               <div className="p-4 border border-stroke-primary bg-surface-bg/50 rounded-lg shadow-2xl overflow-hidden backdrop-blur-md">
                 <Text mask maskAlignment="left" size="lg" weight="medium">
                   {testText}
@@ -148,8 +149,9 @@ export default function TextShowcase() {
         </div>
       </section>
 
-      <footer className="pt-24 pb-12 text-center border-t border-stroke-primary/10">
-        <Text size="xs" color="disabled" weight="light" className="uppercase tracking-[0.4em] opacity-30 italic">
+      <footer className="pt-24 pb-12 text-center flex flex-col gap-20">
+        <Separator />
+        <Text size="xs" color="disabled" weight="light" className="uppercase tracking-[0.4em] opacity-80 italic flex mx-auto">
           Antaris Typography Suite • Technical Specification
         </Text>
       </footer>

@@ -23,6 +23,7 @@ import {
   type ComponentCategory,
 } from "../config/components"
 import { Separator } from "@/components/ui/separator"
+import { cn } from "@/lib/utils"
 
 const CATEGORY_ORDER: ComponentCategory[] = ["UI", "Forms", "Layout", "Feedback"]
 
@@ -82,7 +83,7 @@ export function DocsSidebar() {
     <Sidebar collapsible="icon">
       {/* ── Brand Logo Header ── */}
       <SidebarHeader className="w-full flex flex-col items-center">
-        <Link href="/component-docs" className="block w-full">
+        <Link href="/component-docs" className="w-full flex items-center justify-center">
           <SidebarLogo />
         </Link>
 
@@ -108,11 +109,11 @@ export function DocsSidebar() {
           return (
             <SidebarGroup key={category} className="p-0">
               <Separator className="my-4" />
-              <SidebarGroupLabel className="flex items-center gap-6 py-3 text-md font-semibold uppercase tracking-widest text-text-disabled">
-                <span className="text-icon-secondary">{CATEGORY_ICONS[category]}</span>
+              <SidebarGroupLabel className="flex items-center gap-10 py-3 text-md font-bold uppercase tracking-[0.2em] text-green-10">
+                <span className="scale-125 drop-shadow-sm">{CATEGORY_ICONS[category]}</span>
                 {category}
               </SidebarGroupLabel>
-              <Separator className="mt-4" />
+              <Separator className="my-4" />
               <SidebarGroupContent>
                 <SidebarMenu>
                   {items.map((component) => {
@@ -120,12 +121,12 @@ export function DocsSidebar() {
                     const isActive = pathname === href
                     return (
                       <SidebarMenuItem key={component.slug}>
-                        <SidebarMenuButton asChild isActive={isActive}>
-                          <Link href={href} className="flex items-center gap-8 w-full">
-                            <Layers size={14} className={isActive ? "text-green-9" : "text-text-disabled"} />
-                            <span className="truncate">{component.name}</span>
+                        <SidebarMenuButton asChild isActive={isActive} className="h-36 pl-8 pr-6 group/item active:scale-[0.98] transition-all">
+                          <Link href={href} className="flex items-center gap-6 w-full">
+                            <Layers size={18} className={cn("transition-colors duration-300", isActive ? "text-green-9" : "text-text-disabled group-hover/item:text-text-primary")} />
+                            <span className={cn("truncate text-md font-medium tracking-tight transition-all duration-300", isActive ? "text-green-11 translate-x-1" : "text-text-secondary group-hover/item:text-text-primary group-hover/item:translate-x-0.5")}>{component.name}</span>
                             {component.badge && (
-                              <span className="ml-auto text-[10px] bg-green-alpha-3 text-green-11 px-4 py-0.5 rounded-sm font-medium shrink-0 uppercase tracking-wider">
+                              <span className="ml-auto text-xs bg-green-alpha-4 text-green-11 px-6 pt-4 pb-2 rounded-lg shrink-0 uppercase tracking-widest shadow-sm">
                                 {component.badge}
                               </span>
                             )}
