@@ -57,7 +57,7 @@ function tokenize(code: string): Token[] {
     if (ch === "`") {
       let j = i + 1
       while (j < code.length && code[j] !== "`") {
-        if (code[j] === "\\" ) j++ // skip escape
+        if (code[j] === "\\") j++ // skip escape
         j++
       }
       tokens.push({ type: "string", value: code.slice(i, j + 1) })
@@ -130,18 +130,41 @@ function tokenize(code: string): Token[] {
 }
 
 const TOKEN_CLASSES: Record<Token["type"], string> = {
-  keyword: "text-blue-11",
-  string:  "text-green-11",
-  comment: "text-text-disabled italic",
-  tag:     "text-yellow-11",
-  prop:    "text-blue-10",
-  number:  "text-yellow-10",
-  plain:   "",
+  keyword: "text-red-9 font-medium",
+  string: "text-blue-10",
+  comment: "text-text-disabled/40 italic",
+  tag: "text-text-primary font-semibold",
+  prop: "text-blue-8",
+  number: "text-yellow-10",
+  plain: "text-text-secondary",
 }
 
 export function CodeBlock({ code, language = "tsx", className }: CodeBlockProps) {
   const [copied, setCopied] = React.useState(false)
   const tokens = React.useMemo(() => tokenize(code), [code])
+
+  // Group tokens into lines for line numbers
+  const lines = React.useMemo(() => {
+    const res: Token[][] = [[]]
+    let currentLine = 0
+    for (const tok of tokens) {
+      if (tok.value.includes("\n")) {
+        const parts = tok.value.split("\n")
+        for (let i = 0; i < parts.length; i++) {
+          if (parts[i]) {
+            res[currentLine].push({ ...tok, value: parts[i] })
+          }
+          if (i < parts.length - 1) {
+            currentLine++
+            res[currentLine] = []
+          }
+        }
+      } else {
+        res[currentLine].push(tok)
+      }
+    }
+    return res
+  }, [tokens])
 
   const handleCopy = async () => {
     try {
@@ -159,41 +182,54 @@ export function CodeBlock({ code, language = "tsx", className }: CodeBlockProps)
   }
 
   return (
-    <div className={cn("relative rounded-xl border border-stroke-primary overflow-hidden", className)}>
-      {/* Header */}
-      <div className="flex items-center justify-between px-16 py-10 bg-surface-secondary border-b border-stroke-primary">
-        <span className="text-xs font-medium text-text-disabled uppercase tracking-widest font-code">
-          {language}
-        </span>
-        <Button
-          variant="ghost"
-          color="neutral"
-          size="sm"
+    <div className={cn("group/code relative rounded-3xl bg-[#0d0d0d] border border-stroke-primary overflow-hidden shadow-2xl", className)}>
+      {/* ── Subtle Floating Controls ── */}
+      <div className="absolute top-20 right-20 z-10 opacity-0 group-hover/code:opacity-100 transition-opacity duration-300">
+        <button
           onClick={handleCopy}
-          leadingIcon={
-            copied
-              ? <Check size={12} className="text-green-11" />
-              : <Copy size={12} />
-          }
-          className={cn("transition-all", copied && "text-green-11")}
+          className={cn(
+            "p-10 rounded-xl bg-white/5 hover:bg-white/10 border border-stroke-primary text-white/40 hover:text-white transition-all shadow-lg backdrop-blur-sm",
+            copied && "bg-green-alpha-3 text-green-11 border-green-alpha-2 opacity-100"
+          )}
+          title="Copy code"
         >
-          {copied ? "Copied!" : "Copy"}
-        </Button>
+          {copied ? <Check size={16} /> : <Copy size={16} />}
+        </button>
       </div>
 
-      {/* Code */}
-      <div className="overflow-x-auto bg-surface-bg">
-        <pre className="p-20 text-sm leading-relaxed font-code min-w-0" style={{ tabSize: 2 }}>
-          <code>
-            {tokens.map((tok, idx) => {
-              const cls = TOKEN_CLASSES[tok.type]
-              return cls
-                ? <span key={idx} className={cls}>{tok.value}</span>
-                : tok.value
-            })}
+      {/* ── Line-based Code Area ── */}
+      <div className="relative overflow-x-auto selection:bg-white/10">
+        <pre className="p-32 text-[14px] leading-[1.7] font-code min-w-0" style={{ tabSize: 2 }}>
+          <code className="grid grid-cols-1">
+            {lines.map((line, i) => (
+              <div key={i} className="flex gap-24 group-hover/line:bg-white/[0.02] -mx-32 px-32 transition-colors group/line min-h-[1.7em]">
+                {/* Minimalist Line Numbers */}
+                <span className="select-none text-right w-24 text-white/15 font-mono text-[12px] pt-1 leading-[1.7]">
+                  {i + 1}
+                </span>
+
+                {/* Tokens */}
+                <span className="flex-1 whitespace-pre">
+                  {line.length === 0 ? "\u00A0" : line.map((tok, j) => {
+                    const cls = TOKEN_CLASSES[tok.type]
+                    // Special case for Image 2 keyword color (Pinkish-red)
+                    const finalCls = tok.value === "import" || tok.value === "from" || tok.value === "export" || tok.value === "const" || tok.value === "function" || tok.value === "return"
+                      ? "text-red-9 font-medium"
+                      : cls
+
+                    return finalCls
+                      ? <span key={j} className={finalCls}>{tok.value}</span>
+                      : <span>{tok.value}</span>
+                  })}
+                </span>
+              </div>
+            ))}
           </code>
         </pre>
       </div>
+
+      {/* ── Absolute Bottom Gradient Overlay ── */}
+      <div className="absolute bottom-0 left-0 right-0 h-40 bg-linear-to-t from-[#0d0d0d] to-transparent pointer-events-none opacity-40" />
     </div>
   )
 }

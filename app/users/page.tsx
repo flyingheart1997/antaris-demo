@@ -27,7 +27,7 @@ const Users = async () => {
     // return (
     //     <section className="container mx-auto px-4 max-w-7xl">
     //         {/* Header Area with Create Button */}
-    //         <div className="flex items-center justify-between mb-12 border-b border-white/5 pb-8">
+    //         <div className="flex items-center justify-between mb-12 border-b border-stroke-primary pb-8">
     //             <div>
     //                 <h2 className="text-2xl font-bold text-white tracking-tight">System Operators</h2>
     //                 <p className="text-sm text-slate-500 mt-1">Manage active users and access levels</p>
@@ -46,8 +46,8 @@ const Users = async () => {
 
     return (
         <HydrateClient client={queryClient}>
-            <PageShell 
-                title="Operators" 
+            <PageShell
+                title="Operators"
                 description="Manage all system operators and their profiles."
                 actions={<CreateUserButton />}
             >

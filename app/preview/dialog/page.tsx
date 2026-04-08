@@ -75,7 +75,7 @@ export default function DialogPreview() {
                 </div>
               </div>
             </DialogHeader>
-            <p className="text-sm text-text-secondary">
+            <p className="text-md text-text-secondary">
               This will permanently delete <strong className="text-text-primary">Mission Alpha</strong> and all of its data. Are you sure?
             </p>
             <DialogFooter className="mt-16">
@@ -96,7 +96,7 @@ export default function DialogPreview() {
               <DialogTitle>About Antaris Design System</DialogTitle>
               <DialogDescription>Version 1.0 · Production Ready</DialogDescription>
             </DialogHeader>
-            <div className="space-y-12 text-sm text-text-secondary">
+            <div className="space-y-12 text-md text-text-secondary">
               <p>The Antaris Design System provides a comprehensive set of UI components, design tokens, and patterns for building mission-critical interfaces.</p>
               <p>Built on Next.js, Radix UI primitives, and Tailwind CSS — the system prioritizes accessibility, performance, and visual consistency.</p>
             </div>

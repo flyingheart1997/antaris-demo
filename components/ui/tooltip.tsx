@@ -6,7 +6,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const tooltipContentVariants = cva(
-  "z-50 inline-flex items-center animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 text-text-primary border-[0.5px] border-stroke-primary px-8 py-6 rounded-md text-md font-regular backdrop-blur-40 [--tooltip-bg:var(--color-surface-overlay)]",
+  "z-50 inline-flex items-center animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 text-text-primary border-[0.5px] border-stroke-primary px-8 py-6 rounded-md text-md font-regular backdrop-blur-40 bg-surface-bg",
   {
     variants: {},
     defaultVariants: {},
@@ -25,7 +25,7 @@ function TooltipProvider({
   )
 }
 
-function Tooltip({
+function CustomTooltip({
   ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Root>) {
   return <TooltipPrimitive.Root {...props} />
@@ -39,12 +39,14 @@ function TooltipTrigger({
 
 interface TooltipContentProps
   extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>,
-  VariantProps<typeof tooltipContentVariants> { }
+  VariantProps<typeof tooltipContentVariants> {
+  showArrow?: boolean
+}
 
 const TooltipContent = React.forwardRef<
   React.ElementRef<typeof TooltipPrimitive.Content>,
   TooltipContentProps
->(({ className, sideOffset = 4, children, ...props }, ref) => (
+>(({ className, sideOffset = 6, children, showArrow = true, ...props }, ref) => (
   <TooltipPrimitive.Portal>
     <TooltipPrimitive.Content
       ref={ref}
@@ -54,9 +56,53 @@ const TooltipContent = React.forwardRef<
       {...props}
     >
       {children}
+      {showArrow && (
+        <TooltipPrimitive.Arrow className="fill-surface-bg drop-shadow-[0_0.5px_0_var(--color-stroke-primary)]" />
+      )}
     </TooltipPrimitive.Content>
   </TooltipPrimitive.Portal>
 ))
 TooltipContent.displayName = TooltipPrimitive.Content.displayName
 
-export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger }
+function Tooltip({
+  children,
+  content,
+  side = "top",
+  align = "center",
+  hidden = false,
+  showArrow = true,
+  contentClassName,
+  delayDuration,
+  sideOffset
+}: {
+  children: React.ReactNode,
+  content?: React.ReactNode | string,
+  side?: "top" | "bottom" | "left" | "right",
+  align?: "start" | "center" | "end",
+  hidden?: boolean,
+  showArrow?: boolean,
+  contentClassName?: string,
+  delayDuration?: number,
+  sideOffset?: number
+}) {
+  const hide = hidden || !content
+  return (
+    <CustomTooltip delayDuration={delayDuration}>
+      <TooltipTrigger asChild>
+        {children}
+      </TooltipTrigger>
+      <TooltipContent
+        side={side}
+        align={align}
+        hidden={hide}
+        sideOffset={sideOffset}
+        className={contentClassName}
+        showArrow={showArrow}
+      >
+        {typeof content === "string" ? <p>{content}</p> : content}
+      </TooltipContent>
+    </CustomTooltip>
+  )
+}
+
+export { TooltipProvider, Tooltip }

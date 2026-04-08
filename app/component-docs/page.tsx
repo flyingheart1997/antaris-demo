@@ -30,110 +30,122 @@ export default function ComponentDocsIndexPage() {
   const grouped = getComponentsByCategory()
 
   return (
-    <div className="max-w-5xl mx-auto px-32 py-48">
-      {/* ── Hero ── */}
-      <div className="mb-60">
-        <div className="flex items-center gap-10 mb-20">
-          <div className="size-40 rounded-xl bg-green-9 flex items-center justify-center shadow-sm">
-            <Layers size={22} className="text-gray-1" />
-          </div>
-          <div>
-            <h1 className="text-xxxl font-bold text-text-primary font-heading leading-tight">
-              Antaris UI
-            </h1>
-            <p className="text-text-disabled text-sm">Component Documentation Library</p>
-          </div>
-        </div>
+    <div className="max-w-6xl mx-auto px-40 py-64">
+      {/* ── Hero section ── */}
+      <div className="relative mb-80">
+        {/* Decorative background element */}
+        <div className="absolute -top-40 -left-64 size-160 bg-green-alpha-2 blur-80 rounded-full opacity-60" />
+        <div className="absolute -top-20 right-0 size-120 bg-blue-alpha-2 blur-60 rounded-full opacity-40" />
 
-        <p className="text-xl text-text-secondary max-w-xl leading-relaxed mb-24">
-          A curated collection of production-ready components built on the{" "}
-          <span className="text-text-primary font-medium">Antaris design system</span>.
-          Browse live previews, explore props, and copy code instantly.
-        </p>
+        <div className="relative">
+          <div className="flex items-center gap-12 mb-24">
+            <div className="size-48 rounded-2xl bg-linear-to-br from-green-9 to-green-11 flex items-center justify-center shadow-lg shadow-green-alpha-3">
+              <Layers size={24} className="text-gray-1" />
+            </div>
+            <div className="flex flex-col">
+              <h1 className="text-xxxl font-bold text-text-primary font-heading leading-[1.05] tracking-tight mb-4">
+                Antaris UI
+              </h1>
+              <p className="text-text-disabled text-lg font-bold uppercase tracking-[0.25em] opacity-60">
+                Premium Design System
+              </p>
+            </div>
+          </div>
 
-        {/* Stats row */}
-        <div className="flex items-center gap-24 pt-16 border-t border-stroke-primary">
-          <div className="flex flex-col">
-            <span className="text-xxl font-bold text-green-11">
-              {COMPONENT_REGISTRY.length}
-            </span>
-            <span className="text-xs text-text-disabled uppercase tracking-widest">Components</span>
-          </div>
-          <div className="flex flex-col">
-            <span className="text-xxl font-bold text-blue-11">
-              {CATEGORY_ORDER.filter((c) => grouped[c].length > 0).length}
-            </span>
-            <span className="text-xs text-text-disabled uppercase tracking-widest">Categories</span>
-          </div>
-          <div className="flex flex-col">
-            <span className="text-xxl font-bold text-yellow-11">∞</span>
-            <span className="text-xs text-text-disabled uppercase tracking-widest">Composable</span>
+          <p className="text-xl text-text-secondary max-w-2xl leading-relaxed mb-40 font-light tracking-tight">
+            A premium collection of production-ready components built for{" "}
+            <span className="text-text-primary font-semibold">high-performance interfaces</span>.
+            Engineered with extreme precision and accessibility.
+          </p>
+
+          {/* Stats row */}
+          <div className="flex items-center gap-48 pt-32 border-t border-stroke-primary relative overflow-hidden">
+            <div className="flex flex-col">
+              <span className="text-xxxl font-bold text-green-11 leading-tight tracking-tighter">
+                {COMPONENT_REGISTRY.length}
+              </span>
+              <span className="text-sm text-text-disabled font-bold uppercase tracking-[0.2em] opacity-50">Components</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xxxl font-bold text-blue-11 leading-tight tracking-tighter">
+                {CATEGORY_ORDER.filter((c) => grouped[c].length > 0).length}
+              </span>
+              <span className="text-sm text-text-disabled font-bold uppercase tracking-[0.2em] opacity-50">Categories</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xxxl font-bold text-yellow-11 leading-tight tracking-tighter">∞</span>
+              <span className="text-sm text-text-disabled font-bold uppercase tracking-[0.2em] opacity-50">Customizable</span>
+            </div>
           </div>
         </div>
       </div>
 
       {/* ── Category Sections ── */}
-      <div className="space-y-52">
+      <div className="space-y-100">
         {CATEGORY_ORDER.map((category) => {
           const items = grouped[category]
           if (items.length === 0) return null
 
           return (
-            <section key={category} aria-labelledby={`category-${category}`}>
-              <div className="flex items-center gap-12 mb-20">
+            <section key={category} aria-labelledby={`category-${category}`} className="relative">
+              <div className="flex items-baseline gap-12 mb-32">
                 <h2
                   id={`category-${category}`}
-                  className="text-xl font-semibold text-text-primary"
+                  className="text-xxxl font-bold text-text-primary tracking-tight"
                 >
                   {category}
                 </h2>
-                <span className={`text-xs font-medium px-8 py-2 rounded-md ${CATEGORY_BADGE_STYLES[category]}`}>
-                  {items.length} {items.length === 1 ? "component" : "components"}
+                <span className="text-xl text-text-secondary font-medium opacity-60">
+                  {items.length} {items.length === 1 ? "element" : "elements"}
                 </span>
+                <div className="flex-1 h-px bg-stroke-primary/20 translate-y-[-0.3rem] ml-12" />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                 {items.map((component) => (
                   <Link
                     key={component.slug}
                     href={`/component-docs/${component.slug}`}
                     className={`
-                      group relative flex flex-col gap-12 p-20 rounded-xl
-                      border bg-linear-to-br transition-all duration-200
-                      hover:shadow-md hover:-translate-y-0.5
-                      ${CATEGORY_GRADIENTS[category]}
+                      group relative flex flex-col gap-24 p-32 rounded-3xl
+                      border border-stroke-primary bg-surface-primary hover:bg-surface-selected
+                      transition-all duration-500 ease-out
+                      hover:shadow-2xl hover:shadow-black/5 hover:-translate-y-2
+                      hover:border-stroke-secondary
                     `}
                   >
-                    {/* Name + badge */}
-                    <div className="flex items-start justify-between gap-8">
-                      <h3 className="text-md font-semibold text-text-primary group-hover:text-green-11 transition-colors">
+                    {/* Highlight indicator */}
+                    <div className={`absolute top-0 right-0 p-16 opacity-0 group-hover:opacity-100 transition-opacity`}>
+                      <ArrowRight size={20} className="text-green-9 animate-in slide-in-from-left-2 duration-500" />
+                    </div>
+
+                    {/* Name */}
+                    <div className="flex items-start justify-between">
+                      <h3 className="text-xxl font-bold text-text-primary group-hover:text-green-11 transition-colors leading-tight tracking-tight">
                         {component.name}
                       </h3>
-                      <div className="flex items-center gap-4 shrink-0">
-                        {component.badge && (
-                          <span className="text-xs bg-green-alpha-4 text-green-11 px-6 py-1 rounded-sm font-medium">
-                            {component.badge}
-                          </span>
-                        )}
-                        <ArrowRight
-                          size={14}
-                          className="text-text-disabled group-hover:text-green-11 group-hover:translate-x-1 transition-all"
-                        />
-                      </div>
+                      {component.badge && (
+                        <span className="text-sm bg-green-alpha-4 text-green-11 px-10 py-4 rounded-lg font-medium uppercase tracking-widest">
+                          {component.badge}
+                        </span>
+                      )}
                     </div>
 
                     {/* Summary */}
-                    <p className="text-sm text-text-secondary leading-relaxed flex-1">
+                    <p className="text-xl text-text-secondary leading-relaxed flex-1 opacity-80 font-normal">
                       {component.summary}
                     </p>
 
-                    {/* Variants count */}
-                    <div className="flex items-center gap-8 pt-8 border-t border-stroke-primary">
-                      <span className="text-xs text-text-disabled">
-                        {component.variants.length} variant{component.variants.length !== 1 ? "s" : ""}
-                      </span>
-                      <span className="text-text-disabled">·</span>
-                      <span className="text-xs text-text-disabled">
+                    {/* Meta info */}
+                    <div className="flex items-center gap-12 pt-16 border-t border-stroke-primary">
+                      <div className="flex items-center gap-6">
+                        <Layers size={14} className="text-text-disabled" />
+                        <span className="text-xl text-text-disabled font-medium group-hover:text-text-secondary transition-colors">
+                          {component.variants.length} variant{component.variants.length !== 1 ? "s" : ""}
+                        </span>
+                      </div>
+                      <span className="text-text-disabled/20">•</span>
+                      <span className="text-xl text-text-disabled font-medium group-hover:text-text-secondary transition-colors">
                         {component.props.length} props
                       </span>
                     </div>
@@ -145,18 +157,20 @@ export default function ComponentDocsIndexPage() {
         })}
       </div>
 
-      {/* ── Add New Component CTA ── */}
-      <div className="mt-60 p-28 rounded-xl border border-stroke-secondary bg-surface-secondary text-center">
-        <h3 className="text-lg font-semibold text-text-primary mb-8">
-          Add a new component
+      {/* ── Footer CTA ── */}
+      <div className="mt-80 p-40 rounded-3xl border border-dashed border-stroke-secondary bg-surface-secondary/50 backdrop-blur-md text-center">
+        <div className="inline-flex size-48 rounded-full bg-green-alpha-2 items-center justify-center mb-16">
+          <Layers size={24} className="text-green-11" />
+        </div>
+        <h3 className="text-xl font-bold text-text-primary mb-12">
+          Expanding the Library
         </h3>
-        <p className="text-sm text-text-secondary mb-0 max-w-md mx-auto">
-          Register your component in{" "}
-          <code className="text-green-11 font-code text-xs bg-green-alpha-2 px-6 py-1 rounded-sm">
-            app/component-docs/config/components.ts
-          </code>{" "}
-          and it appears everywhere automatically.
+        <p className="text-md text-text-secondary mb-24 max-w-lg mx-auto leading-relaxed">
+          Need a component that isn&apos;t here yet? Register it in the registry to keep our documentation unified and always up to date.
         </p>
+        <code className="inline-block px-12 py-6 rounded-lg bg-surface-primary border border-stroke-primary text-green-11 font-code text-sm shadow-sm">
+          app/component-docs/config/components.ts
+        </code>
       </div>
     </div>
   )

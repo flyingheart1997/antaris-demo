@@ -112,7 +112,7 @@ All colors use **OKLCH** color space for perceptual uniformity.
 | Checkbox | `checkbox.tsx` | Radix UI | - |
 | Collapsible | `collapsible.tsx` | Radix UI | - |
 | Combobox | `combobox.tsx` | Custom | - |
-| Component Drawer | `component-drawer.tsx` | Custom | - |
+| Drawer | `drawer.tsx` | Custom | - |
 | Dialog | `dialog.tsx` | Radix UI | - |
 | Dropdown Menu | `dropdown-menu.tsx` | Radix UI | - |
 | Field | `field.tsx` | Custom | CVA |

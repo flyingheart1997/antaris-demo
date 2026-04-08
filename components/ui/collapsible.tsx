@@ -12,6 +12,7 @@ export function Collapsible({
 
 export function CollapsibleTrigger({
   className,
+  title,
   ...props
 }: CollapsiblePrimitive.Trigger.Props): React.ReactElement {
   return (

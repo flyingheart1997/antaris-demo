@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/collapsible"
 import { IconButton } from "@/components/ui/icon-button"
 import { ChevronDown } from "lucide-react";
+import { Tooltip } from "./tooltip";
 
 function Drawer({
   className,
@@ -40,19 +41,21 @@ Drawer.displayName = "Drawer"
 const DrawerTrigger = React.forwardRef<
   React.ElementRef<typeof CollapsibleTrigger>,
   React.ComponentProps<typeof CollapsibleTrigger>
->(({ className, children, ...props }, ref) => {
+>(({ className, children, title, ...props }, ref) => {
   return (
-    <CollapsibleTrigger
-      className={cn(
-        // Ensure standard hover states and text color for the trigger. 
-        // When open, we might want to preserve a particular tint if defined.
-        "flex items-center justify-center hover:bg-green-alpha-3 hover:border hover:border-stroke-selected [&_svg]:text-icon-secondary rounded-md p-0 h-40 w-40 data-panel-open:[&_svg]:text-icon-primary data-panel-open:bg-green-alpha-2 data-panel-open:border data-panel-open:border-stroke-selected",
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </CollapsibleTrigger>
+    <Tooltip side="right" content={title}>
+      <CollapsibleTrigger
+        className={cn(
+          // Ensure standard hover states and text color for the trigger. 
+          // When open, we might want to preserve a particular tint if defined.
+          "flex items-center justify-center hover:bg-green-alpha-3 hover:border hover:border-stroke-selected [&_svg]:text-icon-secondary rounded-md p-0 h-40 w-40 data-panel-open:[&_svg]:text-icon-primary data-panel-open:bg-green-alpha-2 data-panel-open:border data-panel-open:border-stroke-selected",
+          className
+        )}
+        {...props}
+      >
+        {children}
+      </CollapsibleTrigger>
+    </Tooltip>
   )
 })
 DrawerTrigger.displayName = "DrawerTrigger"
@@ -77,26 +80,29 @@ DrawerContainer.displayName = "DrawerContainer"
 
 interface DrawerItemProps extends React.ComponentProps<typeof IconButton> {
   active?: boolean;
+  title: string;
 }
 
 const DrawerItem = React.forwardRef<
   React.ElementRef<typeof IconButton>,
   DrawerItemProps
->(({ className, active, ...props }, ref) => {
+>(({ className, active, title, ...props }, ref) => {
   return (
-    <IconButton
-      ref={ref}
-      variant={active ? "soft" : "ghost"}
-      selected={active}
-      className={cn(
-        'h-40 w-40',
-        active
-          ? "bg-green-alpha-3 hover:bg-green-alpha-3 text-icon-selected hover:text-icon-selected"
-          : "hover:text-icon-primary",
-        className
-      )}
-      {...props}
-    />
+    <Tooltip side="right" content={title}>
+      <IconButton
+        ref={ref}
+        variant={active ? "soft" : "ghost"}
+        selected={active}
+        className={cn(
+          'h-40 w-40',
+          active
+            ? "bg-green-alpha-3 hover:bg-green-alpha-3 text-icon-selected hover:text-icon-selected"
+            : "hover:text-icon-primary",
+          className
+        )}
+        {...props}
+      />
+    </Tooltip>
   )
 })
 DrawerItem.displayName = "DrawerItem"

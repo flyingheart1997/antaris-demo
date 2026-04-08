@@ -75,7 +75,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-3">
-      <span className="text-text-disabled text-xs">{label}</span>
+      <span className="text-text-secondary text-md">{label}</span>
       <div className="flex flex-wrap items-start gap-6">
         {children}
       </div>

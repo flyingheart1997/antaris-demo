@@ -11,7 +11,11 @@
         ],
         "barrel": "features/home/index.ts"
       },
-      "exports": ["HeroSection", "HeroHeader", "Logo"]
+      "exports": [
+        "HeroSection",
+        "HeroHeader",
+        "Logo"
+      ]
     },
     "user-management": {
       "description": "Full CRUD for user management with list view, detail view, and modal forms",
@@ -39,7 +43,16 @@
           "app/(server)/router/user.ts"
         ]
       },
-      "exports": ["UsersList", "UserCard", "UserModal", "CreateUserButton", "UserForm", "useUserModal", "userFormSchema", "UserType"]
+      "exports": [
+        "UsersList",
+        "UserCard",
+        "UserModal",
+        "CreateUserButton",
+        "UserForm",
+        "useUserModal",
+        "userFormSchema",
+        "UserType"
+      ]
     },
     "authentication": {
       "description": "Keycloak OAuth 2.0 + UMA authentication with httpOnly cookie session management",
@@ -78,7 +91,13 @@
         ]
       },
       "namespaces": {
-        "user": ["list", "details", "create", "update", "delete"],
+        "user": [
+          "list",
+          "details",
+          "create",
+          "update",
+          "delete"
+        ],
         "mission": []
       }
     },
@@ -92,8 +111,13 @@
         ]
       },
       "rules": {
-        "standard": ["shield (WAF)", "detectBot"],
-        "ratelimit": ["slidingWindow (1 req/min)"]
+        "standard": [
+          "shield (WAF)",
+          "detectBot"
+        ],
+        "ratelimit": [
+          "slidingWindow (1 req/min)"
+        ]
       }
     },
     "design-system": {
@@ -114,14 +138,44 @@
         ]
       },
       "component-list": [
-        "accordion", "alert-dialog", "animated-group", "avatar", "badge",
-        "button", "card", "checkbox", "collapsible", "combobox",
-        "component-drawer", "dialog", "dropdown-menu", "field", "form",
-        "frame", "icon-button", "input-group", "input", "kbd",
-        "label", "radio-group", "resizable", "scroll-area", "select",
-        "separator", "sheet", "sidebar", "skeleton", "sonner",
-        "spinner", "table", "tabs", "text-effect", "text",
-        "textarea", "toaster", "tooltip"
+        "accordion",
+        "alert-dialog",
+        "animated-group",
+        "avatar",
+        "badge",
+        "button",
+        "card",
+        "checkbox",
+        "collapsible",
+        "combobox",
+        "drawer",
+        "dialog",
+        "dropdown-menu",
+        "field",
+        "form",
+        "frame",
+        "icon-button",
+        "input-group",
+        "input",
+        "kbd",
+        "label",
+        "radio-group",
+        "resizable",
+        "scroll-area",
+        "select",
+        "separator",
+        "sheet",
+        "sidebar",
+        "skeleton",
+        "sonner",
+        "spinner",
+        "table",
+        "tabs",
+        "text-effect",
+        "text",
+        "textarea",
+        "toaster",
+        "tooltip"
       ]
     },
     "component-previews": {
@@ -131,7 +185,7 @@
           "app/preview/button/",
           "app/preview/card/",
           "app/preview/checkbox/",
-          "app/preview/component-drawer/",
+          "app/preview/drawer/",
           "app/preview/custom-text/",
           "app/preview/input/",
           "app/preview/radio/",
@@ -162,7 +216,12 @@
           "providers/background-provider.tsx"
         ]
       },
-      "order": ["ThemeProvider", "AuthProvider", "TanstackQueryProvider", "ModalsProvider"]
+      "order": [
+        "ThemeProvider",
+        "AuthProvider",
+        "TanstackQueryProvider",
+        "ModalsProvider"
+      ]
     },
     "icons": {
       "description": "Custom SVG icon system with build pipeline",

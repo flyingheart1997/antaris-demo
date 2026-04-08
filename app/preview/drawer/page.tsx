@@ -7,7 +7,7 @@ export default function ComponentDrawerPreview() {
   return (
     <div className="flex flex-col items-center justify-center p-20 min-h-screen bg-gray-50 gap-20">
       <div className="text-center font-semibold text-xl mb-4 text-gray-900 border-b pb-2">
-        Component Drawer Preview
+        Drawer Preview
       </div>
 
       <div className="flex gap-20 items-start">
@@ -15,26 +15,26 @@ export default function ComponentDrawerPreview() {
         <div className="flex flex-col items-center gap-4">
           <span className="text-sm font-medium text-gray-500">Expanded (state="on")</span>
           <Drawer defaultOpen={true}>
-            <DrawerTrigger>
+            <DrawerTrigger title="Settings">
               <Settings />
             </DrawerTrigger>
             <DrawerContainer>
-              <DrawerItem active>
+              <DrawerItem active title="Search">
                 <Search />
               </DrawerItem>
-              <DrawerItem>
+              <DrawerItem title="Sun">
                 <Sun />
               </DrawerItem>
-              <DrawerItem>
+              <DrawerItem title="Thermometer">
                 <Thermometer />
               </DrawerItem>
-              <DrawerItem>
+              <DrawerItem title="Rocket">
                 <Rocket />
               </DrawerItem>
-              <DrawerItem>
+              <DrawerItem title="Upload">
                 <Upload />
               </DrawerItem>
-              <DrawerItem>
+              <DrawerItem title="Users">
                 <Users />
               </DrawerItem>
             </DrawerContainer>
@@ -45,20 +45,20 @@ export default function ComponentDrawerPreview() {
         <div className="flex flex-col items-center gap-4">
           <span className="text-sm font-medium text-gray-500">Collapsed (state="off")</span>
           <Drawer defaultOpen={false}>
-            <DrawerTrigger>
+            <DrawerTrigger title="Settings">
               <Settings />
             </DrawerTrigger>
             <DrawerContainer>
-              <DrawerItem active>
+              <DrawerItem active title="Search">
                 <Search />
               </DrawerItem>
-              <DrawerItem>
+              <DrawerItem title="Sun">
                 <Sun />
               </DrawerItem>
-              <DrawerItem>
+              <DrawerItem title="Thermometer">
                 <Thermometer />
               </DrawerItem>
-              <DrawerItem>
+              <DrawerItem title="Rocket">
                 <Rocket />
               </DrawerItem>
             </DrawerContainer>
