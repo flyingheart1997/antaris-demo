@@ -9,7 +9,7 @@ Layer 3 — Composite Components      (components/*.tsx)
            page-shell, data-grid, skeletons, error, empty-state
 
 Layer 2 — Design System Primitives  (components/ui/*.tsx)
-           38 components built on Radix UI + CVA + Design Tokens
+           37 components built on Radix UI + CVA + Design Tokens
 
 Layer 1 — Foundation                (Radix UI + Tailwind v4 + CVA + CSS Variables)
 ```
@@ -164,7 +164,6 @@ All Radix state attributes (`data-state`, `data-open`, `data-disabled`) are avai
 | Checkbox | `checkbox.tsx` | Radix Checkbox | No |
 | Radio Group | `radio-group.tsx` | Radix Radio | No |
 | Select | `select.tsx` | Radix Select | No |
-| Combobox | `combobox.tsx` | Custom | No |
 
 ### 2. Overlay Components
 
@@ -183,7 +182,7 @@ All Radix state attributes (`data-state`, `data-open`, `data-disabled`) are avai
 |---|---|---|---|
 | Avatar | `avatar.tsx` | Yes — size, color | With AvatarIndicator status dot |
 | Badge | `badge.tsx` | Yes | Small status label |
-| Card | `card.tsx` | Yes — size (1-6), state | Content container |
+| Card | `card/index.tsx` | Yes — size (1-4), state (default/emphasis/hover/disabled), selected | Content container with Figma selected-state mask overlay |
 | Text | `text.tsx` | Yes — type, size, weight, color | Typography |
 | Skeleton | `skeleton.tsx` | No | Loading placeholder shimmer |
 | Separator | `separator.tsx` | Radix Separator | Visual divider |

@@ -1,22 +1,17 @@
 ---
 trigger: always_on
-glob:
-description: Advanced AI agent operational rules for the Antaris ATMOS frontend project
+description: AI agent operational rules for Antaris ATMOS frontend
 ---
 
-# Antaris — Advanced AI Agent Rules
+# Antaris — AI Agent Rules
 
-> Operational intelligence for agents working on this codebase. A reasoning + execution framework — not a style guide. Read this before touching any code.
-
----
+> Execution framework for agents on this codebase. Read before touching any code.
 
 ## 1. IDENTITY & MISSION
 
-You are an AI agent in the **Antaris ATMOS** frontend project — the architecture reference for a satellite operations platform. Every pattern you set becomes the standard across the platform. You are not just writing code. **You are setting precedent.**
+You are an AI agent in the **Antaris ATMOS** frontend — architecture reference for a satellite ops platform. Every pattern you set becomes the standard. **You are setting precedent.**
 
-Mission: implement features / fix bugs while preserving architectural integrity. Keep docs in sync with code. Write code any developer or future AI can understand.
-
----
+Mission: implement features / fix bugs preserving architectural integrity. Keep docs in sync. Write code any developer or AI can understand.
 
 ## 2. DOCUMENTATION — YOUR KNOWLEDGE BASE
 
@@ -38,8 +33,6 @@ All docs live in [`/docs`](../../docs/). **Read relevant docs before writing any
 **Tier 3 — Always read the actual code files you will change before changing them.**
 
 Full doc map: `ai-context/folder-structure.md`
-
----
 
 ## 3. ARCHITECTURE — MENTAL MODEL
 
@@ -77,8 +70,6 @@ On the server, `globalThis.$client` is set → handler runs as a direct function
 
 Details → `modules/orpc-server.md`, `modules/orpc-client-tanstack.md`
 
----
-
 ## 4. TASK ANALYSIS
 
 Before any code: **classify → plan → gate-check → execute.**
@@ -91,8 +82,6 @@ Before any code: **classify → plan → gate-check → execute.**
 **Plan before acting:** which files to read? which to create/modify? which pattern from Section 5? which docs to update after?
 
 **Playbooks by task type** → [`ai-context/ai-rules.md`](../../docs/ai-context/ai-rules.md)
-
----
 
 ## 5. IMPLEMENTATION PATTERNS
 
@@ -120,8 +109,6 @@ CVA for variants. Radix primitives for interactive. `cn()` for conditionals. Ful
 
 Use only semantic tokens: `bg-surface-*`, `text-text-*`, `border-stroke-*`, semantic intent variants (`info/warning/error`), and brand accents (`bg-green-9`, `bg-red-9`) sparingly. **Never** raw Tailwind color classes (`bg-gray-*`, `text-white`) or arbitrary values (`w-[n]`). Full token list → `features/design-system.md`
 
----
-
 ## 6. DECISION FRAMEWORK
 
 **State:** API data → TanStack Query | Auth → `useAuth()` | Modal → feature Zustand | Form → RHF | Toast → Sonner | Anything else → re-evaluate
@@ -133,8 +120,6 @@ Use only semantic tokens: `bg-surface-*`, `text-text-*`, `border-stroke-*`, sema
 **RSC vs Client:** Hooks / events / browser APIs / Framer Motion → `'use client'` | Static render or SSR prefetch only → RSC
 
 **Create vs reuse:** Check `features/design-system.md` list → check `components/ui/` → can variant props satisfy need? → only if no: create new
-
----
 
 ## 7. QUALITY GATES
 
@@ -150,17 +135,11 @@ Use only semantic tokens: `bg-surface-*`, `text-text-*`, `border-stroke-*`, sema
 
 **Gate 4 — Docs:** `feature-map.json` updated? | Feature/module doc created or updated? | `folder-structure.md` updated if new dirs? | `tech-stack.md` updated if new deps? | New doc cross-linked with related docs? | Related existing docs updated to reference the new doc?
 
----
-
 ## 8. DOCUMENTATION SYNC MATRIX
 
 **Rule:** Every code change that affects behavior, structure, or contracts MUST update the relevant doc. A code change without a doc update is **unfinished work**.
 
-**Cross-linking rule:** Every new doc file must:
-1. Have a `## See Also` section at the bottom linking to related docs
-2. Be listed in `feature-map.json` (in the feature's `"doc"` field)
-3. Be listed in `folder-structure.md` under `/docs`
-4. Be referenced from at least one existing related doc
+**Cross-linking:** New docs must have `## See Also` links, be in `feature-map.json`, `folder-structure.md`, and referenced from a related doc.
 
 | Changed | Update |
 |---|---|
@@ -181,8 +160,6 @@ Use only semantic tokens: `bg-surface-*`, `text-text-*`, `border-stroke-*`, sema
 | Icon | `architecture/icon-system.md` |
 | Architecture | `architecture/system-design.md` + `architecture/data-flow.md` |
 
----
-
 ## 9. ABSOLUTE CONSTRAINTS
 
 | # | Law |
@@ -195,8 +172,6 @@ Use only semantic tokens: `bg-surface-*`, `text-text-*`, `border-stroke-*`, sema
 | 6 | Never import from a feature's internal files outside that feature |
 | 7 | Never modify provider tree order without reading `providers.md` |
 | 8 | Never add `'use client'` unless actually needed |
-
----
 
 ## 10. RED FLAGS — STOP AND CORRECT
 
@@ -211,17 +186,11 @@ Use only semantic tokens: `bg-surface-*`, `text-text-*`, `border-stroke-*`, sema
 🚩 New `components/ui/` component without checking if one exists → duplicates
 🚩 Modifying provider order without reading `providers.md` → cascading errors
 
----
+## 11. SELF-CORRECTION
 
-## 11. SELF-CORRECTION & COMMUNICATION
-
-**Mistake mid-implementation:** Stop before propagating → find correct pattern in Section 5 or docs → rewrite correctly, don't patch over it.
-
-**Unsure:** Re-read relevant doc → look at `features/users/` (reference impl for every pattern) → check `coding-rules.md` → if still unclear, ask a specific focused question.
-
-**Before starting:** State which files you'll read and modify. **After completing:** State which docs were updated and why.
-
----
+**Mistake:** Stop → find correct pattern in Section 5 or docs → rewrite, don't patch.
+**Unsure:** Re-read doc → check `features/users/` → check `coding-rules.md` → if still unclear, ask.
+**Before:** State files to read/modify. **After:** State docs updated.
 
 ## 12. PROJECT CONTEXT
 
@@ -232,11 +201,9 @@ Use only semantic tokens: `bg-surface-*`, `text-text-*`, `border-stroke-*`, sema
 | Auth: Keycloak OAuth2 + UMA | httpOnly cookies, never localStorage |
 | Dark mode is primary | Design system is dark-first — don't fight it |
 | Tokens from Figma | Don't invent new visual styles without Figma specs |
-| HeroHeader commented out | Intentional — waiting for real nav structure |
+| HeroHeader commented out | Intentional — waiting for real nav |
 | `mission: {}` in router | Placeholder for future mission operations |
-| Token typos exist (`surface-warnig`) | Inherited from Figma — don't fix without fixing Figma first |
-
----
+| Token typos (`surface-warnig`) | Inherited from Figma — don't fix without Figma fix first |
 
 ## 13. QUICK CHEAT SHEET
 

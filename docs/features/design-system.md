@@ -18,7 +18,7 @@ graph LR
     E --> H["app/globals.css"]
     F --> H
     H --> I["Tailwind utilities<br/>(bg-surface-bg, text-text-primary, etc.)"]
-    I --> J["components/ui/*<br/>(38 components)"]
+    I --> J["components/ui/*<br/>(37 components)"]
 ```
 
 ---
@@ -108,10 +108,9 @@ All colors use **OKLCH** color space for perceptual uniformity.
 | Avatar | `avatar.tsx` | Radix UI | CVA |
 | Badge | `badge.tsx` | Custom | CVA |
 | **Button** | `button.tsx` | Radix Slot | CVA (size, variant, color) |
-| Card | `card.tsx` | Custom | - |
+| Card | `card/index.tsx` | Custom | CVA (size, state, selected) + Figma mask overlay |
 | Checkbox | `checkbox.tsx` | Radix UI | - |
 | Collapsible | `collapsible.tsx` | Radix UI | - |
-| Combobox | `combobox.tsx` | Custom | - |
 | Drawer | `drawer.tsx` | Custom | - |
 | Dialog | `dialog.tsx` | Radix UI | - |
 | Dropdown Menu | `dropdown-menu.tsx` | Radix UI | - |
