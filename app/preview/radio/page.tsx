@@ -7,19 +7,11 @@ export default function RadioPreview() {
         <h2 className="text-xl font-bold text-text-primary">Radio - Surface Variant</h2>
         <div className="flex flex-col gap-2">
           <RadioGroup defaultValue="on">
-             <div className="flex flex-col gap-4">
-              <RadioGroupItem value="off" variant="surface">
-                Surface Off
-              </RadioGroupItem>
-              <RadioGroupItem value="on" variant="surface">
-                Surface On
-              </RadioGroupItem>
-              <RadioGroupItem value="hover" variant="surface" className="bg-surface-hover">
-                Surface Hover (Manual)
-              </RadioGroupItem>
-              <RadioGroupItem value="disabled" variant="surface" disabled>
-                Surface Disabled
-              </RadioGroupItem>
+            <div className="flex flex-col gap-4">
+              <RadioGroupItem value="off" variant="surface" label="Surface Off" />
+              <RadioGroupItem value="on" variant="surface" label="Surface On" />
+              <RadioGroupItem value="hover" variant="surface" className="bg-surface-hover" label="Surface Hover (Manual)" />
+              <RadioGroupItem value="disabled" variant="surface" disabled label="Surface Disabled" />
             </div>
           </RadioGroup>
         </div>
@@ -29,16 +21,10 @@ export default function RadioPreview() {
         <h2 className="text-xl font-bold text-text-primary">Radio - Solid Variant</h2>
         <div className="flex flex-col gap-2">
           <RadioGroup defaultValue="on">
-             <div className="flex flex-col gap-4">
-              <RadioGroupItem value="off" variant="solid">
-                Solid Default (Off)
-              </RadioGroupItem>
-              <RadioGroupItem value="on" variant="solid">
-                Solid Default (On)
-              </RadioGroupItem>
-              <RadioGroupItem value="disabled" variant="solid" disabled>
-                Solid Disabled
-              </RadioGroupItem>
+            <div className="flex flex-col gap-4">
+              <RadioGroupItem value="off" variant="solid" label="Solid Default (Off)" />
+              <RadioGroupItem value="on" variant="solid" label="Solid Default (On)" />
+              <RadioGroupItem value="disabled" variant="solid" disabled label="Solid Disabled" />
             </div>
           </RadioGroup>
         </div>
@@ -49,8 +35,8 @@ export default function RadioPreview() {
         <div className="flex flex-row gap-8">
           <RadioGroup defaultValue="1">
             <div className="flex flex-row gap-4">
-              <RadioGroupItem value="1" variant="surface" showText={false} />
-              <RadioGroupItem value="2" variant="surface" showText={false} />
+              <RadioGroupItem value="1" variant="surface" />
+              <RadioGroupItem value="2" variant="surface" />
             </div>
           </RadioGroup>
         </div>

@@ -1,159 +1,87 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
-import { Info } from "lucide-react"
-
-import { cn } from "@/lib/utils"
-import { Label } from "@/components/ui/label"
 
 const textareaVariants = cva(
-  "flex min-h-15.5 w-full transition-all outline-none disabled:pointer-events-none rounded-lg",
+  [
+    "flex min-h-15.5 w-full transition-all outline-none rounded-md p-6",
+    "border-[0.5px] focus-visible:outline-none disabled:opacity-40 disabled:pointer-events-none",
+  ].join(" "),
   {
     variants: {
       variant: {
-        surface: "bg-surface-bg border border-stroke-primary",
-        solid: "bg-gray-alpha-3 border border-transparent",
+        surface: [
+          // Base Colors
+          "bg-surface-bg border-stroke-primary",
+          "hover:border-gray-11",
+
+          // Focus state
+          "focus-visible:border-green-8 focus-visible:ring-3 focus-visible:ring-green-8/20",
+          "read-only:focus-visible:ring-0 read-only:focus-visible:border-stroke-primary",
+          "disabled:focus-visible:ring-0",
+
+          // States (Disabled / Readonly)
+          "disabled:bg-gray-alpha-2 disabled:border-gray-8",
+          "read-only:bg-gray-alpha-2 read-only:cursor-default read-only:hover:border-gray-10",
+
+          // Error states
+          "aria-invalid:border-stroke-error aria-invalid:ring-3 aria-invalid:ring-stroke-error/20",
+          "group-data-[invalid=true]/field:border-stroke-error group-data-[invalid=true]/field:ring-3 group-data-[invalid=true]/field:ring-stroke-error/20",
+
+          // Group contexts
+          "group-data-[readonly=true]/field:bg-gray-alpha-2 group-data-[readonly=true]/field:border-gray-10 group-data-[readonly=true]/field:cursor-default",
+        ].join(" "),
+
+        solid: [
+          // Base Colors
+          "bg-surface-bg border-gray-8",
+          "hover:border-gray-11",
+
+          // Focus state
+          "focus-visible:border-green-8 focus-visible:ring-3 focus-visible:ring-green-8/20",
+          "read-only:focus-visible:ring-0 read-only:focus-visible:border-gray-8",
+          "disabled:focus-visible:ring-0",
+
+          // States (Disabled / Readonly)
+          "disabled:bg-gray-2 disabled:border-gray-8",
+          "read-only:bg-gray-2 read-only:border-gray-10 read-only:cursor-not-allowed read-only:hover:border-gray-10",
+
+          // Error states
+          "aria-invalid:border-stroke-error aria-invalid:ring-3 aria-invalid:ring-stroke-error/20",
+          "group-data-[invalid=true]/field:border-stroke-error group-data-[invalid=true]/field:ring-3 group-data-[invalid=true]/field:ring-stroke-error/20",
+
+          // Group contexts
+          "group-data-[readonly=true]/field:bg-gray-2 group-data-[readonly=true]/field:border-gray-10 group-data-[readonly=true]/field:cursor-default",
+        ].join(" "),
       },
-      state: {
-        default: "",
-        hover: "",
-        active: "ring-3 ring-surface-selected border-stroke-selected",
-        filled: "",
-        disabled: "opacity-60 cursor-not-allowed",
-        error: "border-stroke-error bg-surface-error-subtle ring-3 ring-stroke-error/20",
-        "read-only": "border-dashed border-stroke-disabled cursor-default",
-      }
     },
-    compoundVariants: [
-      {
-        variant: "surface",
-        state: "default",
-        className: "hover:bg-surface-hover hover:border-stroke-secondary focus:border-stroke-selected focus:ring-3 focus:ring-surface-selected"
-      },
-      {
-        variant: "solid",
-        state: "default",
-        className: "hover:bg-gray-alpha-4 focus:bg-surface-bg focus:border-stroke-selected focus:ring-3 focus:ring-surface-selected"
-      },
-      {
-        variant: "surface",
-        state: "filled",
-        className: "bg-surface-primary"
-      }
-    ],
     defaultVariants: {
-      variant: "surface",
-      state: "default",
+      variant: "solid",
     },
   }
 )
 
 interface TextareaProps
-  extends Omit<React.ComponentPropsWithoutRef<"textarea">, "state">,
-  VariantProps<typeof textareaVariants> {
-  label?: boolean
-  labelText?: string
-  labelIcon?: boolean | React.ReactNode
-  helper?: boolean
-  helperText?: string
-  units?: boolean
-  unitsText?: string
-}
+  extends React.ComponentPropsWithoutRef<"textarea">,
+  VariantProps<typeof textareaVariants> { }
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({
     className,
-    variant = "surface",
-    state = "default",
-    label = true,
-    labelText = "Label",
-    labelIcon = false,
-    helper = false,
-    helperText = "Helper",
-    units = false,
-    unitsText,
-    onChange,
-    value,
-    defaultValue,
-    maxLength,
+    variant,
+    disabled,
+    readOnly,
     ...props
   }, ref) => {
-    const [internalValue, setInternalValue] = React.useState<string | number | readonly string[]>(value ?? defaultValue ?? "")
-
-    React.useEffect(() => {
-      if (value !== undefined) {
-        setInternalValue(value)
-      }
-    }, [value])
-
-    const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setInternalValue(e.target.value)
-      onChange?.(e)
-    }
-
-    const currentLength = String(internalValue).length
-    const isError = props["aria-invalid"] === "true" || props["aria-invalid"] === true || state === "error"
-    const isFilled = currentLength > 0
-    const isDisabled = props.disabled || state === "disabled"
-    const isReadOnly = props.readOnly || state === "read-only"
-
-    // Derive the effective state for CVA
-    let effectiveState = state
-    if (state === "default") {
-      if (isError) effectiveState = "error"
-      else if (isDisabled) effectiveState = "disabled"
-      else if (isReadOnly) effectiveState = "read-only"
-      else if (isFilled) effectiveState = "filled"
-    }
-
     return (
-      <div className="flex w-full flex-col gap-4">
-        {label && (
-          <div className="flex items-center py-4">
-            <Label className="text-text-secondary text-md font-medium" icon={labelIcon ? (typeof labelIcon === 'boolean' ? <Info size={14} /> : labelIcon) : undefined}>
-              {labelText}
-            </Label>
-          </div>
-        )}
-
-        <textarea
-          ref={ref}
-          data-slot="textarea"
-          data-variant={variant}
-          data-state={effectiveState}
-          disabled={isDisabled}
-          readOnly={isReadOnly}
-          value={value}
-          defaultValue={defaultValue}
-          onChange={handleTextareaChange}
-          maxLength={maxLength}
-          className={cn(
-            textareaVariants({ variant, state: effectiveState }),
-            "px-16 py-12 text-sm text-text-primary placeholder:text-text-secondary selection:bg-surface-selected resize-none",
-            className
-          )}
-          {...props}
-        />
-
-        {(helper || units) && (
-          <div className="flex items-start justify-between gap-4 mt-1">
-            {helper && (
-              <span
-                className={cn(
-                  "text-sm leading-tight",
-                  isError ? "text-text-error" : "text-text-secondary"
-                )}
-              >
-                {helperText}
-              </span>
-            )}
-            {units && (
-              <span className="text-text-secondary ml-auto text-sm whitespace-nowrap tabular-nums">
-                {unitsText || `${currentLength}${maxLength ? `/${maxLength}` : ""}`}
-              </span>
-            )}
-          </div>
-        )}
-      </div>
+      <textarea
+        ref={ref}
+        data-slot="textarea"
+        data-variant={variant}
+        disabled={disabled}
+        readOnly={readOnly}
+        className={textareaVariants({ variant, className })}
+        {...props}
+      />
     )
   }
 )

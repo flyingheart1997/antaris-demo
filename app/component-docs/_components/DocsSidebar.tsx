@@ -89,13 +89,13 @@ export function DocsSidebar() {
 
         {/* Search - only visible in expanded state */}
         {!isCollapsed && (
-          <div className="w-full mt-24">
+          <div className="w-full mt-24 relative">
+            <Search size={14} className="absolute left-10 top-1/2 -translate-y-1/2 text-text-disabled z-10" />
             <Input
-              leadingIcon={<Search size={14} />}
               placeholder="Search components..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="h-32 text-sm bg-surface-primary border-stroke-primary"
+              className="h-32 pl-32 text-sm bg-surface-primary border-stroke-primary"
             />
           </div>
         )}

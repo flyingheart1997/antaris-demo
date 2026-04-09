@@ -118,8 +118,8 @@ All colors use **OKLCH** color space for perceptual uniformity.
 | Form | `form.tsx` | react-hook-form | - |
 | Frame | `frame.tsx` | Custom | - |
 | Icon Button | `icon-button.tsx` | Custom | CVA |
-| Input Group | `input-group.tsx` | Custom | - |
-| **Input** | `input.tsx` | Custom | CVA (size, status) |
+| Input Group | `input-group.tsx` | Custom | Yes — variant (surface, solid), size (md, lg) |
+| **Input** | `input.tsx` | Custom | Yes — variant (surface, solid), size (md, lg) |
 | Kbd | `kbd.tsx` | Custom | - |
 | Label | `label.tsx` | Radix UI | - |
 | Radio Group | `radio-group.tsx` | Radix UI | - |
@@ -136,7 +136,7 @@ All colors use **OKLCH** color space for perceptual uniformity.
 | Tabs | `tabs.tsx` | Radix UI | CVA |
 | Text Effect | `text-effect.tsx` | Framer Motion | - |
 | **Text** | `text.tsx` | Custom | CVA (size, weight, color) |
-| Textarea | `textarea.tsx` | Custom | CVA |
+| Textarea | `textarea.tsx` | Custom | Yes — variant (surface, solid) |
 | Toaster | `toaster.tsx` | sonner | - |
 | Tooltip | `tooltip.tsx` | Radix UI | - |
 

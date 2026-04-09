@@ -70,13 +70,13 @@ RadioGroup.displayName = "RadioGroup"
 interface RadioGroupItemProps
   extends React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item>,
   Prettify<VariantProps<typeof radioGroupItemVariants>> {
-  showText?: boolean;
+  label?: React.ReactNode | string | number;
 }
 
 const RadioGroupItem = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Item>,
   RadioGroupItemProps
->(({ className, variant, showText = true, children, ...props }, ref) => {
+>(({ className, variant, label, ...props }, ref) => {
   return (
     <RadioGroupPrimitive.Item
       ref={ref}
@@ -93,9 +93,9 @@ const RadioGroupItem = React.forwardRef<
           )} />
         </RadioGroupPrimitive.Indicator>
       </div>
-      {showText && children && (
+      {label && (
         <Label className="cursor-pointer text-text-primary text-md leading-none group-disabled/radio-item:text-text-disabled">
-          {children}
+          {label}
         </Label>
       )}
     </RadioGroupPrimitive.Item>

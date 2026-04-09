@@ -159,11 +159,11 @@ All Radix state attributes (`data-state`, `data-open`, `data-disabled`) are avai
 |---|---|---|---|
 | Button | `button.tsx` | Radix Slot | Yes — variant, color, size, radius |
 | Icon Button | `icon-button.tsx` | Custom | Yes |
-| Input | `input.tsx` | Custom | Yes — size, status |
-| Textarea | `textarea.tsx` | Custom | Yes |
-| Checkbox | `checkbox.tsx` | Radix Checkbox | No |
-| Radio Group | `radio-group.tsx` | Radix Radio | No |
-| Select | `select.tsx` | Radix Select | No |
+| Input | `input.tsx` | Custom | Yes — variant (surface, solid), size (md, lg) |
+| Textarea | `textarea.tsx` | Custom | Yes — variant (surface, solid) |
+| Checkbox | `checkbox.tsx` | Radix Checkbox | Yes — variant (surface, solid) |
+| Radio Group | `radio-group.tsx` | Radix Radio | Yes — variant (surface, solid) |
+| Select | `select.tsx` | Radix Select | Yes — variant (surface, solid) |
 
 ### 2. Overlay Components
 
@@ -211,7 +211,7 @@ All Radix state attributes (`data-state`, `data-open`, `data-disabled`) are avai
 |---|---|---|
 | Form | `form.tsx` | React Hook Form wrapper — FormField, FormItem, FormLabel, FormControl, FormMessage |
 | Label | `label.tsx` | Radix Label — tied to input via `htmlFor` |
-| Field | `field.tsx` | Custom field wrapper |
+| Field | `field.tsx` | Custom field wrapper. Recommended pattern: Use **FieldInput**, **FieldArea**, or **InputGroup** inside `FieldContent` for full state propagation (focus, error, disabled). |
 
 ---
 
