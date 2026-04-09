@@ -1,11 +1,14 @@
 "use client"
 
+import * as React from "react"
 import { useMemo } from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
+import { Input } from "./input"
+import { Textarea } from "./textarea"
 
 function FieldSet({ className, ...props }: React.ComponentProps<"fieldset">) {
   return (
@@ -65,10 +68,9 @@ function Field({
   className,
   orientation = "vertical",
   ...props
-}: React.ComponentProps<"div"> & VariantProps<typeof fieldVariants>) {
+}: React.ComponentProps<"fieldset"> & VariantProps<typeof fieldVariants>) {
   return (
-    <div
-      role="group"
+    <fieldset
       data-slot="field"
       data-orientation={orientation}
       className={cn(fieldVariants({ orientation }), className)}
@@ -98,7 +100,7 @@ function FieldLabel({
     <Label
       data-slot="field-label"
       className={cn(
-        "text-md font-medium text-text-primary gap-6 group-data-[disabled=true]/field:opacity-50 flex w-fit leading-none items-center",
+        "text-md font-medium text-text-primary gap-6 group-disabled/field:opacity-40 flex w-fit leading-none items-center",
         className
       )}
       {...props}
@@ -111,7 +113,7 @@ function FieldTitle({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="field-label"
       className={cn(
-        "gap-2 text-sm/relaxed font-medium group-data-[disabled=true]/field:opacity-50 flex w-fit items-center leading-snug",
+        "gap-2 text-sm/relaxed font-medium group-disabled/field:opacity-40 flex w-fit items-center leading-snug",
         className
       )}
       {...props}
@@ -124,9 +126,42 @@ function FieldDescription({ className, ...props }: React.ComponentProps<"p">) {
     <p
       data-slot="field-description"
       className={cn(
-        "text-text-secondary text-left text-sm leading-normal font-normal group-has-data-[orientation=horizontal]/field:text-balance",
+        "text-text-secondary text-left text-sm leading-normal font-normal group-has-data-[orientation=horizontal]/field:text-balance group-disabled/field:opacity-40",
         className
       )}
+      {...props}
+    />
+  )
+}
+
+/**
+ * FieldInput combines the native Input with a styled Design System container.
+ * It automatically derives its state (error, disabled, etc.) and propagates 
+ * focus-rings correctly.
+ */
+function FieldInput({
+  className,
+  ...props
+}: React.ComponentProps<typeof Input>) {
+  return (
+    <Input
+      className={className}
+      {...props}
+    />
+  )
+}
+
+/**
+ * FieldArea combines the native Textarea with a styled Design System container.
+ * It automatically derives its state and propagates correctly.
+ */
+function FieldArea({
+  className,
+  ...props
+}: React.ComponentProps<typeof Textarea>) {
+  return (
+    <Textarea
+      className={className}
       {...props}
     />
   )
@@ -202,7 +237,7 @@ function FieldError({
     <div
       role="alert"
       data-slot="field-error"
-      className={cn("text-text-error text-sm font-normal", className)}
+      className={cn("text-text-error-subtle text-sm font-normal font-body", className)}
       {...props}
     >
       {content}
@@ -221,4 +256,6 @@ export {
   FieldSet,
   FieldContent,
   FieldTitle,
+  FieldInput,
+  FieldArea,
 }

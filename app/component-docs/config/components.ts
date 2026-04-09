@@ -189,9 +189,6 @@ import { Mail, ArrowRight } from "lucide-react"
   <TabsContent value="overview">
     <p>Overview content here.</p>
   </TabsContent>
-  <TabsContent value="analytics">
-    <p>Analytics content here.</p>
-  </TabsContent>
   <TabsContent value="settings">
     <p>Settings content here.</p>
   </TabsContent>
@@ -203,107 +200,83 @@ import { Mail, ArrowRight } from "lucide-react"
     slug: "input",
     name: "Input",
     category: "Forms",
-    summary: "Text input with leading/trailing icons, units, character counter, and error state.",
+    summary: "Standard text input with support for design system states (error, disabled, readonly), sizes, and variants.",
     description:
-      "The Input component extends the native HTML input with Antaris design tokens. Supports leading/trailing icons, a unit label (e.g. 'USD'), character counter with maxLength, and helper/error text. Integrates with the Field component for full form layouts.",
+      "The Input component is a low-level primitive for capturing text data. It automatically handles visual states like error (red ring) when 'aria-invalid' is true or when contained within an invalid 'Field'.",
     variants: [
-      { label: "Default", description: "Standard text input with placeholder." },
-      { label: "With Icons", description: "leadingIcon and trailingIcon props for search or suffix labels." },
-      { label: "Units", description: "units + unitsText appends a label inside the input (e.g. 'USD', 'kg')." },
-      { label: "Counter", description: "counter + maxLength shows remaining character count." },
-      { label: "States", description: "disabled, readOnly, and error states." },
+      { label: "Surface", description: "Default — outlined style with subtle background tint." },
+      { label: "Solid", description: "Filled style — uses a solid gray background for distinct visual layering." },
+      { label: "Sizes", description: "Supports 'md' (32px) and 'lg' (40px) height tokens." },
     ],
     props: [
-      { name: "leadingIcon", type: "React.ReactNode", default: "—", description: "Icon node rendered inside the input on the left." },
-      { name: "trailingIcon", type: "React.ReactNode", default: "—", description: "Icon node rendered inside the input on the right." },
-      { name: "units", type: "boolean", default: "false", description: "Enables the units suffix panel." },
-      { name: "unitsText", type: "string", default: "—", description: "Text shown in units panel (e.g. 'USD')." },
-      { name: "counter", type: "boolean", default: "false", description: "Enables the character counter display." },
-      { name: "maxLength", type: "number", default: "—", description: "Max characters; used by counter." },
-      { name: "helperText", type: "string", default: "—", description: "Helper text below the input." },
-      { name: "state", type: "'error'", default: "—", description: "Applies error styling (red ring + icon)." },
-      { name: "disabled", type: "boolean", default: "false", description: "Disables the input." },
+      { name: "variant", type: "'surface' | 'solid'", default: "'surface'", description: "Visual style of the input." },
+      { name: "size", type: "'md' | 'lg'", default: "'md'", description: "Controls height and padding." },
+      { name: "disabled", type: "boolean", default: "false", description: "Disables interaction and dims the input." },
+      { name: "readOnly", type: "boolean", default: "false", description: "Prevents editing while maintaining focusability." },
+      { name: "aria-invalid", type: "boolean | 'grammar' | 'spelling'", default: "false", description: "Triggers the error state styling (red border/ring)." },
     ],
     codeExample: `import { Input } from "@/components/ui/input"
+import { Field, FieldLabel, FieldInput, FieldDescription, FieldError } from "@/components/ui/field"
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
 import { Search } from "lucide-react"
 
-// Basic
-<Input placeholder="Enter value..." />
+// 1. Recommended Pattern (Standard Field)
+<Field>
+  <FieldLabel htmlFor="username">Username</FieldLabel>
+  <FieldInput id="username" placeholder="Type something..." />
+  <FieldDescription>Alpha-numeric characters only.</FieldDescription>
+</Field>
 
-// With leading icon
-<Input
-  leadingIcon={<Search size={16} />}
-  placeholder="Search..."
-/>
+// 2. Recommended Pattern (Decorated Field with InputGroup)
+<Field>
+  <FieldLabel htmlFor="search">Search Database</FieldLabel>
+  <InputGroup>
+    <InputGroupAddon>
+      <Search size={14} />
+    </InputGroupAddon>
+    <InputGroupInput id="search" placeholder="Search satellites..." />
+  </InputGroup>
+</Field>
 
-// With units
-<Input units unitsText="USD" placeholder="0.00" />
-
-// With counter
-<Input counter maxLength={20} placeholder="Max 20 chars" />
-
-// Error state
-<Input
-  state="error"
-  helperText="This field is required."
-  defaultValue="Invalid"
-/>`,
+// 3. Simple / Stand-alone usage (e.g. Navigation)
+<Input placeholder="Quick search..." />`,
   },
 
   {
     slug: "input-group",
     name: "Input Group",
     category: "Forms",
-    summary: "Composable input wrapper with inline/block prefix and suffix addons — text labels, icons, and action buttons.",
+    summary: "Decorated input wrapper for adding icons, text prefixes, or action buttons.",
     description:
-      "InputGroup wraps an input or textarea with contextual addons. Inline addons (inline-start / inline-end) add prefix/suffix elements like currency symbols, domain suffixes, copy buttons, or visibility toggles. Block addons (block-start / block-end) add top/bottom labels or descriptions. Focus and error states propagate to the entire group automatically.",
+      "InputGroup allows you to compose inputs with contextual addons. It is designed to work seamlessly within the Field component, automatically propagating focus and error states to the entire group container.",
     variants: [
-      { label: "Inline-Start", description: "Prefix addon — icon, text, or symbol placed before the input (e.g. '@', '$', 'https://')." },
-      { label: "Inline-End", description: "Suffix addon — unit, domain, or action button placed after the input (e.g. 'km/s', '.io', copy button)." },
-      { label: "Both Inline", description: "Prefix and suffix combined — ideal for URL, password toggle, and search-with-action patterns." },
-      { label: "Block Addons", description: "Top (block-start) or bottom (block-end) label or helper text spanning the full width of the input." },
-      { label: "Textarea", description: "InputGroupTextarea replaces InputGroupInput for multi-line content with full addon support." },
+      { label: "Surface", description: "Default — outlined group container." },
+      { label: "Solid", description: "Filled background group container." },
+      { label: "Sizes", description: "Supports 'md' (32px) and 'lg' (40px) matching the Input component." },
     ],
     props: [
-      { name: "align (InputGroupAddon)", type: "'inline-start' | 'inline-end' | 'block-start' | 'block-end'", default: "'inline-start'", description: "Position of the addon relative to the input." },
-      { name: "size (InputGroupButton)", type: "'xs' | 'sm' | 'icon-xs' | 'icon-sm'", default: "'xs'", description: "Size of the action button inside the addon." },
-      { name: "variant (InputGroupButton)", type: "ButtonVariant", default: "'ghost'", description: "Visual style of the button inside the addon." },
-      { name: "className (InputGroup)", type: "string", default: "—", description: "Extend the group container. Use h-auto when using block addons or textarea." },
-      { name: "rows (InputGroupTextarea)", type: "number", default: "—", description: "Number of visible rows for the textarea variant." },
+      { name: "variant", type: "'surface' | 'solid'", default: "'surface'", description: "Visual style of the group container." },
+      { name: "size", type: "'md' | 'lg'", default: "'md'", description: "Controls the height of the group and all internal elements." },
     ],
-    codeExample: `import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupText,
-  InputGroupInput,
-} from "@/components/ui/input-group"
-import { Search, Send } from "lucide-react"
+    codeExample: `import { Field, FieldLabel } from "@/components/ui/field"
+import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupButton } from "@/components/ui/input-group"
+import { Search, Info } from "lucide-react"
 
-// Search with prefix icon + send button
-<InputGroup>
-  <InputGroupAddon align="inline-start">
-    <InputGroupText><Search size={14} /></InputGroupText>
-  </InputGroupAddon>
-  <InputGroupInput placeholder="Search satellites..." />
-  <InputGroupAddon align="inline-end">
-    <InputGroupButton size="icon-xs">
-      <Send size={12} />
-    </InputGroupButton>
-  </InputGroupAddon>
-</InputGroup>
-
-// URL with protocol prefix + TLD suffix
-<InputGroup>
-  <InputGroupAddon align="inline-start">
-    <InputGroupText>https://</InputGroupText>
-  </InputGroupAddon>
-  <InputGroupInput placeholder="hostname" />
-  <InputGroupAddon align="inline-end">
-    <InputGroupText>.atmos.io</InputGroupText>
-  </InputGroupAddon>
-</InputGroup>`,
-    badge: "New",
+// Recommended Pattern: InputGroup inside Field
+<Field>
+  <FieldLabel htmlFor="search-input">Search Satellites</FieldLabel>
+  <InputGroup>
+    <InputGroupAddon>
+      <Search size={14} />
+    </InputGroupAddon>
+    <InputGroupInput id="search-input" placeholder="Search..." />
+    <InputGroupAddon align="inline-end">
+      <InputGroupButton variant="ghost"> 
+        <Info size={14} />
+      </InputGroupButton>
+    </InputGroupAddon>
+  </InputGroup>
+</Field>`,
   },
 
   {
@@ -312,7 +285,7 @@ import { Search, Send } from "lucide-react"
     category: "Forms",
     summary: "Binary and indeterminate selection control with surface and solid variants.",
     description:
-      "Checkbox is built on Radix UI Checkbox and supports two visual variants (surface, solid), three states (unchecked, checked, indeterminate), an optional label, and a showText prop to render icon-only.",
+      "Checkbox is built on Radix UI Checkbox and supports two visual variants (surface, solid). It uses a unified 'label' prop for both text strings and complex React nodes, replacing the legacy 'showText' pattern.",
     variants: [
       { label: "Surface", description: "Outlined checkbox, subtle fill on checked state." },
       { label: "Solid", description: "Filled background on checked state — higher emphasis." },
@@ -320,8 +293,7 @@ import { Search, Send } from "lucide-react"
     ],
     props: [
       { name: "variant", type: "'surface' | 'solid'", default: "'surface'", description: "Visual style of the checkbox." },
-      { name: "label", type: "string", default: "—", description: "Label text rendered beside the checkbox.", required: true },
-      { name: "showText", type: "boolean", default: "true", description: "Set false to hide the label (icon-only)." },
+      { name: "label", type: "string | number | React.ReactNode", default: "—", description: "Label content rendered beside the checkbox." },
       { name: "checked", type: "boolean | 'indeterminate'", default: "false", description: "Controlled checked state." },
       { name: "defaultChecked", type: "boolean", default: "false", description: "Uncontrolled initial state." },
       { name: "disabled", type: "boolean", default: "false", description: "Disables interaction." },
@@ -329,24 +301,16 @@ import { Search, Send } from "lucide-react"
     ],
     codeExample: `import { Checkbox } from "@/components/ui/checkbox"
 
-// Basic
+// Basic with Label
 <Checkbox variant="surface" label="Accept terms" />
 
-// Pre-checked
-<Checkbox variant="solid" label="Notifications" defaultChecked />
+// Icon-only (No label prop)
+<Checkbox variant="surface" />
 
-// Indeterminate
-<Checkbox
-  variant="surface"
-  label="Select all"
-  checked="indeterminate"
-/>
-
-// Disabled
-<Checkbox variant="surface" label="Locked option" disabled />
-
-// Icon-only (no label text)
-<Checkbox variant="surface" label="Hidden" showText={false} />`,
+// Complex Label
+<Checkbox 
+  label={<span className="font-bold">Enable Protocol</span>} 
+/>`,
   },
 
   {
@@ -355,35 +319,31 @@ import { Search, Send } from "lucide-react"
     category: "Forms",
     summary: "Single-selection radio group with surface and solid variants.",
     description:
-      "RadioGroup and RadioGroupItem are built on Radix UI RadioGroup. Supports surface and solid visual variants, disabled state, and a showText prop for label-free (icon) mode.",
+      "RadioGroup and RadioGroupItem are built on Radix UI RadioGroup. Supports surface and solid visual variants, disabled state, and a simplified 'label' prop for the RadioGroupItem.",
     variants: [
       { label: "Surface", description: "Outlined radio indicator with subtle fill." },
       { label: "Solid", description: "Filled indicator on selection — higher emphasis." },
-      { label: "No Label", description: "showText={false} renders icon-only radio buttons." },
     ],
     props: [
       { name: "variant", type: "'surface' | 'solid'", default: "'surface'", description: "Visual style applied to each RadioGroupItem." },
       { name: "value", type: "string", default: "—", description: "Value of this radio item.", required: true },
-      { name: "showText", type: "boolean", default: "true", description: "Show or hide the label text." },
+      { name: "label", type: "string | number | React.ReactNode", default: "—", description: "Label content for the radio item." },
       { name: "disabled", type: "boolean", default: "false", description: "Disables this radio item." },
       { name: "defaultValue (RadioGroup)", type: "string", default: "—", description: "Pre-selected value (uncontrolled)." },
       { name: "onValueChange (RadioGroup)", type: "(value: string) => void", default: "—", description: "Callback with the selected value." },
     ],
-    codeExample: `import {
-  RadioGroup,
-  RadioGroupItem,
-} from "@/components/ui/radio-group"
+    codeExample: `import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 <RadioGroup defaultValue="option-a">
-  <RadioGroupItem value="option-a" variant="surface">
-    Option A
-  </RadioGroupItem>
-  <RadioGroupItem value="option-b" variant="surface">
-    Option B
-  </RadioGroupItem>
-  <RadioGroupItem value="option-c" variant="surface" disabled>
-    Disabled Option
-  </RadioGroupItem>
+  <RadioGroupItem value="option-a" label="Option A" />
+  <RadioGroupItem value="option-b" label="Option B" />
+  <RadioGroupItem value="option-c" label="Disabled Option" disabled />
+</RadioGroup>
+
+// Icon-only (No label prop)
+<RadioGroup defaultValue="1">
+  <RadioGroupItem value="1" />
+  <RadioGroupItem value="2" />
 </RadioGroup>`,
   },
 
@@ -735,46 +695,30 @@ import { Globe } from "lucide-react"
     slug: "textarea",
     name: "Textarea",
     category: "Forms",
-    summary: "Multi-line text input with label, helper text, character counter, and error/disabled states.",
+    summary: "Multi-line text input with custom variants, error handling, and character counters.",
     description:
-      "Textarea extends the native HTML textarea with Antaris tokens. Supports surface and solid variants, state-based styling (default, error, disabled, read-only), an optional label, helper text, and a character counter linked to maxLength.",
+      "Textarea provides an identical variant and state system to the Input component, but for multi-line content. It supports 'surface' and 'solid' variants and automatically reacts to disabled/read-only/invalid states.",
     variants: [
-      { label: "Surface", description: "Outlined textarea with hover/focus states." },
-      { label: "Solid", description: "Filled gray background style." },
-      { label: "Error", description: "Red border + ring with error helper text." },
-      { label: "With Counter", description: "units={true} + maxLength shows remaining character count." },
+      { label: "Surface", description: "Default — outlined style." },
+      { label: "Solid", description: "Solid background style." },
     ],
     props: [
       { name: "variant", type: "'surface' | 'solid'", default: "'surface'", description: "Visual style." },
-      { name: "state", type: "'default' | 'active' | 'filled' | 'disabled' | 'error' | 'read-only'", default: "'default'", description: "Explicit visual state override." },
-      { name: "label", type: "boolean", default: "true", description: "Show/hide the label element." },
-      { name: "labelText", type: "string", default: "'Label'", description: "Label text content." },
-      { name: "helper", type: "boolean", default: "false", description: "Show/hide helper text." },
-      { name: "helperText", type: "string", default: "'Helper'", description: "Helper text content." },
-      { name: "units", type: "boolean", default: "false", description: "Enable character counter display." },
-      { name: "maxLength", type: "number", default: "—", description: "Max character count (used by counter)." },
+      { name: "disabled", type: "boolean", default: "false", description: "Disables interaction." },
+      { name: "readOnly", type: "boolean", default: "false", description: "Prevents editing." },
     ],
     codeExample: `import { Textarea } from "@/components/ui/textarea"
+import { Field, FieldLabel, FieldArea, FieldDescription } from "@/components/ui/field"
 
-// Basic
-<Textarea labelText="Message" placeholder="Type your message..." />
+// 1. Recommended Pattern (Standard Field)
+<Field>
+  <FieldLabel htmlFor="bio">User Biography</FieldLabel>
+  <FieldArea id="bio" placeholder="Tell us about yourself..." rows={4} />
+  <FieldDescription>Maximum 500 characters.</FieldDescription>
+</Field>
 
-// With error
-<Textarea
-  state="error"
-  labelText="Description"
-  helper
-  helperText="This field is required."
-/>
-
-// With character counter
-<Textarea
-  labelText="Bio"
-  placeholder="Tell us about yourself..."
-  maxLength={200}
-  units
-  rows={4}
-/>`,
+// 2. Simple / Stand-alone usage
+<Textarea placeholder="Quick notes..." />`,
     badge: "New",
   },
 

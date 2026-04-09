@@ -1,6 +1,4 @@
 "use client"
-
-import * as React from "react"
 import { Checkbox } from "@/components/ui/checkbox"
 
 export default function CheckboxPreview() {
@@ -27,7 +25,7 @@ export default function CheckboxPreview() {
           </div>
           <div className="space-y-2">
             <p className="text-xs text-text-secondary">No Text</p>
-            <Checkbox variant="surface" showText={false} label="Hidden" />
+            <Checkbox variant="surface" />
           </div>
         </div>
       </section>
