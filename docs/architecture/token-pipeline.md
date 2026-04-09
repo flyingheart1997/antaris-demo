@@ -282,6 +282,22 @@ This overwrites `styles/src/index.css`, `antaris-theme.css`, and `tokens.generat
 
 ---
 
+## Optimized Font Generation Bridge
+
+While standard tokens (colors, spacing) resolve at runtime via CSS variables, **Font Families** require the browser to download external font files. Antaris uses an enterprise-grade "Code Generation" bridge to ensure fonts are both dynamic and high-performance.
+
+### How it works:
+
+1. **Meta-Programming Build Step (`build.js`)**: When tokens are processed, the build script identifies font-family and weight tokens. It then **writes a React component** to [styles/src/fonts.generated.tsx](file:///Users/koushikmondal/ANTARIS_PROJECTS/antaris-demo/styles/src/fonts.generated.tsx).
+2. **Next.js Optimization**: The generated file uses `next/font/google` to configure the families discovered in Figma. This enables Next.js to:
+   - **Self-host** the font files (faster, no external requests).
+   - **Prevent Layout Shift (CLS)** by providing optimized fallback fonts.
+3. **Automatic Injection**: The `FontVars` component is imported and rendered in the `RootLayout`, injecting the font variables into the global CSS scope.
+
+This architecture ensures your design remains dynamic (syncs with Figma) while maintaining the highest possible web performance standards.
+
+---
+
 ## Known Issues
 
 See [docs/features/design-system.md → Known Issues](../features/design-system.md) for:

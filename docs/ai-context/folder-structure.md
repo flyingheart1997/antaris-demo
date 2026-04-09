@@ -6,7 +6,7 @@
 antaris/
 ├── app/                    # Next.js App Router (pages, layouts, API routes)
 ├── components/             # Shared UI components (design system)
-├── features/               # Feature-based modules (home, users)
+├── features/               # Feature-based modules (home, users, catalog)
 ├── hooks/                  # Global custom React hooks
 ├── icons/                  # Custom SVG icon system
 ├── lib/                    # Core utilities and configurations
@@ -18,7 +18,7 @@ antaris/
 ├── docs/                   # Project documentation
 │   ├── ai-context/         # AI context layer: system overview, rules, feature map
 │   ├── architecture/       # System design, data flow, API, component system, token pipeline
-│   ├── features/           # Feature docs: users, auth, design system, home, security
+│   ├── features/           # Feature docs: users, auth, design system, home, security, catalog
 │   ├── modules/            # Module docs: oRPC server, oRPC client, state management, providers
 │   ├── decisions/          # Architectural decisions and documentation sync rules
 │   ├── setup/              # Developer setup: environment variables, onboarding guide
@@ -71,18 +71,29 @@ app/
 │   ├── page.tsx            # Users list page (SSR prefetch + HydrateClient)
 │   └── [userId]/           # Dynamic user detail page
 │
-├── preview/                # Component preview/showcase pages
+├── catalog/                # Satellite component catalog page
+│   ├── layout.tsx          # Catalog page layout (full-screen, no scroll)
+│   └── page.tsx            # Catalog grid page (uses CatalogCard + mock data, client)
+│
+├── preview/                # Component preview/showcase pages (used as iframes in component-docs)
 │   ├── button/             # Button component preview
 │   ├── card/               # Card component preview
 │   ├── checkbox/           # Checkbox component preview
-│   ├── drawer/   # drawer preview
-│   ├── custom-text/        # Custom text preview
+│   ├── custom-text/        # Text component preview
+│   ├── dialog/             # Dialog component preview
+│   ├── drawer/             # Drawer component preview
+│   ├── dropdown-menu/      # DropdownMenu component preview
+│   ├── icon-button/        # IconButton component preview
 │   ├── input/              # Input component preview
-│   ├── radio/              # Radio group preview
+│   ├── input-group/        # InputGroup component preview
+│   ├── radio/              # RadioGroup component preview
+│   ├── select/             # Select component preview
 │   ├── separator-test/     # Separator component preview
-│   ├── side-nav/           # Side navigation preview
 │   ├── sidebar-test/       # Sidebar component preview
-│   └── tabs/               # Tabs component preview
+│   ├── skeleton/           # Skeleton/Spinner component preview
+│   ├── tabs/               # Tabs component preview
+│   ├── textarea/           # Textarea component preview
+│   └── tooltip/            # Tooltip component preview
 │
 └── docs/                   # Documentation pages
     ├── about/
@@ -107,10 +118,12 @@ components/
     ├── avatar.tsx           # User avatars with status
     ├── badge.tsx            # Status/label badges
     ├── button.tsx           # Primary button (CVA variants: size, color, variant)
-    ├── card.tsx             # Content cards
+    ├── card/                # Content cards (folder — selected state mask)
+    │   ├── index.tsx        #   Card component (CVA variants + selected prop)
+    │   ├── card-mask.tsx    #   Selected-state SVG overlay (React, unique gradient IDs)
+    │   └── card-mask.svg    #   Source SVG from Figma (node 2895:297)
     ├── checkbox.tsx         # Checkbox inputs
     ├── collapsible.tsx      # Collapsible sections
-    ├── combobox.tsx         # Searchable select/combobox
     ├── drawer.tsx # Side drawer for component docs
     ├── dialog.tsx           # Modal dialogs
     ├── dropdown-menu.tsx    # Dropdown menus
@@ -153,6 +166,17 @@ features/
 │       ├── header.tsx       # Navigation header
 │       ├── hero-section.tsx # Landing page hero
 │       └── logo.tsx         # Antaris logo component
+│
+├── catalog/                # Catalog feature (satellite component browser)
+│   ├── index.ts            # Barrel exports: CatalogCard, CatalogCategoryGroup
+│   ├── components/
+│   │   ├── catalog-card.tsx          # Satellite component card (uses Card selected state)
+│   │   └── catalog-category-group.tsx # Collapsible category group (WIP)
+│   ├── hooks/              # (reserved for future Zustand store)
+│   ├── types/
+│   │   └── catalog.ts      # CatalogItem, CatalogCategoryGroup interfaces
+│   └── utils/
+│       └── mock-data.ts    # Static mock catalog items (replaces API until backend ready)
 │
 └── users/                  # User management feature
     ├── index.ts             # Barrel exports: UsersList, UserCard, UserModal, etc.
@@ -219,12 +243,13 @@ store/
 
 ```
 styles/
-├── build.js                 # Token build script (Figma JSON → CSS variables)
+├── build.js                 # Token build script (Figma JSON → CSS variables + fonts.generated.tsx)
 ├── figma/                   # Raw Figma token exports (JSON)
 └── src/
     ├── index.css            # Generated CSS variables (:root) — all design tokens
     ├── antaris-theme.css    # Tailwind @theme mapping — tokens → Tailwind utilities
-    └── tokens.generated.ts  # TypeScript token exports (for programmatic access)
+    ├── tokens.generated.ts  # TypeScript token exports (for programmatic access)
+    └── fonts.generated.tsx  # Auto-generated next/font/google loader (do not edit manually)
 ```
 
 ### `icons/` — Custom Icon System

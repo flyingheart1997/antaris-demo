@@ -2,7 +2,7 @@
 
 ## Overview
 
-Antaris uses a **custom SVG icon pipeline** — 53 domain-specific icons for satellite operations, converted from raw SVGs into typed React components via an automated build process.
+Antaris uses a **custom SVG icon pipeline** — 54 domain-specific icons for satellite operations, converted from raw SVGs into typed React components via an automated build process.
 
 These icons are in addition to third-party icon libraries (Lucide, HugeIcons, Tabler) used for generic UI icons.
 
@@ -21,6 +21,11 @@ icons/
 ---
 
 ## Icon Categories
+
+### Branding
+| Icon | Component Name | Notes |
+|---|---|---|
+| Antaris Logo | `AntarisIcon` | Brand icon, 16×16 viewBox |
 
 ### Navigation & UI
 | Icon | Component Name |
@@ -41,7 +46,7 @@ icons/
 ### Satellite Domain
 | Icon | Component Name |
 |---|---|
-| Satellite | `SatelliteIcon` |
+| Satellite | `SatelliteIcon` | Redesigned — 16×16 viewBox, `currentColor` fill, `antaris-icon` class |
 | Satellite Review | `SatelliteReviewIcon` |
 | Rocket | `RocketIconIcon` |
 | Mission | `MissionIcon` |

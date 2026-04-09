@@ -91,13 +91,6 @@ export default function ButtonPreview() {
             Double Icons
           </Button>
 
-          <div className="bg-surface-secondary p-12 rounded-md flex gap-8">
-            <Button size="sm" leadingIcon={<Settings className="size-12" />} showText={false} variant="ghost" color="neutral" />
-            <Button size="md" leadingIcon={<Settings className="size-16" />} showText={false} variant="soft" color="neutral" />
-            <Button size="lg" leadingIcon={<Settings className="size-20" />} showText={false} variant="surface" color="neutral" />
-            <Button size="xl" leadingIcon={<Settings className="size-24" />} showText={false} variant="solid" color="neutral" />
-          </div>
-
           <Button
             variant="solid"
             color="accent"

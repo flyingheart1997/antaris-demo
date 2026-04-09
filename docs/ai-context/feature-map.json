@@ -140,13 +140,36 @@
         ]
       }
     },
+    "catalog": {
+      "description": "Satellite component catalog — browse and select hardware for a mission. UI-only, mock data, no oRPC routes yet.",
+      "files": {
+        "pages": [
+          "app/catalog/page.tsx",
+          "app/catalog/layout.tsx"
+        ],
+        "components": [
+          "features/catalog/components/catalog-card.tsx",
+          "features/catalog/components/catalog-category-group.tsx"
+        ],
+        "types": "features/catalog/types/catalog.ts",
+        "mock": "features/catalog/utils/mock-data.ts",
+        "barrel": "features/catalog/index.ts"
+      },
+      "exports": [
+        "CatalogCard",
+        "CatalogCategoryGroup"
+      ],
+      "doc": "docs/features/catalog.md",
+      "_note": "Backend routes (oRPC) not yet implemented — uses static mock data"
+    },
     "design-system": {
-      "description": "Figma-synced design tokens and 38 UI components",
+      "description": "Figma-synced design tokens and 37 UI components",
       "files": {
         "tokens": [
           "styles/src/index.css",
           "styles/src/antaris-theme.css",
           "styles/src/tokens.generated.ts",
+          "styles/src/fonts.generated.tsx",
           "styles/build.js"
         ],
         "figma-source": "styles/figma/",
@@ -167,7 +190,6 @@
         "card",
         "checkbox",
         "collapsible",
-        "combobox",
         "drawer",
         "dialog",
         "dropdown-menu",

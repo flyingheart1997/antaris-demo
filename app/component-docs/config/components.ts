@@ -251,6 +251,62 @@ import { Search } from "lucide-react"
   },
 
   {
+    slug: "input-group",
+    name: "Input Group",
+    category: "Forms",
+    summary: "Composable input wrapper with inline/block prefix and suffix addons — text labels, icons, and action buttons.",
+    description:
+      "InputGroup wraps an input or textarea with contextual addons. Inline addons (inline-start / inline-end) add prefix/suffix elements like currency symbols, domain suffixes, copy buttons, or visibility toggles. Block addons (block-start / block-end) add top/bottom labels or descriptions. Focus and error states propagate to the entire group automatically.",
+    variants: [
+      { label: "Inline-Start", description: "Prefix addon — icon, text, or symbol placed before the input (e.g. '@', '$', 'https://')." },
+      { label: "Inline-End", description: "Suffix addon — unit, domain, or action button placed after the input (e.g. 'km/s', '.io', copy button)." },
+      { label: "Both Inline", description: "Prefix and suffix combined — ideal for URL, password toggle, and search-with-action patterns." },
+      { label: "Block Addons", description: "Top (block-start) or bottom (block-end) label or helper text spanning the full width of the input." },
+      { label: "Textarea", description: "InputGroupTextarea replaces InputGroupInput for multi-line content with full addon support." },
+    ],
+    props: [
+      { name: "align (InputGroupAddon)", type: "'inline-start' | 'inline-end' | 'block-start' | 'block-end'", default: "'inline-start'", description: "Position of the addon relative to the input." },
+      { name: "size (InputGroupButton)", type: "'xs' | 'sm' | 'icon-xs' | 'icon-sm'", default: "'xs'", description: "Size of the action button inside the addon." },
+      { name: "variant (InputGroupButton)", type: "ButtonVariant", default: "'ghost'", description: "Visual style of the button inside the addon." },
+      { name: "className (InputGroup)", type: "string", default: "—", description: "Extend the group container. Use h-auto when using block addons or textarea." },
+      { name: "rows (InputGroupTextarea)", type: "number", default: "—", description: "Number of visible rows for the textarea variant." },
+    ],
+    codeExample: `import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupText,
+  InputGroupInput,
+} from "@/components/ui/input-group"
+import { Search, Send } from "lucide-react"
+
+// Search with prefix icon + send button
+<InputGroup>
+  <InputGroupAddon align="inline-start">
+    <InputGroupText><Search size={14} /></InputGroupText>
+  </InputGroupAddon>
+  <InputGroupInput placeholder="Search satellites..." />
+  <InputGroupAddon align="inline-end">
+    <InputGroupButton size="icon-xs">
+      <Send size={12} />
+    </InputGroupButton>
+  </InputGroupAddon>
+</InputGroup>
+
+// URL with protocol prefix + TLD suffix
+<InputGroup>
+  <InputGroupAddon align="inline-start">
+    <InputGroupText>https://</InputGroupText>
+  </InputGroupAddon>
+  <InputGroupInput placeholder="hostname" />
+  <InputGroupAddon align="inline-end">
+    <InputGroupText>.atmos.io</InputGroupText>
+  </InputGroupAddon>
+</InputGroup>`,
+    badge: "New",
+  },
+
+  {
     slug: "checkbox",
     name: "Checkbox",
     category: "Forms",

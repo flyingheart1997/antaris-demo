@@ -153,7 +153,14 @@ async function build() {
     // 4. Generate CSS Variables
     let cssVars = ':root {\n';
     for (const [name, val] of Object.entries(allResolvedFlat)) {
-        if (val !== null) cssVars += `  --${name}: ${val};\n`;
+        if (val !== null) {
+            let finalVal = val;
+            if (name.includes('font-family')) {
+                const slug = val.toString().toLowerCase().replace(/[\s\./,]/g, '-');
+                finalVal = `var(--font-${slug}, ${val})`;
+            }
+            cssVars += `  --${name}: ${finalVal};\n`;
+        }
     }
     cssVars += '}\n';
 
@@ -200,7 +207,71 @@ async function build() {
     }
     themeVars += '}\n';
 
-    // 6. Output Generation
+    // 6. Generate fonts.generated.tsx (Professional Registry-Based Font Loader)
+    const FONT_COMPATIBILITY_MAP = {
+        // Registry for optimized font loading strategies
+        'mono': {
+            isStatic: true,
+            safeWeights: [400, 500, 700]
+        },
+        'variable': {
+            isVariable: true,
+            axes: ['wght']
+        },
+        'default': {
+            isStatic: true,
+            safeWeights: [300, 400, 500, 700]
+        }
+    };
+
+    const families = new Set();
+    const globalWeights = new Set();
+
+    Object.entries(allResolvedFlat).forEach(([name, val]) => {
+        if (name.includes('font-family') && typeof val === 'string') families.add(val);
+        if (name.includes('font-weight') && !isNaN(parseInt(val))) globalWeights.add(parseInt(val));
+    });
+
+    const familyList = Array.from(families);
+    
+    let fontsContent = `import { ${familyList.map(f => f.replace(/\s+/g, '_')).join(', ')} } from 'next/font/google';\n\n`;
+    
+    familyList.forEach(f => {
+        const varName = f.toLowerCase().replace(/\s+/g, '');
+        const importName = f.replace(/\s+/g, '_');
+        const familyLower = f.toLowerCase();
+
+        // Determine Strategy: Variable vs Static
+        // Most modern fonts (Space Grotesk, Montserrat) are variable
+        const isVariable = familyLower.includes('grotesk') || familyLower.includes('montserrat') || familyLower.includes('inter');
+        const isMono = familyLower.includes('mono');
+
+        const strategy = isVariable ? FONT_COMPATIBILITY_MAP.variable : 
+                         isMono ? FONT_COMPATIBILITY_MAP.mono : 
+                         FONT_COMPATIBILITY_MAP.default;
+
+        let weightValue;
+        if (strategy.isVariable) {
+            weightValue = "'variable'";
+        } else {
+            const weights = Array.from(globalWeights)
+                .sort((a, b) => a - b)
+                .filter(w => strategy.safeWeights.includes(w));
+            weightValue = JSON.stringify(weights.map(String));
+        }
+
+        fontsContent += `const ${varName} = ${importName}({\n  subsets: ['latin'],\n  variable: '--font-${f.toLowerCase().replace(/\s+/g, '-')}',\n  weight: ${weightValue},\n});\n\n`;
+    });
+
+    fontsContent += `export const fonts = {\n${familyList.map(f => {
+        const varName = f.toLowerCase().replace(/\s+/g, '');
+        const keyName = f.toLowerCase().replace(/\s+/g, '');
+        return `  ${keyName}: ${varName}.variable,\n`;
+    }).join('')}};\n`;
+
+    fs.writeFileSync(path.join(OUTPUT_DIR, 'fonts.generated.tsx'), fontsContent);
+
+    // 7. Output Generation
     if (!fs.existsSync(OUTPUT_DIR)) fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 
     fs.writeFileSync(path.join(OUTPUT_DIR, 'index.css'), cssVars);

@@ -1,6 +1,6 @@
-# Antaris ATMOS — Frontend Architecture Reference
+# Antaris — Frontend Architecture Reference
 
-> Frontend architecture reference for the **Antaris ATMOS** (Antaris Mission Operations System) platform — a satellite operations suite for scheduling, pre-simulation, telemetry, HWIL, and orbit management.
+> Frontend architecture reference for the **Antaris** (Antaris Mission Operations System) platform — a satellite operations suite for scheduling, pre-simulation, telemetry, HWIL, and orbit management.
 
 ---
 

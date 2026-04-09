@@ -4,7 +4,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import svgPaths from "./sidebar-svgs";
 import { useSidebar } from ".";
-import { SatelliteIcon } from "@/icons";
+import { AntarisIcon } from "@/icons";
 
 // -----------------------------------------------------------------------------
 // Enterprise Fluid SVG Architecture (High-Performance Engine)
@@ -192,7 +192,7 @@ export function SidebarBackground() {
               opacity="0.4"
               onClick={toggleSidebar}
               className={cn(
-                "cursor-pointer pointer-events-auto hover:opacity-100 transition-all duration-200 ease-linear", 
+                "cursor-pointer pointer-events-auto hover:opacity-100 transition-all duration-200 ease-linear",
                 isCollapsed && "rotate-180"
               )}
               style={{ transformOrigin: "center center", transformBox: "fill-box" }}
@@ -296,7 +296,7 @@ export function SidebarLogo({ isExpanded }: { isExpanded?: boolean }) {
           </div>
         </React.Fragment>
       ) : (
-        <SatelliteIcon />
+        <AntarisIcon />
       )}
     </div>
   );

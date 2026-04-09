@@ -3,6 +3,7 @@ export { default as AccordianCaretOpenIcon } from "./src/AccordianCaretOpenIcon"
 export { default as AdcsIcon } from "./src/AdcsIcon";
 export { default as AddIcon } from "./src/AddIcon";
 export { default as AddcustomIcon } from "./src/AddcustomIcon";
+export { default as AntarisIcon } from "./src/AntarisIcon";
 export { default as AxisIcon } from "./src/AxisIcon";
 export { default as BatteryIcon } from "./src/BatteryIcon";
 export { default as BusIcon } from "./src/BusIcon";

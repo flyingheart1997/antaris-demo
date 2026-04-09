@@ -130,9 +130,9 @@
   --opacity-80: 0.80;
   --opacity-100: 1.00;
   --opacity-0-2: 0.20000000298023224;
-  --text-font-family-heading: Space Grotesk;
-  --text-font-family-body: Montserrat;
-  --text-font-family-code: Fira Mono;
+  --text-font-family-heading: var(--font-space-grotesk, Space Grotesk);
+  --text-font-family-body: var(--font-montserrat, Montserrat);
+  --text-font-family-code: var(--font-fira-mono, Fira Mono);
   --text-font-weight-light: 300;
   --text-font-weight-regular: 400;
   --text-font-weight-medium: 500;
