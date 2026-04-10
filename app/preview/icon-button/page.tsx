@@ -92,6 +92,16 @@ export default function IconButtonPreview() {
           <IconButton variant="ghost" color="neutral" disabled><Lock size={16} /></IconButton>
         </div>
       </Section>
+
+      <Section title="Advanced (Corner Borders)">
+        <div className="flex flex-wrap gap-24">
+          <IconButton advanced variant="surface" color="accent"><Plus size={16} /></IconButton>
+          <IconButton advanced variant="solid" color="accent"><Settings size={16} /></IconButton>
+          <IconButton advanced variant="outline" color="neutral"><Search size={16} /></IconButton>
+          <IconButton advanced variant="soft" color="info"><Bell size={16} /></IconButton>
+          <IconButton advanced variant="surface" size="lg" color="warning"><Star size={20} /></IconButton>
+        </div>
+      </Section>
     </div>
   )
 }

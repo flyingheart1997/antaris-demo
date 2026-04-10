@@ -1,5 +1,6 @@
 "use client"
 
+import { InputRange } from "@/components/ui/input-range";
 import {
   Select,
   SelectContent,
@@ -187,6 +188,37 @@ export default function SelectPreview() {
               <SelectContent>
                 <SelectItem value="active">Active Session</SelectItem>
                 <SelectItem value="idle">Idle Timeout</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-8">
+            <p className="text-xs font-mono text-text-info uppercase italic">Select Input Range</p>
+            <Select size="lg">
+              <SelectTrigger variant='neutral' className="w-75">
+                <SelectValue placeholder="Select Range" />
+              </SelectTrigger>
+              <SelectContent className="p-12 border border-gray-8 w-75 bg-surface-bg flex flex-col">
+                <InputRange
+                  variant="surface"
+                  unit="m"
+                  minPlaceholder="0"
+                  maxPlaceholder="1000"
+                  minLabel="Start"
+                  minLimit="0"
+                  maxLabel="End"
+                  maxLimit="5000"
+                />
+                <InputRange
+                  className="mt-12"
+                  variant="surface"
+                  unit="m"
+                  minPlaceholder="0"
+                  maxPlaceholder="1000"
+                  minLabel="Start"
+                  minLimit="0"
+                  maxLabel="End"
+                  maxLimit="5000"
+                />
               </SelectContent>
             </Select>
           </div>

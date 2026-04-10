@@ -150,7 +150,7 @@ function InputGroupText({ className, ...props }: React.ComponentProps<"span">) {
   return (
     <span
       className={cn(
-        "text-text-secondary [&_svg]:text-icon-secondary gap-4 pr-4 text-xs/relaxed [&_svg:not([class*='size-'])]:size-12 flex items-center [&_svg]:pointer-events-none",
+        "text-text-secondary font-body font-regular opacity-50 [&_svg]:text-icon-secondary gap-4 pr-4 text-md [&_svg:not([class*='size-'])]:size-12 flex items-center [&_svg]:pointer-events-none",
         className
       )}
       {...props}

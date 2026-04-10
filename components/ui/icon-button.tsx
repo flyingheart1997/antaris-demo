@@ -1,11 +1,12 @@
 import * as React from "react"
+import { Fragment } from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { Slot } from "@radix-ui/react-slot"
 
 import { cn } from "@/lib/utils"
 
 const iconButtonVariants = cva(
-  "inline-flex shrink-0 items-center justify-center transition-all outline-none select-none active:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-stroke-error aria-invalid:ring-3 aria-invalid:ring-stroke-error/20 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "inline-flex group/button relative shrink-0 items-center justify-center transition-all outline-none select-none active:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-stroke-error aria-invalid:ring-3 aria-invalid:ring-stroke-error/20 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -86,10 +87,11 @@ interface IconButtonProps
   VariantProps<typeof iconButtonVariants> {
   asChild?: boolean
   selected?: boolean
+  advanced?: boolean
 }
 
 const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
-  ({ className, variant, color, size, radius, asChild = false, selected, ...props }, ref) => {
+  ({ className, variant, color, size, radius, asChild = false, selected, advanced = false, children, ...props }, ref) => {
     const Comp = asChild ? Slot : "button"
 
     return (
@@ -98,13 +100,30 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
         data-slot="icon-button"
         data-variant={variant}
         data-selected={selected ? "true" : undefined}
+        data-advanced={advanced ? "true" : undefined}
         aria-pressed={selected}
         data-color={color}
         data-size={size}
         data-radius={radius}
         className={cn(iconButtonVariants({ variant, color, size, radius, className }))}
         {...props}
-      />
+      >
+        {asChild ? (
+          children
+        ) : (
+          <Fragment>
+            {advanced && (
+              <Fragment>
+                <span className="absolute -top-[1.5px] -left-[1.5px] size-8 border-t-[1.5px] border-l-[1.5px] border-green-9 rounded-tl-sm transition-all duration-300 ease-out group-hover/button:-top-4 group-hover/button:-left-4" />
+                <span className="absolute -top-[1.5px] -right-[1.5px] size-8 border-t-[1.5px] border-r-[1.5px] border-green-9 rounded-tr-sm transition-all duration-300 ease-out group-hover/button:-top-4 group-hover/button:-right-4" />
+                <span className="absolute -bottom-[1.5px] -left-[1.5px] size-8 border-b-[1.5px] border-l-[1.5px] border-green-9 rounded-bl-sm transition-all duration-300 ease-out group-hover/button:-bottom-4 group-hover/button:-left-4" />
+                <span className="absolute -bottom-[1.5px] -right-[1.5px] size-8 border-b-[1.5px] border-r-[1.5px] border-green-9 rounded-br-sm transition-all duration-300 ease-out group-hover/button:-bottom-4 group-hover/button:-right-4" />
+              </Fragment>
+            )}
+            {children}
+          </Fragment>
+        )}
+      </Comp>
     )
   }
 )

@@ -115,6 +115,30 @@ export default function ButtonPreview() {
           <Button radius="full" variant="solid" color="neutral">Radius: Full</Button>
         </div>
       </div>
+
+      {/* Advanced Showcase */}
+      <div className="space-y-16 pt-32 pb-40">
+        <h2 className="text-xl font-semibold text-text-secondary border-b border-stroke-primary pb-8">
+          Advanced (Corner Borders)
+        </h2>
+        <div className="flex flex-wrap items-center gap-24">
+          <Button advanced variant="surface" color="accent">
+            Advanced Surface
+          </Button>
+          <Button advanced variant="solid" color="accent">
+            Advanced Solid
+          </Button>
+          <Button advanced variant="outline" color="neutral">
+            Advanced Outline
+          </Button>
+          <Button advanced variant="soft" color="info" leadingIcon={<Plus className="size-16" />}>
+            Advanced with Icon
+          </Button>
+          <Button advanced size="lg" variant="surface" color="warning">
+            Large Advanced
+          </Button>
+        </div>
+      </div>
     </div>
   )
 }

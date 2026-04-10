@@ -17,12 +17,13 @@ const selectTriggerVariants = cva(
   {
     variants: {
       variant: {
-        surface: "bg-surface-primary/0 backdrop-blur-40 border-gray-11 data-[placeholder]:border-gray-8 hover:!border-gray-11 group-hover/select:!border-gray-11 data-[state=open]:border-stroke-selected data-[read-only=true]:bg-gray-2 data-[read-only=true]:border-gray-11",
+        surface: "bg-surface-primary backdrop-blur-40 border-gray-11 data-[placeholder]:border-gray-8 hover:!border-gray-11 group-hover/select:!border-gray-11 data-[state=open]:border-stroke-selected data-[read-only=true]:bg-gray-2 data-[read-only=true]:border-gray-11",
         solid: "bg-surface-bg border-gray-11 data-[placeholder]:border-gray-8 hover:!border-gray-11 group-hover/select:!border-gray-11 data-[state=open]:border-stroke-selected data-[read-only=true]:bg-gray-2 data-[read-only=true]:border-gray-11",
+        neutral: "bg-surface-primary border-gray-8 data-[placeholder]:border-gray-8",
       },
       color: {
         primary: "",
-        error: "!border-stroke-error",
+        error: "border-stroke-error!",
       },
       size: {
         md: "h-24 text-md font-regular",
@@ -32,7 +33,7 @@ const selectTriggerVariants = cva(
     defaultVariants: {
       variant: "surface",
       color: "primary",
-      size: "md",
+      size: "lg",
     },
   }
 )
@@ -83,14 +84,14 @@ const SelectTrigger = React.forwardRef<
       data-read-only={isReadOnly}
       {...props}
     >
-      <div className="flex items-center gap-[inherit] h-full min-w-0 font-[inherit]">
+      <div className="flex items-center justify-start gap-[inherit] h-full min-w-35 font-[inherit]">
         {leadingIcon && (
-          <span className="flex shrink-0 items-center justify-center px-4 pointer-events-none text-icon-secondary group-data-state-open/select:text-icon-primary group-data-[color=error]/select:text-text-error-subtle! font-[inherit]">
+          <span className="flex shrink-0 items-center justify-center px-4 pointer-events-none text-icon-secondary opacity-50 group-data-state-open/select:text-icon-primary group-data-[color=error]/select:text-text-error-subtle! font-[inherit]">
             {leadingIcon}
           </span>
         )}
         <span className={
-          cn("flex-1 truncate text-text-primary opacity-100 group-data-placeholder/select:opacity-60 group-data-state-open/select:opacity-100 group-data-[read-only=true]/select:opacity-100 group-data-[color=error]/select:text-text-error-subtle! font-[inherit]",
+          cn("flex-1 truncate text-start text-text-primary opacity-100 group-data-placeholder/select:opacity-60 group-data-state-open/select:opacity-100 group-data-[read-only=true]/select:opacity-100 group-data-[color=error]/select:text-text-error-subtle! font-[inherit]",
             leadingIcon ? 'pr-6' : 'px-6'
           )
         }>
@@ -101,7 +102,7 @@ const SelectTrigger = React.forwardRef<
         <SelectPrimitive.Icon asChild>
           <div className="flex shrink-0 items-center justify-center px-4 font-[inherit]">
             {trailingIcon === true ? (
-              <ChevronDown className="size-12 shrink-0 text-icon-secondary transition-transform duration-300 ease-in-out group-data-[state=open]/select:rotate-180 group-data-[state=open]/select:text-icon-primary group-data-[color=error]/select:text-text-error-subtle! " />
+              <ChevronDown className="size-12 shrink-0 text-icon-secondary transition-transform duration-300 ease-in-out group-data-[state=open]/select:rotate-180 group-data-[state=open]/select:text-icon-primary " />
             ) : (
               <span className="flex shrink-0 items-center justify-center pointer-events-none font-[inherit]">
                 {trailingIcon}
@@ -162,9 +163,9 @@ const SelectContent = React.forwardRef<
         <SelectPrimitive.Content
           ref={ref}
           className={cn(
-            "relative z-50 max-h-96 min-w-50 overflow-hidden rounded-md border border-stroke-selected bg-surface-primary/0 backdrop-blur-60 text-text-primary shadow-xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 duration-100 p-4",
+            "relative z-50 max-h-96 w-(--radix-select-trigger-width) overflow-hidden rounded-md border border-stroke-selected bg-surface-primary/0 backdrop-blur-60 text-text-primary shadow-xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 duration-100 p-4",
             position === "popper" &&
-            "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
+            "data-[side=bottom]:translate-y-4 data-[side=left]:-translate-x-4 data-[side=right]:translate-x-4 data-[side=top]:-translate-y-4",
             className
           )}
           position={position}

@@ -66,6 +66,8 @@ export const COMPONENT_REGISTRY: ComponentDoc[] = [
       { name: "leadingIcon", type: "React.ReactNode", default: "—", description: "Icon node rendered before the label." },
       { name: "trailingIcon", type: "React.ReactNode", default: "—", description: "Icon node rendered after the label." },
       { name: "showText", type: "boolean", default: "true", description: "Hide the label text (icon-only mode)." },
+      { name: "selected", type: "boolean", default: "false", description: "Sets aria-pressed and data-selected attributes for toggle states." },
+      { name: "advanced", type: "boolean", default: "false", description: "Adds animated corner accent borders on hover." },
       { name: "disabled", type: "boolean", default: "false", description: "Disables the button and reduces opacity." },
       { name: "asChild", type: "boolean", default: "false", description: "Renders as the Radix Slot — delegates rendering to the child element." },
     ],
@@ -209,8 +211,8 @@ import { Mail, ArrowRight } from "lucide-react"
       { label: "Sizes", description: "Supports 'md' (32px) and 'lg' (40px) height tokens." },
     ],
     props: [
-      { name: "variant", type: "'surface' | 'solid'", default: "'surface'", description: "Visual style of the input." },
-      { name: "size", type: "'md' | 'lg'", default: "'md'", description: "Controls height and padding." },
+      { name: "variant", type: "'surface' | 'solid'", default: "'solid'", description: "Visual style of the input." },
+      { name: "size", type: "'md' | 'lg'", default: "'lg'", description: "Controls height and padding." },
       { name: "disabled", type: "boolean", default: "false", description: "Disables interaction and dims the input." },
       { name: "readOnly", type: "boolean", default: "false", description: "Prevents editing while maintaining focusability." },
       { name: "aria-invalid", type: "boolean | 'grammar' | 'spelling'", default: "false", description: "Triggers the error state styling (red border/ring)." },
@@ -255,8 +257,9 @@ import { Search } from "lucide-react"
       { label: "Sizes", description: "Supports 'md' (32px) and 'lg' (40px) matching the Input component." },
     ],
     props: [
-      { name: "variant", type: "'surface' | 'solid'", default: "'surface'", description: "Visual style of the group container." },
-      { name: "size", type: "'md' | 'lg'", default: "'md'", description: "Controls the height of the group and all internal elements." },
+      { name: "variant", type: "'surface' | 'solid'", default: "'solid'", description: "Visual style of the group container." },
+      { name: "size", type: "'md' | 'lg'", default: "'lg'", description: "Controls the height of the group and all internal elements." },
+      { name: "align (InputGroupAddon)", type: "'inline-start' | 'inline-end' | 'block-start' | 'block-end'", default: "'inline-start'", description: "Visual alignment and ordering of the addon relative to the input." },
     ],
     codeExample: `import { Field, FieldLabel } from "@/components/ui/field"
 import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupButton } from "@/components/ui/input-group"
@@ -650,10 +653,11 @@ import { Button } from "@/components/ui/button"
     category: "Forms",
     summary: "Dropdown select with surface/solid variants, sizes, grouped options, and error state.",
     description:
-      "Select is built on Radix UI Select. The trigger supports surface and solid variants, md and lg sizes, a leadingIcon, and color states (primary, error, warning, etc.). Options can be organized with SelectGroup and SelectLabel.",
+      "Select is built on Radix UI Select. The trigger supports surface and solid variants, md and lg sizes, a leadingIcon, and color states (primary, error, warning, etc.). The dropdown width automatically matches the trigger width for pixel-perfect alignment.",
     variants: [
       { label: "Surface", description: "Default — outlined trigger with hover background." },
       { label: "Solid", description: "Filled trigger background." },
+      { label: "Width Match", description: "Automatically synchronizes dropdown content width with the trigger width." },
       { label: "Grouped Options", description: "SelectGroup + SelectLabel for categorized option lists." },
       { label: "Error State", description: "color='error' applies red ring and border." },
     ],
@@ -703,7 +707,7 @@ import { Globe } from "lucide-react"
       { label: "Solid", description: "Solid background style." },
     ],
     props: [
-      { name: "variant", type: "'surface' | 'solid'", default: "'surface'", description: "Visual style." },
+      { name: "variant", type: "'surface' | 'solid'", default: "'solid'", description: "Visual style." },
       { name: "disabled", type: "boolean", default: "false", description: "Disables interaction." },
       { name: "readOnly", type: "boolean", default: "false", description: "Prevents editing." },
     ],
@@ -741,6 +745,8 @@ import { Field, FieldLabel, FieldArea, FieldDescription } from "@/components/ui/
       { name: "color", type: "'accent' | 'neutral' | 'error' | 'warning' | 'info'", default: "'accent'", description: "Semantic color scale." },
       { name: "size", type: "'sm' | 'md' | 'lg' | 'xl'", default: "'md'", description: "Square dimensions (24–48px)." },
       { name: "radius", type: "'none' | 'md' | 'lg' | 'xl' | 'full'", default: "'md'", description: "Border-radius token." },
+      { name: "selected", type: "boolean", default: "false", description: "Toggle selection state." },
+      { name: "advanced", type: "boolean", default: "false", description: "Adds corner accent borders." },
       { name: "disabled", type: "boolean", default: "false", description: "Disables the button." },
       { name: "asChild", type: "boolean", default: "false", description: "Render as Radix Slot child." },
     ],
@@ -877,6 +883,7 @@ import { Button } from "@/components/ui/button"
     props: [
       { name: "type", type: "'single' | 'multiple'", default: "'single'", description: "Allow single or multiple open items.", required: true },
       { name: "collapsible (single)", type: "boolean", default: "false", description: "Allow closing the open item by clicking its trigger again." },
+      { name: "value (AccordionTrigger)", type: "React.ReactNode", default: "—", description: "Node rendered on the right side of the trigger header." },
       { name: "defaultValue", type: "string | string[]", default: "—", description: "Initially open item(s)." },
       { name: "value", type: "string | string[]", default: "—", description: "Controlled open state." },
       { name: "onValueChange", type: "(value: string | string[]) => void", default: "—", description: "Callback on open state change." },
@@ -938,6 +945,87 @@ import { Spinner } from "@/components/ui/spinner"
   <Spinner className="size-14" />
   Loading...
 </button>`,
+    badge: "New",
+  },
+  {
+    slug: "field",
+    name: "Field",
+    category: "Forms",
+    summary: "Form field wrapper that manages labels, descriptions, errors, and layout orientations.",
+    description: "Field is the foundational wrapper for all form controls. It handles accessible label association, positioning of helper text and error messages, and supports horizontal/vertical/responsive layouts.",
+    variants: [
+      { label: "Vertical", description: "Default — Labelling above the control." },
+      { label: "Horizontal", description: "Labelling to the left of the control (ideal for forms with many fields)." },
+      { label: "Responsive", description: "Switches from vertical to horizontal based on container width." },
+    ],
+    props: [
+      { name: "orientation", type: "'vertical' | 'horizontal' | 'responsive'", default: "'vertical'", description: "Layout direction." },
+      { name: "disabled", type: "boolean", default: "false", description: "Propagates disabled state to children." },
+    ],
+    codeExample: `import { Field, FieldLabel, FieldInput, FieldDescription, FieldError } from "@/components/ui/field"
+
+<Field orientation="vertical">
+  <FieldLabel>Username</FieldLabel>
+  <FieldInput placeholder="Enter username" />
+  <FieldDescription>This is your public display name.</FieldDescription>
+  <FieldError />
+</Field>`,
+    badge: "New",
+  },
+  {
+    slug: "input-range",
+    name: "Input Range",
+    category: "Forms",
+    summary: "Compound range input for min/max values with units and limits.",
+    description: "InputRange provides a synchronized pair of inputs for capturing a range of values (e.g. min/max). It supports units, labels, and limit indicators for each input.",
+    variants: [
+      { label: "Standard", description: "Two inputs with a separator line." },
+      { label: "With Units", description: "Displaying units (e.g., m, kg, ms) inside the inputs." },
+    ],
+    props: [
+      { name: "minPlaceholder", type: "string", default: "—", description: "Placeholder for min input." },
+      { name: "maxPlaceholder", type: "string", default: "—", description: "Placeholder for max input." },
+      { name: "unit", type: "string", default: "—", description: "Unit label appended to both inputs." },
+      { name: "minLabel / maxLabel", type: "string", default: "—", description: "Sub-labels for min/max inputs." },
+    ],
+    codeExample: `import { InputRange } from "@/components/ui/input-range"
+
+<InputRange
+  unit="m"
+  minPlaceholder="Min"
+  maxPlaceholder="Max"
+  minLabel="Starting altitude"
+  maxLabel="Ending altitude"
+/>`,
+    badge: "New",
+  },
+  {
+    slug: "sheet",
+    name: "Sheet",
+    category: "UI",
+    summary: "Slide-out sheet/drawer panel anchored to an edge — built on Radix UI.",
+    description: "Sheet provides a flexible overlay anchored to any of the four viewport edges. Ideal for mobile navigation, settings panels, or contextual side-views. Built on top of Radix UI Dialog.",
+    variants: [
+      { label: "Right", description: "Default — slides in from the right edge." },
+      { label: "Bottom", description: "Slides in from the bottom — good for mobile menus." },
+    ],
+    props: [
+      { name: "side", type: "'top' | 'right' | 'bottom' | 'left'", default: "'right'", description: "Which edge the sheet slides in from." },
+      { name: "showCloseButton", type: "boolean", default: "true", description: "Shows/hides the top-right close button." },
+    ],
+    codeExample: `import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+
+<Sheet>
+  <SheetTrigger>Open Sheet</SheetTrigger>
+  <SheetContent side="right">
+    <SheetHeader>
+      <SheetTitle>Configuration</SheetTitle>
+    </SheetHeader>
+    <div className="p-20">
+      {/* Content here */}
+    </div>
+  </SheetContent>
+</Sheet>`,
     badge: "New",
   },
 ]
