@@ -107,18 +107,19 @@ All colors use **OKLCH** color space for perceptual uniformity.
 | Animated Group | `animated-group.tsx` | Framer Motion | - |
 | Avatar | `avatar.tsx` | Radix UI | CVA |
 | Badge | `badge.tsx` | Custom | CVA |
-| **Button** | `button.tsx` | Radix Slot | CVA (size, variant, color) |
+| **Button** | `button.tsx` | Radix Slot | CVA (size, variant, color, selected, advanced) |
 | Card | `card/index.tsx` | Custom | CVA (size, state, selected) + Figma mask overlay |
 | Checkbox | `checkbox.tsx` | Radix UI | - |
 | Collapsible | `collapsible.tsx` | Radix UI | - |
 | Drawer | `drawer.tsx` | Custom | - |
 | Dialog | `dialog.tsx` | Radix UI | - |
 | Dropdown Menu | `dropdown-menu.tsx` | Radix UI | - |
-| Field | `field.tsx` | Custom | CVA |
+| Field | `field.tsx` | Custom | Yes — orientation (vertical, horizontal, responsive) |
 | Form | `form.tsx` | react-hook-form | - |
 | Frame | `frame.tsx` | Custom | - |
-| Icon Button | `icon-button.tsx` | Custom | CVA |
+| Icon Button | `icon-button.tsx` | Custom | CVA (size, variant, selected, advanced) |
 | Input Group | `input-group.tsx` | Custom | Yes — variant (surface, solid), size (md, lg) |
+| Input Range | `input-range.tsx` | Custom | - |
 | **Input** | `input.tsx` | Custom | Yes — variant (surface, solid), size (md, lg) |
 | Kbd | `kbd.tsx` | Custom | - |
 | Label | `label.tsx` | Radix UI | - |

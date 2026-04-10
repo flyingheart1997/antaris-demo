@@ -3,6 +3,7 @@
 import { Field, FieldLabel, FieldDescription, FieldError, FieldContent, FieldInput, FieldArea } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { InputGroup, InputGroupInput, InputGroupAddon, InputGroupText, InputGroupButton } from "@/components/ui/input-group"
+import { InputRange } from "@/components/ui/input-range"
 import { Textarea } from "@/components/ui/textarea"
 import { Search, Info } from "lucide-react"
 
@@ -182,6 +183,39 @@ export default function InputPreviewPage() {
             <FieldLabel htmlFor="error-textarea">Textarea with Error</FieldLabel>
             <FieldArea id="error-textarea" defaultValue="Something went wrong in this text" rows={4} />
             <FieldError>Please provide a valid description.</FieldError>
+          </Field>
+        </div>
+      </section>
+
+      {/* 6. Range Inputs */}
+      <section className="space-y-32">
+        <h2 className="text-xl font-medium text-text-primary border-b border-stroke-primary pb-8">6. Range Inputs</h2>
+        <div className="grid grid-cols-2 gap-40">
+          <Field>
+            <FieldLabel>Range with Units & Limits</FieldLabel>
+            <InputRange 
+              unit="Km"
+              minPlaceholder="10"
+              maxPlaceholder="Value"
+              minLabel="Mini"
+              minLimit="5"
+              maxLabel="Max"
+              maxLimit="100"
+            />
+          </Field>
+          
+          <Field>
+            <FieldLabel>Surface Variant</FieldLabel>
+            <InputRange 
+              variant="surface"
+              unit="m"
+              minPlaceholder="0"
+              maxPlaceholder="1000"
+              minLabel="Start"
+              minLimit="0"
+              maxLabel="End"
+              maxLimit="5000"
+            />
           </Field>
         </div>
       </section>

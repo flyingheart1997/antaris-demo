@@ -1,4 +1,5 @@
 import * as React from "react"
+import { Fragment } from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { Slot } from "@radix-ui/react-slot"
 
@@ -90,6 +91,7 @@ interface ButtonProps
   trailingIcon?: React.ReactNode
   showText?: boolean
   selected?: boolean
+  advanced?: boolean
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -104,6 +106,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     trailingIcon,
     showText = true,
     selected = false,
+    advanced = false,
     children,
     ...props
   }, ref) => {
@@ -118,6 +121,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         data-size={size}
         data-radius={radius}
         data-selected={selected ? "true" : undefined}
+        data-advanced={advanced ? "true" : undefined}
         aria-pressed={selected}
         className={cn(buttonVariants({ variant, color, size, radius, className }))}
         {...props}
@@ -125,7 +129,15 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {asChild ? (
           children
         ) : (
-          <>
+          <Fragment>
+            {advanced && (
+              <Fragment>
+                <span className="absolute -top-[1.5px] -left-[1.5px] size-8 border-t-[1.5px] border-l-[1.5px] border-green-9 rounded-tl-sm transition-all duration-300 ease-out group-hover/button:-top-4 group-hover/button:-left-4" />
+                <span className="absolute -top-[1.5px] -right-[1.5px] size-8 border-t-[1.5px] border-r-[1.5px] border-green-9 rounded-tr-sm transition-all duration-300 ease-out group-hover/button:-top-4 group-hover/button:-right-4" />
+                <span className="absolute -bottom-[1.5px] -left-[1.5px] size-8 border-b-[1.5px] border-l-[1.5px] border-green-9 rounded-bl-sm transition-all duration-300 ease-out group-hover/button:-bottom-4 group-hover/button:-left-4" />
+                <span className="absolute -bottom-[1.5px] -right-[1.5px] size-8 border-b-[1.5px] border-r-[1.5px] border-green-9 rounded-br-sm transition-all duration-300 ease-out group-hover/button:-bottom-4 group-hover/button:-right-4" />
+              </Fragment>
+            )}
             {leadingIcon && (
               <span className="inline-flex shrink-0 items-center justify-center" data-slot="button-leading-icon">
                 {leadingIcon}
@@ -141,7 +153,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
                 {trailingIcon}
               </span>
             )}
-          </>
+          </Fragment>
         )}
       </Comp>
     )

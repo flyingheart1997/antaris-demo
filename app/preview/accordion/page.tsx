@@ -21,50 +21,52 @@ export default function AccordionPreview() {
     <div className="p-40 space-y-40 bg-surface-bg min-h-screen">
       <h1 className="text-xxxl font-bold text-text-primary">Accordion Showcase</h1>
 
-      <Section title="Single (Collapsible)">
+      <Section title="Payload Subsystems (Status)">
         <div className="max-w-xl">
-          <Accordion type="single" collapsible>
-            <AccordionItem value="item-1">
-              <AccordionTrigger>What is the Antaris Design System?</AccordionTrigger>
+          <Accordion type="single" collapsible defaultValue="imager">
+            <AccordionItem value="imager">
+              <AccordionTrigger value="4">Imager</AccordionTrigger>
               <AccordionContent>
-                The Antaris Design System is a comprehensive UI component library built for mission-critical satellite operations interfaces. It provides design tokens, components, and patterns.
+                <div className="space-y-4">
+                  <p>Spectral bands: 16 total (Visible, NIR, SWIR, TIR)</p>
+                  <p>Resolution: 0.5m GSD at nadir</p>
+                  <p>Data rate: 1.2 Gbps peak</p>
+                </div>
               </AccordionContent>
             </AccordionItem>
-            <AccordionItem value="item-2">
-              <AccordionTrigger>How do I install it?</AccordionTrigger>
+            <AccordionItem value="sar">
+              <AccordionTrigger value="2">SAR (Synthetic Aperture Radar)</AccordionTrigger>
               <AccordionContent>
-                The system is pre-configured in this Next.js project. Import components directly from <code className="text-green-11 bg-green-alpha-2 px-4 py-0.5 rounded-sm text-xs">@/components/ui</code>.
+                <div className="space-y-4">
+                  <p>Frequency band: X-band (9.6 GHz)</p>
+                  <p>Polarization: Single, Dual, Quad</p>
+                  <p>Swath width: Up to 100km</p>
+                </div>
               </AccordionContent>
             </AccordionItem>
-            <AccordionItem value="item-3">
-              <AccordionTrigger>Is it accessible?</AccordionTrigger>
+            <AccordionItem value="ais">
+              <AccordionTrigger value="1">AIS Receiver</AccordionTrigger>
               <AccordionContent>
-                Yes. All components are built on Radix UI primitives, which implement WAI-ARIA patterns. Keyboard navigation, focus management, and screen reader support are built-in.
+                Global ship tracking subsystem. Current sensitivity: -118 dBm.
               </AccordionContent>
             </AccordionItem>
           </Accordion>
         </div>
       </Section>
 
-      <Section title="Multiple (Allow Multiple Open)">
+      <Section title="Navigation & Orbit">
         <div className="max-w-xl">
-          <Accordion type="multiple" defaultValue={["q1"]}>
-            <AccordionItem value="q1">
-              <AccordionTrigger>Orbit Insertion Parameters</AccordionTrigger>
+          <Accordion type="multiple">
+            <AccordionItem value="gnss">
+              <AccordionTrigger value="Locked">GNSS Receiver</AccordionTrigger>
               <AccordionContent>
-                LEO insertion at 550km altitude. Inclination: 53°. RAAN: 127.4°. True anomaly: 245.8°.
+                Multi-constellation support: GPS, Galileo, GLONASS, BeiDou. Position accuracy: &lt; 2m.
               </AccordionContent>
             </AccordionItem>
-            <AccordionItem value="q2">
-              <AccordionTrigger>Telemetry Status</AccordionTrigger>
+            <AccordionItem value="star-tracker">
+              <AccordionTrigger value="Active">Star Tracker</AccordionTrigger>
               <AccordionContent>
-                All subsystems nominal. Battery: 94%. Signal strength: -87 dBm. Downlink rate: 2 Mbps.
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="q3">
-              <AccordionTrigger>Thermal Control</AccordionTrigger>
-              <AccordionContent>
-                Panel temperature: 22°C. Heater duty cycle: 12%. All thermal zones within limits.
+                Dual-head configuration. Attitude knowledge accuracy: 2 arcseconds.
               </AccordionContent>
             </AccordionItem>
           </Accordion>
