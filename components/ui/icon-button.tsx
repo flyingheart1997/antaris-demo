@@ -24,10 +24,10 @@ const iconButtonVariants = cva(
         info: "",
       },
       size: {
-        sm: "h-24 w-24 rounded-md",
-        md: "h-32 w-32 rounded-md",
-        lg: "h-40 w-40 rounded-lg",
-        xl: "h-48 w-48 rounded-lg",
+        sm: "h-24 w-24 rounded-md [&_svg]:size-16",
+        md: "h-32 w-32 rounded-md [&_svg]:size-18",
+        lg: "h-40 w-40 rounded-lg [&_svg]:size-20",
+        xl: "h-48 w-48 rounded-lg [&_svg]:size-24",
       },
       radius: {
         none: "rounded-none",

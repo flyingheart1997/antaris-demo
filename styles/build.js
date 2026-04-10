@@ -52,8 +52,17 @@ function isUnitless(path) {
     return unitlessKeywords.some(keyword => path.toLowerCase().includes(keyword.toLowerCase()));
 }
 
+// Normalize any Figma token key to a valid CSS custom-property name.
+// Figma allows characters like apostrophes (e.g. "1'5") that are illegal
+// in CSS variable names — replace them alongside dots, commas, and spaces.
+// sanitizeRefPath MUST use identical rules so {dim.1'5} resolves to "dim-1-5",
+// matching the key produced for the "1'5" entry when its name was sanitized.
 function sanitizeName(name) {
-    return name.replace(/[\.\/,\s]/g, '-');
+    return name.replace(/[\.\/,\s']/g, '-');
+}
+
+function sanitizeRefPath(refPath) {
+    return refPath.replace(/\./g, '-').replace(/[,\s']/g, '-');
 }
 
 function resolveValue(token, path, allFlattened) {
@@ -62,10 +71,29 @@ function resolveValue(token, path, allFlattened) {
 
     if (val === null || val === undefined) return null;
 
-    // Handle Figma Ref Style: {color.blue.500}
+    // Composite tokens (typography, boxShadow, etc.) carry an object as $value.
+    // A CSS custom property cannot hold a compound object — skipping them here
+    // prevents the "[object Object]" bug in the generated CSS.
+    // These tokens remain in tokens.generated.ts for TypeScript / Framer Motion use.
+    if (typeof val === 'object' && !Array.isArray(val) && !val.hex) return null;
+
+    // Full Figma alias — entire value is one reference, e.g. {color.gray.12}
     if (typeof val === 'string' && val.startsWith('{') && val.endsWith('}')) {
-        const refPath = val.slice(1, -1).replace(/\./g, '-').replace(/,/g, '-');
-        return allFlattened[refPath] || val;
+        const refPath = sanitizeRefPath(val.slice(1, -1));
+        return allFlattened[refPath] !== undefined ? allFlattened[refPath] : val;
+    }
+
+    // Partial Figma aliases embedded inside a larger value, e.g.:
+    //   rgba({color.gray.12}, {opacity.0,2})
+    //   linear-gradient(...), {opacity.5}
+    // Resolve every {ref} in-place; unresolvable refs are left as-is.
+    // Exact Figma color values (hex) are preserved — only the {ref} placeholders
+    // are swapped out for the target token's real value.
+    if (typeof val === 'string' && val.includes('{')) {
+        return val.replace(/\{([^}]+)\}/g, (match, refPath) => {
+            const key = sanitizeRefPath(refPath);
+            return allFlattened[key] !== undefined ? allFlattened[key] : match;
+        });
     }
 
     if (type === 'color' && typeof val === 'object' && val.hex) {
@@ -84,6 +112,21 @@ function resolveValue(token, path, allFlattened) {
             return toRem(val);
         }
     }
+
+    // Numeric string values for dimension-like types (e.g. "9999" on borderRadius).
+    // Figma exports these as quoted strings; the typeof === 'number' branch above
+    // is never reached for them, so we handle them explicitly.
+    if (typeof val === 'string') {
+        const trimmed = val.trim();
+        const asNum = parseFloat(trimmed);
+        const isDimensionType = ['borderRadius', 'dimension', 'borderWidth', 'spacing', 'sizing'].includes(type);
+        if (!isNaN(asNum) && String(asNum) === trimmed && isDimensionType) {
+            if (asNum > 1000) return '9999px';
+            if (asNum === 0) return '0';
+            return toRem(asNum);
+        }
+    }
+
     return val;
 }
 
@@ -153,14 +196,15 @@ async function build() {
     // 4. Generate CSS Variables
     let cssVars = ':root {\n';
     for (const [name, val] of Object.entries(allResolvedFlat)) {
-        if (val !== null) {
-            let finalVal = val;
-            if (name.includes('font-family')) {
-                const slug = val.toString().toLowerCase().replace(/[\s\./,]/g, '-');
-                finalVal = `var(--font-${slug}, ${val})`;
-            }
-            cssVars += `  --${name}: ${finalVal};\n`;
+        // Skip nulls (composite tokens) and any object that slipped through — they
+        // cannot be represented as CSS custom property values.
+        if (val === null || val === undefined || typeof val === 'object') continue;
+        let finalVal = val;
+        if (name.includes('font-family')) {
+            const slug = val.toString().toLowerCase().replace(/[\s\./,]/g, '-');
+            finalVal = `var(--font-${slug}, ${val})`;
         }
+        cssVars += `  --${name}: ${finalVal};\n`;
     }
     cssVars += '}\n';
 
@@ -280,7 +324,9 @@ async function build() {
     // Generate TS for React (Framer Motion, etc.)
     const tokensExport = {};
     for (const [name, val] of Object.entries(allResolvedFlat)) {
-        setNested(tokensExport, name, val);
+        if (val !== null && val !== undefined && typeof val !== 'object') {
+            setNested(tokensExport, name, val);
+        }
     }
     const genContent = `export const tokens = ${JSON.stringify(tokensExport, null, 2).replace(/"/g, "'")} as const;\n\nexport type DesignTokens = typeof tokens;\n`;
     fs.writeFileSync(path.join(OUTPUT_DIR, 'tokens.generated.ts'), genContent);

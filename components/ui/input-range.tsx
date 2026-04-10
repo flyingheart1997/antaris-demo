@@ -44,7 +44,7 @@ const InputRange = React.forwardRef<HTMLDivElement, InputRangeProps>(
     return (
       <div
         ref={ref}
-        className={cn("flex flex-col w-full", className)}
+        className={cn("flex w-full", className)}
         {...props}
       >
         <div className="flex items-start gap-4">
@@ -70,7 +70,7 @@ const InputRange = React.forwardRef<HTMLDivElement, InputRangeProps>(
             )}
           </Field>
 
-          <span className="text-gray-8 text-sm font-medium shrink-0 leading-none pt-12">─</span>
+          <span className="text-gray-8 text-sm font-medium shrink-0 leading-none pt-10">─</span>
 
           <Field className="flex-1">
             <InputGroup variant={variant} size={size}>

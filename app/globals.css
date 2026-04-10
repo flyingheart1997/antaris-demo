@@ -12,7 +12,7 @@
     @apply border-stroke-primary outline-surface-selected/50;
   }
   body {
-    @apply bg-surface-bg text-text-primary;
+    @apply text-text-primary;
   }
 }
 

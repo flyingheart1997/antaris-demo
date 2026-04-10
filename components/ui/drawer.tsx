@@ -48,7 +48,7 @@ const DrawerTrigger = React.forwardRef<
         className={cn(
           // Ensure standard hover states and text color for the trigger. 
           // When open, we might want to preserve a particular tint if defined.
-          "flex items-center justify-center hover:bg-green-alpha-3 hover:border hover:border-stroke-selected [&_svg]:text-icon-secondary rounded-md p-0 h-40 w-40 data-panel-open:[&_svg]:text-icon-primary data-panel-open:bg-green-alpha-2 data-panel-open:border data-panel-open:border-stroke-selected",
+          "flex items-center justify-center hover:bg-green-alpha-3 hover:border hover:border-stroke-selected [&_svg]:text-icon-secondary rounded-md p-0 h-40 w-40 [&_svg]:size-20 data-panel-open:[&_svg]:text-icon-primary data-panel-open:bg-green-alpha-2 data-panel-open:border data-panel-open:border-stroke-selected",
           className
         )}
         {...props}
@@ -70,7 +70,7 @@ const DrawerContainer = React.forwardRef<
       {...props}
     >
       {/* Inner wrapper applies the top gap and inter-item gap so that when Panel height is 0, the gap is also hidden */}
-      <div ref={ref} className="flex flex-col items-center pt-10 gap-6 max-h-75 overflow-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+      <div ref={ref} className="flex flex-col items-center pt-10 gap-2 max-h-87 overflow-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         {children}
       </div>
     </CollapsiblePanel>
@@ -94,7 +94,7 @@ const DrawerItem = React.forwardRef<
         variant={active ? "soft" : "ghost"}
         selected={active}
         className={cn(
-          'h-40 w-40',
+          'h-40 w-40 [&_svg]:size-20',
           active
             ? "bg-green-alpha-3 hover:bg-green-alpha-3 text-icon-selected hover:text-icon-selected"
             : "hover:text-icon-primary",
