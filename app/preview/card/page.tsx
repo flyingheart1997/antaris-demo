@@ -32,7 +32,7 @@ export default function CardPreview() {
         <h1 className="text-2xl font-bold">Card States (Size 3)</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {states.map((state) => (
-            <Card key={state} size="3" state={state}>
+            <Card key={state} size="3" state={state} stroke>
               <CardHeader>
                 <CardTitle className="capitalize">{state}</CardTitle>
                 <CardDescription>Variant: {state}</CardDescription>
@@ -42,33 +42,6 @@ export default function CardPreview() {
               </CardContent>
             </Card>
           ))}
-        </div>
-      </section>
-
-      <section className="space-y-4">
-        <h1 className="text-2xl font-bold">Inset Content vs Normal (Size 4)</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card size="4" stroke={true}>
-            <div className="h-32 bg-green-100 flex items-center justify-center rounded-sm mb-4">
-              Normal Content with Padding
-            </div>
-            <CardHeader>
-              <CardTitle>Standard Padding</CardTitle>
-            </CardHeader>
-            <CardContent>Standard padding ensures space between card edges and content.</CardContent>
-          </Card>
-
-          <Card size="4" stroke={true} insetContent={true}>
-            <div className="h-32 bg-blue-100 flex items-center justify-center">
-              Inset Content (Flush to Edges)
-            </div>
-            <div className="p-16">
-              <CardHeader>
-                <CardTitle>Inset Content</CardTitle>
-              </CardHeader>
-              <CardContent>When insetContent is true, parent padding is removed for flush assets.</CardContent>
-            </div>
-          </Card>
         </div>
       </section>
     </div>
