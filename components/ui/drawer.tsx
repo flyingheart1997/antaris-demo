@@ -70,7 +70,7 @@ const DrawerContainer = React.forwardRef<
       {...props}
     >
       {/* Inner wrapper applies the top gap and inter-item gap so that when Panel height is 0, the gap is also hidden */}
-      <div ref={ref} className="flex flex-col items-center pt-10 gap-2 max-h-75 overflow-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+      <div ref={ref} className="flex flex-col items-center pt-10 gap-2 max-h-87 overflow-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         {children}
       </div>
     </CollapsiblePanel>

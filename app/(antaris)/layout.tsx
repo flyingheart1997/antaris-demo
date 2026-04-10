@@ -14,7 +14,7 @@ export default function CatalogPageLayout({
   children: React.ReactNode
 }) {
   return (
-    <main className="flex flex-col h-screen w-screen overflow-hidden">
+    <main className="flex flex-col h-screen w-screen bg-surface-bg-grad overflow-hidden">
       <HomeLayout>
         {children}
       </HomeLayout>

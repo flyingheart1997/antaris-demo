@@ -26,7 +26,6 @@ interface HomeLayoutProps {
 
 const HomeLayout = ({ children }: HomeLayoutProps) => {
     const { user } = useAuth()
-
     const name = useMemo(() => user ? user?.name?.split(' ')[0][0] + user?.name?.split(' ')[1][0] : 'KM', [user])
 
     return (
@@ -140,7 +139,9 @@ const HomeLayout = ({ children }: HomeLayoutProps) => {
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
                                 <SidebarMenuItem>
-                                    <SidebarMenuButton asChild tooltip="Settings" className="hover:bg-transparent">
+                                    <SidebarMenuButton disabled asChild tooltip="Settings"
+                                        className="hover:bg-transparent"
+                                    >
                                         <Link href="/settings">
                                             <div className={cn(iconButtonVariants({
                                                 size: "sm",
