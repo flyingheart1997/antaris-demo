@@ -17,40 +17,34 @@ export default function TextareaPreview() {
       <h1 className="text-xxxl font-bold text-text-primary">Textarea Showcase</h1>
 
       <Section title="Variants">
-        <Textarea variant="surface" labelText="Surface Variant" placeholder="Type your message..." />
-        <Textarea variant="solid" labelText="Solid Variant" placeholder="Type your message..." />
+        <Textarea variant="surface" placeholder="Type your message..." />
+        <Textarea variant="solid" placeholder="Type your message..." />
       </Section>
 
       <Section title="States">
-        <Textarea labelText="Default" placeholder="Default state..." />
-        <Textarea labelText="With Helper Text" placeholder="Type here..." helper helperText="This field supports markdown." />
-        <Textarea state="error" labelText="Error State" helper helperText="This field is required." defaultValue="Invalid content" />
-        <Textarea state="disabled" labelText="Disabled" placeholder="Cannot type here" />
-        <Textarea state="read-only" labelText="Read Only" defaultValue="This content cannot be edited." />
+        <Textarea placeholder="Default state..." />
+        <Textarea placeholder="Type here..." />
+        <Textarea defaultValue="Invalid content" />
+        <Textarea placeholder="Cannot type here" />
+        <Textarea defaultValue="This content cannot be edited." />
       </Section>
 
       <Section title="With Character Counter">
         <Textarea
-          labelText="With Counter"
           placeholder="Max 200 chars..."
           maxLength={200}
-          units
           rows={4}
         />
         <Textarea
-          labelText="With Counter + Helper"
           placeholder="Describe the issue..."
           maxLength={500}
-          helper
-          helperText="Provide as much detail as possible."
-          units
           rows={4}
         />
       </Section>
 
       <Section title="Without Label">
-        <Textarea label={false} placeholder="No label, just textarea..." />
-        <Textarea label={false} variant="solid" placeholder="Solid, no label..." />
+        <Textarea placeholder="No label, just textarea..." />
+        <Textarea variant="solid" placeholder="Solid, no label..." />
       </Section>
     </div>
   )
