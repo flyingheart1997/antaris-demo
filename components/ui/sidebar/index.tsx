@@ -503,6 +503,8 @@ function SidebarMenuButton({
       data-sidebar="menu-button"
       data-size={size}
       data-active={selected !== undefined ? selected : isActive}
+      disabled={props.disabled}
+      aria-disabled={props.disabled}
       className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
       {...props}
     />
@@ -691,16 +693,16 @@ function SidebarMenuSubButton({
   );
 }
 
-const Dashboard = ({ children }: { children: React.ReactNode }) => {
+const SidebarDashboard = ({ children, className }: { children: React.ReactNode, className?: string }) => {
   return (
-    <div className="flex flex-1">
+    <div className={cn("flex flex-1", className)}>
       {children}
     </div>
   )
 }
 export {
   Sidebar,
-  Dashboard,
+  SidebarDashboard,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,

@@ -1,6 +1,4 @@
-import * as React from "react"
 import { Drawer, DrawerTrigger, DrawerContainer, DrawerItem } from "@/components/ui/drawer"
-import { IconButton } from "@/components/ui/icon-button"
 import { Search, Settings, Sun, Thermometer, Rocket, Upload, Users } from "lucide-react"
 
 export default function ComponentDrawerPreview() {
