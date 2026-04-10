@@ -6,7 +6,7 @@ import { Slot } from "@radix-ui/react-slot"
 import { cn } from "@/lib/utils"
 
 const iconButtonVariants = cva(
-  "inline-flex group/button relative shrink-0 items-center justify-center transition-all outline-none select-none active:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-stroke-error aria-invalid:ring-3 aria-invalid:ring-stroke-error/20 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "inline-flex group/button relative shrink-0 items-center justify-center transition-all outline-none select-none active:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-stroke-error aria-invalid:ring-3 aria-invalid:ring-stroke-error/20 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:transition-transform [&_svg]:duration-400 [&_svg]:ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:[&_svg]:scale-110",
   {
     variants: {
       variant: {

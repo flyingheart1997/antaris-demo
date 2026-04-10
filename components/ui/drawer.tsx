@@ -30,7 +30,7 @@ function Drawer({
       </svg>
       <div className="absolute -bottom-10 flex items-center justify-center w-full h-10">
         <CollapsibleTrigger className="group">
-          <ChevronDown className="size-12 shrink-0 text-icon-secondary transition-transform duration-300 ease-in-out group-data-panel-open:rotate-180" />
+          <ChevronDown className="size-12 shrink-0 text-icon-secondary transition-transform duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-data-panel-open:rotate-180" />
         </CollapsibleTrigger>
       </div>
     </Collapsible>
@@ -48,7 +48,7 @@ const DrawerTrigger = React.forwardRef<
         className={cn(
           // Ensure standard hover states and text color for the trigger. 
           // When open, we might want to preserve a particular tint if defined.
-          "flex items-center justify-center hover:bg-green-alpha-3 hover:border hover:border-stroke-selected [&_svg]:text-icon-secondary rounded-md p-0 h-40 w-40 [&_svg]:size-20 data-panel-open:[&_svg]:text-icon-primary data-panel-open:bg-green-alpha-2 data-panel-open:border data-panel-open:border-stroke-selected",
+          "flex items-center justify-center hover:bg-green-alpha-3 hover:border hover:border-stroke-selected [&_svg]:text-icon-secondary rounded-md p-0 h-40 w-40 [&_svg]:size-20 hover:[&_svg]:scale-105 [&_svg]:transition-transform [&_svg]:duration-400 [&_svg]:ease-[cubic-bezier(0.34,1.56,0.64,1)] data-panel-open:[&_svg]:text-icon-primary data-panel-open:bg-green-alpha-2 data-panel-open:border data-panel-open:border-stroke-selected",
           className
         )}
         {...props}
@@ -94,7 +94,7 @@ const DrawerItem = React.forwardRef<
         variant={active ? "soft" : "ghost"}
         selected={active}
         className={cn(
-          'h-40 w-40 [&_svg]:size-20',
+          'h-40 w-40 [&_svg]:size-20 hover:[&_svg]:scale-105 transition-all duration-300 ease-in-out',
           active
             ? "bg-green-alpha-3 hover:bg-green-alpha-3 text-icon-selected hover:text-icon-selected"
             : "hover:text-icon-primary",

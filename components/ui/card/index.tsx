@@ -17,7 +17,7 @@ import { CardMask } from "./card-mask"
  * Backdrop blur spec (Figma: effects/bg_blur-60 / 2 = 30px)
  */
 const cardVariants = cva(
-  "inline-flex flex-col relative transition-all duration-300",
+  "inline-flex flex-col relative transition-all duration-300 backdrop-blur-60",
   {
     variants: {
       size: {
@@ -27,12 +27,12 @@ const cardVariants = cva(
         "4": "p-20 rounded-lg",
       },
       state: {
-        default: "bg-gray-2 shadow-[2px_0_20px_0_rgba(9,9,9,0.25)] backdrop-blur-[30px] hover:bg-green-alpha-2 hover:ring-1 hover:ring-(--color-green-alpha-4)",
-        emphasis: "bg-green-alpha-2 shadow-[2px_0_20px_0_rgba(9,9,9,0.25)] backdrop-blur-[30px] hover:ring-1 hover:ring-(--color-green-alpha-4)",
-        disabled: "opacity-50 pointer-events-none",
+        default: "border-stroke-primary hover:border-gray-10 bg-surface-primary shadow-[2px_0_20px_0_rgba(9,9,9,0.25)]",
+        emphasis: "border-green-alpha-2 bg-green-alpha-2 shadow-[2px_0_20px_0_rgba(9,9,9,0.25)]",
+        disabled: "opacity-60 pointer-events-none border-stroke-primary bg-surface-primary",
       },
       stroke: {
-        true: "border-[0.5px] border-stroke-primary",
+        true: "border-[0.5px]",
         false: "border-none",
       },
       insetContent: {

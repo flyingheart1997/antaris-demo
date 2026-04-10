@@ -19,7 +19,7 @@ export default function ComponentDocsLayout({
 }) {
   return (
     <SidebarProvider defaultOpen>
-      <div className="flex min-h-screen w-full bg-surface-bg">
+      <div className="flex min-h-screen w-full">
         {/* ── Fixed sidebar ── */}
         <aside className="hidden md:flex flex-col w-65 min-w-65 h-screen sticky top-0 overflow-y-auto">
           <DocsSidebar />

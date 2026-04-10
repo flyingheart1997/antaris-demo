@@ -68,7 +68,7 @@ export function ComponentPreview({ slug, height = 480, title }: ComponentPreview
 
         {/* URL pill */}
         <div className="flex-1 mx-16 max-w-xs">
-          <div className="flex items-center gap-6 h-24 px-10 rounded-md bg-surface-primary border border-stroke-primary">
+          <div className="flex items-center gap-6 h-24 px-10 rounded-md bg-surface-secondary border border-stroke-primary">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-text-secondary shrink-0">
               <rect x="3" y="11" width="18" height="11" rx="2" />
               <path d="M7 11V7a5 5 0 0 1 10 0v4" />
@@ -80,7 +80,7 @@ export function ComponentPreview({ slug, height = 480, title }: ComponentPreview
         </div>
 
         {/* Viewport switcher */}
-        <div className="flex items-center gap-2 p-1 rounded-lg bg-surface-secondary border border-stroke-primary">
+        <div className="flex items-center gap-2 p-2 px-4 rounded-md bg-surface-secondary border border-stroke-primary">
           {(["desktop", "tablet", "mobile"] as ViewportMode[]).map((v) => (
             <button
               key={v}

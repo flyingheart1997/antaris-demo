@@ -12,19 +12,6 @@ export const metadata: Metadata = {
 
 const CATEGORY_ORDER = ["UI", "Forms", "Layout", "Feedback"] as const
 
-const CATEGORY_GRADIENTS: Record<string, string> = {
-    UI: "from-green-alpha-3 to-green-alpha-1 border-green-7",
-    Forms: "from-blue-alpha-3 to-blue-alpha-1 border-blue-7",
-    Layout: "from-yellow-alpha-3 to-yellow-alpha-1 border-yellow-7",
-    Feedback: "from-red-alpha-3 to-red-alpha-1 border-red-7",
-}
-
-const CATEGORY_BADGE_STYLES: Record<string, string> = {
-    UI: "bg-green-alpha-3 text-green-11",
-    Forms: "bg-blue-alpha-3 text-blue-11",
-    Layout: "bg-yellow-alpha-3 text-yellow-11",
-    Feedback: "bg-red-alpha-3 text-red-11",
-}
 
 export default function ComponentDocsIndexPage() {
     const grouped = getComponentsByCategory()
