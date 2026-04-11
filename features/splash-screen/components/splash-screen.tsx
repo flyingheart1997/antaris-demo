@@ -1,10 +1,10 @@
 'use client';
 
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion, useAnimate } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
-// ─── Inline SVG path data ────────────────────────────────────────────────────
-// AntarisIcon paths (satellite form)
+// ─── SVG path data ────────────────────────────────────────────────────────────
+// All 11 AntarisIcon paths (satellite form)
 const SAT = [
   'M13.8003 9.91948L12.7754 8.89452C12.6666 8.78574 12.5191 8.72464 12.3653 8.72464L11.2754 8.72464C11.1215 8.72464 10.974 8.78574 10.8653 8.89452L7.21081 12.549C7.10204 12.6577 7.04093 12.8053 7.04093 12.9591L7.04093 14.049C7.04093 14.2028 7.10204 14.3503 7.21081 14.4591L8.23578 15.484L9.26074 16.509C9.36951 16.6178 9.51704 16.6789 9.67087 16.6789H10.7607C10.9146 16.6789 11.0621 16.6178 11.1709 16.509L14.8253 12.8546C14.9341 12.7458 14.9952 12.5983 14.9952 12.4445L14.9952 11.3546C14.9952 11.2007 14.9341 11.0532 14.8253 10.9445L13.8003 9.91948Z',
   'M8.031 15.6888L7.00603 14.6639C6.89726 14.5551 6.74974 14.494 6.59591 14.494H6.42777C6.27394 14.494 6.12642 14.5551 6.01765 14.6639L5.70877 14.9727C5.6 15.0815 5.5389 15.229 5.5389 15.3829L5.5389 15.551C5.5389 15.7048 5.6 15.8524 5.70877 15.9611L6.73374 16.9861L7.75871 18.0111C7.86748 18.1198 8.015 18.1809 8.16883 18.1809L8.33697 18.1809C8.4908 18.1809 8.63832 18.1198 8.74709 18.0111L9.05597 17.7022C9.16474 17.5934 9.22585 17.4459 9.22585 17.2921L9.22585 17.1239C9.22585 16.9701 9.16474 16.8226 9.05597 16.7138L8.031 15.6888Z',
@@ -19,8 +19,22 @@ const SAT = [
   'M19.0579 19.5469L17.3851 17.8741L15.4392 19.82C15.2129 20.0462 15.2129 20.4131 15.4392 20.6393L16.2926 21.4928C16.5189 21.719 16.8857 21.719 17.112 21.4928L19.0579 19.5469Z',
 ];
 
-// Logo mark wing, icon parts, ANTARIS lettering
-// (inlined to avoid importing from components/ui/sidebar internals)
+// Per-path scatter vectors: each part flies in its own direction
+const SCATTER: { x: number; y: number; r: number }[] = [
+  { x:  18, y: -14, r:  20 }, // main body       → up-right
+  { x: -14, y:  16, r: -15 }, // bottom tip       → down-left
+  { x:  22, y: -10, r:  25 }, // top-right wing   → up-right
+  { x: -18, y:   8, r: -20 }, // left panel 1     → left
+  { x: -22, y:  10, r: -25 }, // left panel 2     → left-down
+  { x:  -6, y: -20, r:  15 }, // top-left         → up
+  { x: -16, y: -16, r: -30 }, // top-left rect    → up-left
+  { x:  14, y:  14, r:  18 }, // bottom-right 1   → down-right
+  { x:  18, y:  16, r:  22 }, // bottom-right 2   → down-right
+  { x:  24, y:   6, r:  20 }, // bottom connector → right
+  { x:  20, y:  12, r:  15 }, // bottom corner    → right-down
+];
+
+// Logo paths inlined (mirrors SidebarLogo, no internal import)
 const WING =
   'M0 7.15385C6.69231 1.61538 16.5385 0.0769231 20.5385 0C20.5385 0 21 0 21 0.461538C21 0.923077 20.5385 0.923077 20.5385 0.923077C16.5385 1 4.74038 3.23077 0 7.15385Z';
 
@@ -39,14 +53,8 @@ const ICON_PATHS = [
 ];
 
 const TEXT_PATHS: { d: string; rule?: 'evenodd' }[] = [
-  {
-    d: 'M0 9.46154H2.76923L4.15385 6.69231H10.1538L11.5385 9.46154H14.3077L8.76923 8.36303e-07H5.53846L0 9.46154ZM5.53846 4.61538L7.15385 2.07692L8.76923 4.61538H5.53846Z',
-    rule: 'evenodd',
-  },
-  {
-    d: 'M36.4615 9.46154H39.2308L40.6154 6.69231H46.6154L48 9.46154H50.7692L45.2308 8.36303e-07H42L36.4615 9.46154ZM42 4.61538L43.6154 2.07692L45.2308 4.61538H42Z',
-    rule: 'evenodd',
-  },
+  { d: 'M0 9.46154H2.76923L4.15385 6.69231H10.1538L11.5385 9.46154H14.3077L8.76923 8.36303e-07H5.53846L0 9.46154ZM5.53846 4.61538L7.15385 2.07692L8.76923 4.61538H5.53846Z', rule: 'evenodd' },
+  { d: 'M36.4615 9.46154H39.2308L40.6154 6.69231H46.6154L48 9.46154H50.7692L45.2308 8.36303e-07H42L36.4615 9.46154ZM42 4.61538L43.6154 2.07692L45.2308 4.61538H42Z', rule: 'evenodd' },
   { d: 'M14.7692 9.46154H17.5385V2.76923L24.4615 6.23077V9.46154H27.2308V8.36303e-07L24.4615 1.21047e-07V3.92308L17.5385 8.36303e-07H14.7692V9.46154Z' },
   { d: 'M32.3077 9.46154V2.30769H28.1538V1.21047e-07H39.2308V2.30769H35.0769V9.46154H32.3077Z' },
   { d: 'M51.2308 9.46154V4.61538H60.4615C60.7164 4.61538 60.9231 4.40875 60.9231 4.15385V2.76923C60.9231 2.51433 60.7164 2.30769 60.4615 2.30769H51.2308V1.21047e-07H60.9231C62.9538 1.21047e-07 63.4615 1.38462 63.4615 2.07692V4.84615C63.4615 6.13846 62.5385 6.69231 60.9231 6.69231L62.5385 9.46154H59.7692L58.1538 6.69231H54V9.46154H51.2308Z' },
@@ -54,8 +62,20 @@ const TEXT_PATHS: { d: string; rule?: 'evenodd' }[] = [
   { d: 'M77.5385 9.46154H67.8462V7.15385H76.8462C77.2285 7.15385 77.5385 6.84389 77.5385 6.46154C77.5385 6.07919 77.2285 5.76923 76.8462 5.76923H70.1538C68.3077 5.76923 67.8462 3.92308 67.8462 2.76923C67.8462 1.61539 68.7692 8.36303e-07 70.6154 0H78.9231V2.07692L70.8462 2.07692C70.4638 2.07692 70.1538 2.38688 70.1538 2.76923C70.1538 3.15158 70.4638 3.46154 70.8462 3.46154L77.5385 3.46154C79.6154 3.46154 80.3077 5.53846 80.3077 6.46154C80.3077 7.48134 79.6154 9.46154 77.5385 9.46154Z' },
 ];
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
-function SplashSatellite() {
+// ─── Animation timings (ms) ───────────────────────────────────────────────────
+const MS = {
+  enter:    1300,
+  morphIn:   600,
+  hold:     2500,
+  morphOut:  700,
+  exit:      900,
+};
+
+const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+
+// ─── Satellite sub-component ──────────────────────────────────────────────────
+// Each path is a motion.path so it can scatter/assemble individually
+function SplashSatellite({ scattered }: { scattered: boolean }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -63,11 +83,30 @@ function SplashSatellite() {
       height={120}
       viewBox="0 0 24 24"
       fill="none"
+      style={{ overflow: 'visible' }}
     >
       <g clipPath="url(#splash-sat-clip)">
-        {SAT.map((d, i) => (
-          <path key={i} d={d} fill="#EEEEEE" />
-        ))}
+        {SAT.map((d, i) => {
+          const v = SCATTER[i];
+          return (
+            <motion.path
+              key={i}
+              d={d}
+              fill="#EEEEEE"
+              initial={{ opacity: 1, x: 0, y: 0, rotate: 0 }}
+              animate={
+                scattered
+                  ? { opacity: 0, x: v.x, y: v.y, rotate: v.r }
+                  : { opacity: 1, x: 0,   y: 0,   rotate: 0   }
+              }
+              transition={
+                scattered
+                  ? { delay: i * 0.032, duration: 0.42, ease: 'easeOut' }
+                  : { delay: i * 0.022, duration: 0.30, ease: 'easeOut' }
+              }
+            />
+          );
+        })}
       </g>
       <defs>
         <clipPath id="splash-sat-clip">
@@ -78,16 +117,36 @@ function SplashSatellite() {
   );
 }
 
-/** Scaled-up replica of the SidebarLogo expanded state at 4× */
-function SplashLogo() {
+// ─── Logo sub-component ───────────────────────────────────────────────────────
+// Three groups (wings / icon / text) animate in with staggered delay
+function SplashLogo({ visible }: { visible: boolean }) {
   const S = 4;
   const W = 80.308 * S; // 321.232px
   const H = 24 * S;     // 96px
 
+  // Shared transition helper
+  const t = (delay: number) => ({
+    duration: 0.38,
+    delay,
+    ease: 'easeOut' as const,
+  });
+
+  // Target states: in = assemble, out = scatter back
+  const wingsIn  = { opacity: 1, y: 0 };
+  const wingsOut = { opacity: 0, y: -10 };
+  const iconIn   = { opacity: 1, scale: 1 };
+  const iconOut  = { opacity: 0, scale: 0.7 };
+  const textIn   = { opacity: 1, y: 0 };
+  const textOut  = { opacity: 0, y: 14 };
+
   return (
     <div style={{ width: W, height: H, position: 'relative' }}>
-      {/* Left wing */}
-      <div
+
+      {/* ── Left wing ── */}
+      <motion.div
+        initial={wingsOut}
+        animate={visible ? wingsIn : wingsOut}
+        transition={t(visible ? 0 : 0.12)}
         style={{
           position: 'absolute',
           width: 21 * S,
@@ -104,32 +163,36 @@ function SplashLogo() {
         >
           <path d={WING} fill="#EEEEEE" />
         </svg>
-      </div>
+      </motion.div>
 
-      {/* Right wing — mirrored */}
-      <div
+      {/* ── Right wing (SVG-level flip to avoid transform conflict) ── */}
+      <motion.div
+        initial={wingsOut}
+        animate={visible ? wingsIn : wingsOut}
+        transition={t(visible ? 0.04 : 0.08)}
         style={{
           position: 'absolute',
           width: 21 * S,
           height: 7.154 * S,
           left: 46.15 * S,
           top: 5.54 * S,
-          transform: 'scaleX(-1) scaleY(-1)',
-          transformOrigin: 'center center',
         }}
       >
         <svg
-          style={{ display: 'block', width: '100%', height: '100%' }}
+          style={{ display: 'block', width: '100%', height: '100%', transform: 'scaleX(-1) scaleY(-1)' }}
           fill="none"
           preserveAspectRatio="none"
           viewBox="0 0 21 7.15385"
         >
           <path d={WING} fill="#EEEEEE" />
         </svg>
-      </div>
+      </motion.div>
 
-      {/* Center icon mark */}
-      <div
+      {/* ── Centre icon mark ── */}
+      <motion.div
+        initial={iconOut}
+        animate={visible ? iconIn : iconOut}
+        transition={t(visible ? 0.08 : 0.04)}
         style={{
           position: 'absolute',
           left: 34.15 * S,
@@ -155,10 +218,13 @@ function SplashLogo() {
             </clipPath>
           </defs>
         </svg>
-      </div>
+      </motion.div>
 
-      {/* ANTARIS lettering */}
-      <div
+      {/* ── ANTARIS lettering ── */}
+      <motion.div
+        initial={textOut}
+        animate={visible ? textIn : textOut}
+        transition={t(visible ? 0.16 : 0)}
         style={{
           position: 'absolute',
           left: 0,
@@ -182,52 +248,93 @@ function SplashLogo() {
             />
           ))}
         </svg>
-      </div>
+      </motion.div>
     </div>
   );
 }
 
-// ─── Phase machine ────────────────────────────────────────────────────────────
-type Phase = 'enter' | 'morph-in' | 'hold' | 'morph-out' | 'exit' | 'done';
-
-const MS = {
-  enter: 1000,  // satellite travels bottom-left → centre
-  morphIn: 500,   // satellite fades to logo
-  hold: 3000,  // logo holds
-  morphOut: 500,   // logo fades back to satellite
-  exit: 900,   // satellite travels centre → top-right
-};
-
-const AT = {
-  'morph-in': MS.enter,
-  hold: MS.enter + MS.morphIn,
-  'morph-out': MS.enter + MS.morphIn + MS.hold,
-  exit: MS.enter + MS.morphIn + MS.hold + MS.morphOut,
-  done: MS.enter + MS.morphIn + MS.hold + MS.morphOut + MS.exit,
-};
-
-// ─── Main export ──────────────────────────────────────────────────────────────
+// ─── Main component ───────────────────────────────────────────────────────────
+//
+// Curved-path technique: two nested divs, each animated on one axis only.
+// Because X and Y have DIFFERENT easing curves, the combined trajectory is a
+// genuine arc — not a straight line with timing applied to both axes equally.
+//
+//   outer div  → X translation + scale + opacity + rotate
+//   inner div  → Y translation only
+//
 export function SplashScreen() {
-  const [phase, setPhase] = useState<Phase>('enter');
+  const [xRef, animateX] = useAnimate(); // outer: X axis
+  const [yRef, animateY] = useAnimate(); // inner: Y axis
+
+  const [showLogo,  setShowLogo]  = useState(false);
+  const [mounted,   setMounted]   = useState(true);
+  const [flashGlow, setFlashGlow] = useState(false);
 
   useEffect(() => {
-    const timers = [
-      setTimeout(() => setPhase('morph-in'), AT['morph-in']),
-      setTimeout(() => setPhase('hold'), AT.hold),
-      setTimeout(() => setPhase('morph-out'), AT['morph-out']),
-      setTimeout(() => setPhase('exit'), AT.exit),
-      setTimeout(() => setPhase('done'), AT.done),
-    ];
-    return () => timers.forEach(clearTimeout);
+    async function sequence() {
+      // ── 1. Enter: curved orbital arc, bottom-left → centre ───────────────
+      //
+      // X uses easeOut  (moves right quickly at first, then settles smoothly)
+      // Y uses easeIn   (slow to lift at first, then accelerates upward)
+      //
+      // At the midpoint, X is ~75 % done while Y is only ~25 % done.
+      // The satellite is therefore far to the right of the straight-line path,
+      // tracing a low, sweeping arc from bottom-left into the centre.
+      //
+      await Promise.all([
+        animateX(xRef.current, { x: '0vw', scale: 1, opacity: 1, rotate: 0 }, {
+          duration: MS.enter / 1000,
+          ease: [0.25, 0.1, 0.25, 1], // easeOut
+        }),
+        animateY(yRef.current, { y: '0vh' }, {
+          duration: MS.enter / 1000,
+          ease: [0.42, 0, 1, 1], // easeIn  (different → curve)
+        }),
+      ]);
+
+      // ── 2. Morph → logo ───────────────────────────────────────────────────
+      setFlashGlow(true);
+      setShowLogo(true);
+      await sleep(MS.morphIn);
+      setFlashGlow(false);
+
+      // ── 3. Hold ───────────────────────────────────────────────────────────
+      await sleep(MS.hold);
+
+      // ── 4. Morph → satellite ──────────────────────────────────────────────
+      setFlashGlow(true);
+      setShowLogo(false);
+      await sleep(MS.morphOut);
+      setFlashGlow(false);
+
+      // ── 5. Exit: curved arc, centre → top-right ───────────────────────────
+      //
+      // X uses easeIn  (slow to start moving right, then accelerates away)
+      // Y uses easeOut (lifts quickly at first, then eases off)
+      //
+      // At the midpoint, Y is ~75 % done while X is only ~25 % done.
+      // The satellite first launches upward in a sweeping arc, then swings
+      // right and disappears — mirroring the entry curve in reverse.
+      //
+      await Promise.all([
+        animateX(xRef.current, { x: '44vw', scale: 0.15, opacity: 0, rotate: -18 }, {
+          duration: MS.exit / 1000,
+          ease: [0.42, 0, 1, 1], // easeIn
+        }),
+        animateY(yRef.current, { y: '-44vh' }, {
+          duration: MS.exit / 1000,
+          ease: [0.25, 0.1, 0.25, 1], // easeOut  (different → curve)
+        }),
+      ]);
+
+      setMounted(false);
+    }
+
+    sequence();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (phase === 'done') return null;
-
-  const showSat = phase === 'enter' || phase === 'morph-out' || phase === 'exit';
-  const showLogo = phase === 'morph-in' || phase === 'hold';
-
-  const toExit = phase === 'exit';
-  const morphDur = (phase === 'enter' ? MS.morphIn : MS.morphOut) / 1000;
+  if (!mounted) return null;
 
   return (
     <div className="fixed inset-0 z-9999 flex items-center justify-center overflow-hidden bg-black">
@@ -240,17 +347,16 @@ export function SplashScreen() {
         <div
           className="rounded-full"
           style={{
-            width: 560,
-            height: 560,
-            background:
-              'radial-gradient(circle, rgba(238,238,238,0.055) 0%, transparent 68%)',
+            width: 600,
+            height: 600,
+            background: 'radial-gradient(circle, rgba(238,238,238,0.05) 0%, transparent 68%)',
           }}
         />
       </div>
 
-      {/* Subtle dot-grid */}
+      {/* Dot-grid texture */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.035]"
+        className="pointer-events-none absolute inset-0 opacity-[0.03]"
         style={{
           backgroundImage:
             'radial-gradient(circle, rgba(238,238,238,0.8) 1px, transparent 1px)',
@@ -259,87 +365,59 @@ export function SplashScreen() {
         aria-hidden
       />
 
-      {/* ── Animated payload: enters bottom-left → centre → exits top-right ── */}
+      {/* ── Outer div: X axis + scale + opacity + rotate ── */}
       <motion.div
-        className="relative flex items-center justify-center"
-        initial={{ x: '-40vw', y: '40vh', scale: 0.2, opacity: 0 }}
-        animate={
-          toExit
-            ? { x: '40vw', y: '-40vh', scale: 0.2, opacity: 0 }
-            : { x: 0, y: 0, scale: 1, opacity: 1 }
-        }
-        transition={
-          toExit
-            ? { duration: MS.exit / 1000, ease: [0.76, 0, 0.24, 1] }
-            : { duration: MS.enter / 1000, ease: [0.16, 1, 0.3, 1] }
-        }
+        ref={xRef}
+        className="flex items-center justify-center"
+        initial={{ x: '-42vw', scale: 0.28, opacity: 0, rotate: 20 }}
       >
-        {/* Soft glow ring */}
-        <div
-          className="pointer-events-none absolute rounded-full"
-          style={{
-            width: 220,
-            height: 220,
-            background:
-              'radial-gradient(circle, rgba(238,238,238,0.07) 0%, transparent 65%)',
-          }}
-          aria-hidden
-        />
+        {/* ── Inner div: Y axis only ── */}
+        <motion.div
+          ref={yRef}
+          className="relative flex items-center justify-center"
+          initial={{ y: '42vh' }}
+        >
+          {/* Glow burst on morph transitions */}
+          <motion.div
+            className="pointer-events-none absolute rounded-full"
+            animate={flashGlow ? { scale: 3.5, opacity: 1 } : { scale: 0, opacity: 0 }}
+            transition={{ duration: 0.28, ease: 'easeOut' }}
+            style={{
+              width: 110,
+              height: 110,
+              background: 'radial-gradient(circle, rgba(238,238,238,0.22) 0%, transparent 65%)',
+              filter: 'blur(14px)',
+            }}
+            aria-hidden
+          />
 
-        {/* Satellite (AntarisIcon × 5) */}
-        <AnimatePresence mode="wait">
-          {showSat && (
-            <motion.div
-              key="satellite"
-              className="absolute flex items-center justify-center"
-              initial={{ opacity: 0, scale: 0.85 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.85 }}
-              transition={{ duration: morphDur, ease: 'easeInOut' }}
-            >
-              <SplashSatellite />
-            </motion.div>
-          )}
-        </AnimatePresence>
+          {/* Satellite — paths scatter when showLogo=true */}
+          <div className="absolute flex items-center justify-center">
+            <SplashSatellite scattered={showLogo} />
+          </div>
 
-        {/* ANTARIS logo */}
-        <AnimatePresence mode="wait">
-          {showLogo && (
-            <motion.div
-              key="logo"
-              className="absolute flex items-center justify-center"
-              initial={{ opacity: 0, scale: 0.92 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.92 }}
-              transition={{ duration: MS.morphIn / 1000, ease: 'easeInOut' }}
-            >
-              <SplashLogo />
-            </motion.div>
-          )}
-        </AnimatePresence>
+          {/* Logo — groups assemble when showLogo=true */}
+          <div className="absolute flex items-center justify-center">
+            <SplashLogo visible={showLogo} />
+          </div>
+        </motion.div>
       </motion.div>
 
-      {/* Tagline — visible only while logo is shown */}
-      <AnimatePresence>
-        {showLogo && (
-          <motion.p
-            key="tagline"
-            className="absolute bottom-10 select-none"
-            style={{
-              color: 'rgba(238,238,238,0.22)',
-              fontSize: 11,
-              letterSpacing: '0.32em',
-              textTransform: 'uppercase',
-            }}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 8 }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-          >
-            Mission Operations Platform
-          </motion.p>
-        )}
-      </AnimatePresence>
+      {/* Tagline — fades in with logo */}
+      <motion.p
+        className="pointer-events-none absolute bottom-10 select-none"
+        animate={showLogo ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+        initial={{ opacity: 0, y: 8 }}
+        transition={{ duration: 0.45, ease: 'easeOut' }}
+        style={{
+          color: 'rgba(238,238,238,0.20)',
+          fontSize: 11,
+          letterSpacing: '0.32em',
+          textTransform: 'uppercase',
+        }}
+      >
+        Mission Operations Platform
+      </motion.p>
     </div>
   );
 }
