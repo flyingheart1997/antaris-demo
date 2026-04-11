@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useAnimate } from 'framer-motion';
+import { AnimatePresence, motion, useAnimate } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import {
   ANIMATION_MS,
@@ -32,16 +32,25 @@ function SplashSatellite({ scattered }: { scattered: boolean }) {
               key={i}
               d={d}
               className="fill-icon-primary"
-              initial={{ opacity: 1, x: 0, y: 0, rotate: 0 }}
+              initial={{ opacity: 1, x: 0, y: 0, rotate: 0, scale: 1 }}
               animate={
                 scattered
-                  ? { opacity: 0, x: v.x, y: v.y, rotate: v.r }
-                  : { opacity: 1, x: 0,   y: 0,   rotate: 0   }
+                  // Each path flies outward: amplified distance, rotates more, shrinks to nothing
+                  ? { opacity: 0, x: v.x * 1.7, y: v.y * 1.7, rotate: v.r * 1.6, scale: 0.25 }
+                  : { opacity: 1, x: 0,          y: 0,          rotate: 0,          scale: 1    }
               }
               transition={
                 scattered
-                  ? { delay: i * 0.032, duration: 0.42, ease: 'easeOut' }
-                  : { delay: i * 0.022, duration: 0.30, ease: 'easeOut' }
+                  // Eject: quick acceleration outward, staggered per path
+                  ? { delay: i * 0.036, duration: 0.52, ease: [0.4, 0, 1, 1] }
+                  // Snap back: spring with varied stiffness → each path arrives at a slightly
+                  // different moment, looking like they're magnetically pulled home
+                  : {
+                      type: 'spring',
+                      stiffness: Math.max(180, 400 - i * 18),
+                      damping:   22 + i * 1.8,
+                      delay:     i * 0.02,
+                    }
               }
             />
           );
@@ -62,89 +71,69 @@ function SplashLogo({ visible }: { visible: boolean }) {
   const W = 80.308 * S; // 321.232px
   const H = 24 * S;     // 96px
 
-  // Shared transition helper
-  const t = (delay: number) => ({
-    duration: 0.38,
-    delay,
-    ease: 'easeOut' as const,
-  });
-
-  // Target states: in = assemble, out = scatter back
-  const wingsIn  = { opacity: 1, y: 0 };
-  const wingsOut = { opacity: 0, y: -10 };
-  const iconIn   = { opacity: 1, scale: 1 };
-  const iconOut  = { opacity: 0, scale: 0.7 };
-  const textIn   = { opacity: 1, y: 0 };
-  const textOut  = { opacity: 0, y: 14 };
-
   return (
     <div className="relative" style={{ width: W, height: H }}>
 
-      {/* ── Left wing ── */}
+      {/* ── Left wing: slides in from the left, spring-settles into place ── */}
       <motion.div
-        initial={wingsOut}
-        animate={visible ? wingsIn : wingsOut}
-        transition={t(visible ? 0 : 0.12)}
         className="absolute"
-        style={{
-          width: 21 * S,
-          height: 7.154 * S,
-          left: 12.46 * S,
-          top: 5.54 * S,
-        }}
+        style={{ width: 21 * S, height: 7.154 * S, left: 12.46 * S, top: 5.54 * S }}
+        initial={{ opacity: 0, x: -26, y: -8 }}
+        animate={
+          visible
+            ? { opacity: 1, x: 0, y: 0 }
+            : { opacity: 0, x: -26, y: -8 }
+        }
+        transition={
+          visible
+            ? { type: 'spring', stiffness: 260, damping: 22, delay: 0 }
+            : { duration: 0.2, ease: 'easeIn', delay: 0.1 }
+        }
       >
-        <svg
-          className="block h-full w-full"
-          fill="none"
-          preserveAspectRatio="none"
-          viewBox="0 0 21 7.15385"
-        >
+        <svg className="block h-full w-full" fill="none" preserveAspectRatio="none" viewBox="0 0 21 7.15385">
           <path d={WING_PATH} className="fill-icon-primary" />
         </svg>
       </motion.div>
 
-      {/* ── Right wing ── */}
+      {/* ── Right wing: slides in from the right, spring-settles ── */}
       <motion.div
-        initial={wingsOut}
-        animate={visible ? wingsIn : wingsOut}
-        transition={t(visible ? 0.04 : 0.08)}
         className="absolute"
-        style={{
-          width: 21 * S,
-          height: 7.154 * S,
-          left: 46.15 * S,
-          top: 5.54 * S,
-        }}
+        style={{ width: 21 * S, height: 7.154 * S, left: 46.15 * S, top: 5.54 * S }}
+        initial={{ opacity: 0, x: 26, y: -8 }}
+        animate={
+          visible
+            ? { opacity: 1, x: 0, y: 0 }
+            : { opacity: 0, x: 26, y: -8 }
+        }
+        transition={
+          visible
+            ? { type: 'spring', stiffness: 260, damping: 22, delay: 0.05 }
+            : { duration: 0.2, ease: 'easeIn', delay: 0.06 }
+        }
       >
-        <svg
-          className="block h-full w-full -scale-x-100 -scale-y-100"
-          fill="none"
-          preserveAspectRatio="none"
-          viewBox="0 0 21 7.15385"
-        >
+        <svg className="block h-full w-full -scale-x-100 -scale-y-100" fill="none" preserveAspectRatio="none" viewBox="0 0 21 7.15385">
           <path d={WING_PATH} className="fill-icon-primary" />
         </svg>
       </motion.div>
 
-      {/* ── Centre icon mark ── */}
+      {/* ── Centre icon mark: pops in with underdamped spring (slight overshoot) ── */}
       <motion.div
-        initial={iconOut}
-        animate={visible ? iconIn : iconOut}
-        transition={t(visible ? 0.08 : 0.04)}
         className="absolute"
-        style={{
-          left: 34.15 * S,
-          top: 0,
-          width: 11.0769 * S,
-          height: 11.0769 * S,
-        }}
+        style={{ left: 34.15 * S, top: 0, width: 11.0769 * S, height: 11.0769 * S }}
+        initial={{ opacity: 0, scale: 0 }}
+        animate={
+          visible
+            ? { opacity: 1, scale: 1 }
+            : { opacity: 0, scale: 0 }
+        }
+        transition={
+          visible
+            // stiffness 420, damping 20 → underdamped → bounces past 1 before settling
+            ? { type: 'spring', stiffness: 420, damping: 20, delay: 0.1 }
+            : { duration: 0.16, ease: 'easeIn', delay: 0.02 }
+        }
       >
-        <svg
-          className="block h-full w-full"
-          fill="none"
-          preserveAspectRatio="none"
-          viewBox="0 0 11.0769 11.0769"
-        >
+        <svg className="block h-full w-full" fill="none" preserveAspectRatio="none" viewBox="0 0 11.0769 11.0769">
           <g clipPath="url(#splash-icon-clip)">
             {ICON_PATHS.map((d, i) => (
               <path key={i} d={d} className="fill-icon-primary" />
@@ -158,31 +147,44 @@ function SplashLogo({ visible }: { visible: boolean }) {
         </svg>
       </motion.div>
 
-      {/* ── ANTARIS lettering ── */}
+      {/* ── ANTARIS lettering ──────────────────────────────────────────────────
+          Two-layer approach:
+          • Wrapper spring-slides the whole block up into position
+          • Each <motion.path> staggers its own opacity left-to-right on reveal,
+            right-to-left on dissolve — gives a typewriter / un-typewriter feel
+      ─────────────────────────────────────────────────────────────────────── */}
       <motion.div
-        initial={textOut}
-        animate={visible ? textIn : textOut}
-        transition={t(visible ? 0.16 : 0)}
         className="absolute"
-        style={{
-          left: 0,
-          top: 14.54 * S,
-          width: W,
-          height: 9.462 * S,
-        }}
+        style={{ left: 0, top: 14.54 * S, width: W, height: 9.462 * S }}
+        initial={{ y: 18 }}
+        animate={visible ? { y: 0 } : { y: 14 }}
+        transition={
+          visible
+            ? { type: 'spring', stiffness: 200, damping: 26, delay: 0.14 }
+            : { duration: 0.22, ease: 'easeIn' }
+        }
       >
         <svg
-          className="block h-full w-full"
+          className="block h-full w-full overflow-visible"
           fill="none"
           preserveAspectRatio="none"
           viewBox="0 0 80.3077 9.46154"
         >
           {TEXT_PATHS.map(({ d, rule }, i) => (
-            <path
+            <motion.path
               key={i}
               d={d}
               className="fill-icon-primary"
               {...(rule ? { clipRule: rule, fillRule: rule } : {})}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: visible ? 1 : 0 }}
+              transition={
+                visible
+                  // Left-to-right reveal: each letter 55 ms after the previous
+                  ? { duration: 0.3, ease: [0.4, 0, 0.2, 1], delay: 0.22 + i * 0.055 }
+                  // Right-to-left dissolve: reverse order, faster
+                  : { duration: 0.14, ease: 'easeIn', delay: (TEXT_PATHS.length - 1 - i) * 0.03 }
+              }
             />
           ))}
         </svg>
@@ -318,19 +320,51 @@ export function SplashScreen() {
           className="relative flex items-center justify-center"
           initial={{ y: '42vh' }}
         >
-          {/* Morphing Glow Burst */}
-          <motion.div
-            className="pointer-events-none absolute rounded-rounded"
-            animate={flashGlow ? { scale: 3.5, opacity: 0.8 } : { scale: 0, opacity: 0 }}
-            transition={{ duration: 0.28, ease: 'easeOut' }}
-            style={{
-              width: 120,
-              height: 120,
-              background: 'radial-gradient(circle, var(--color-blue-alpha-5) 0%, transparent 65%)',
-              filter: 'blur(20px)',
-            }}
-            aria-hidden
-          />
+          {/* ── Morph shockwave: three layers mount/unmount together ── */}
+          <AnimatePresence>
+            {flashGlow && (
+              <>
+                {/* Outer ring — expands wide and fades */}
+                <motion.div
+                  key="ring-outer"
+                  className="pointer-events-none absolute rounded-full"
+                  style={{ width: 130, height: 130, border: '1px solid rgba(238,238,238,0.18)' }}
+                  initial={{ scale: 0.3, opacity: 0.5 }}
+                  animate={{ scale: 6,   opacity: 0   }}
+                  exit={{}}
+                  transition={{ duration: 0.75, ease: 'easeOut' }}
+                  aria-hidden
+                />
+                {/* Inner ring — slower, lingers longer */}
+                <motion.div
+                  key="ring-inner"
+                  className="pointer-events-none absolute rounded-full"
+                  style={{ width: 90, height: 90, border: '1px solid rgba(238,238,238,0.1)' }}
+                  initial={{ scale: 0.4, opacity: 0.35 }}
+                  animate={{ scale: 4,   opacity: 0    }}
+                  exit={{}}
+                  transition={{ duration: 0.95, ease: 'easeOut', delay: 0.06 }}
+                  aria-hidden
+                />
+                {/* Core bloom — bright flash that blooms then dims */}
+                <motion.div
+                  key="core-bloom"
+                  className="pointer-events-none absolute rounded-full"
+                  style={{
+                    width: 110,
+                    height: 110,
+                    background: 'radial-gradient(circle, var(--color-blue-alpha-5) 0%, transparent 65%)',
+                    filter: 'blur(22px)',
+                  }}
+                  initial={{ scale: 0,   opacity: 0 }}
+                  animate={{ scale: 2.2, opacity: 1 }}
+                  exit={{ scale: 0, opacity: 0 }}
+                  transition={{ duration: 0.28, ease: 'easeOut' }}
+                  aria-hidden
+                />
+              </>
+            )}
+          </AnimatePresence>
 
           {/* Focal Layer: Satellite and Logo */}
           <div className="absolute flex items-center justify-center">
