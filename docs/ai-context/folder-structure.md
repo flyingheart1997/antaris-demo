@@ -190,6 +190,12 @@ features/
     │   └── useUserModal.ts        # Zustand store for modal state (open/close/mode)
     └── types/
         └── user-schema.ts         # Zod validation schema for user forms
+│
+└── splash-screen/          # Animated splash screen entry
+    ├── index.ts            # Barrel exports: SplashScreen
+    ├── constants.ts        # SVG paths + scatter vectors + animation timings
+    └── components/
+        └── splash-screen.tsx # Main orchestrated animation component
 ```
 
 ### `hooks/` — Global Hooks
