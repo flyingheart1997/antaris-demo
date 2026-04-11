@@ -280,6 +280,24 @@
         "build": "icons/build.js",
         "barrel": "icons/index.ts"
       }
+    },
+    "splash-screen": {
+      "description": "Orchestrated SVG animation intro with orbital entry/exit, satellite scattering, and brand assembly",
+      "files": {
+        "components": [
+          "features/splash-screen/components/splash-screen.tsx"
+        ],
+        "constants": "features/splash-screen/constants.ts",
+        "barrel": "features/splash-screen/index.ts",
+        "integration": "app/layout.tsx"
+      },
+      "animation-sequence": [
+        "Enter: orbital arc entry",
+        "Morph-In: satellite scatters to reveal logo",
+        "Hold: brand display",
+        "Morph-Out: logo scatters back to satellite",
+        "Exit: orbital accelerated departure"
+      ]
     }
   }
 }

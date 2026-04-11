@@ -2,79 +2,18 @@
 
 import { motion, useAnimate } from 'framer-motion';
 import { useEffect, useState } from 'react';
-
-// ─── SVG path data ────────────────────────────────────────────────────────────
-// All 11 AntarisIcon paths (satellite form)
-const SAT = [
-  'M13.8003 9.91948L12.7754 8.89452C12.6666 8.78574 12.5191 8.72464 12.3653 8.72464L11.2754 8.72464C11.1215 8.72464 10.974 8.78574 10.8653 8.89452L7.21081 12.549C7.10204 12.6577 7.04093 12.8053 7.04093 12.9591L7.04093 14.049C7.04093 14.2028 7.10204 14.3503 7.21081 14.4591L8.23578 15.484L9.26074 16.509C9.36951 16.6178 9.51704 16.6789 9.67087 16.6789H10.7607C10.9146 16.6789 11.0621 16.6178 11.1709 16.509L14.8253 12.8546C14.9341 12.7458 14.9952 12.5983 14.9952 12.4445L14.9952 11.3546C14.9952 11.2007 14.9341 11.0532 14.8253 10.9445L13.8003 9.91948Z',
-  'M8.031 15.6888L7.00603 14.6639C6.89726 14.5551 6.74974 14.494 6.59591 14.494H6.42777C6.27394 14.494 6.12642 14.5551 6.01765 14.6639L5.70877 14.9727C5.6 15.0815 5.5389 15.229 5.5389 15.3829L5.5389 15.551C5.5389 15.7048 5.6 15.8524 5.70877 15.9611L6.73374 16.9861L7.75871 18.0111C7.86748 18.1198 8.015 18.1809 8.16883 18.1809L8.33697 18.1809C8.4908 18.1809 8.63832 18.1198 8.74709 18.0111L9.05597 17.7022C9.16474 17.5934 9.22585 17.4459 9.22585 17.2921L9.22585 17.1239C9.22585 16.9701 9.16474 16.8226 9.05597 16.7138L8.031 15.6888Z',
-  'M12.9427 5.45438L12.3836 6.93142C12.2693 7.23329 12.3426 7.5741 12.5708 7.80234L15.9175 11.149C16.1457 11.3772 16.4865 11.4505 16.7884 11.3363L18.2655 10.7771C18.7571 10.591 18.8929 9.95952 18.5212 9.58778L17.1459 8.21255L17.1459 6.8153C17.1459 6.68198 17.0379 6.57391 16.9045 6.57391L15.5073 6.57391L14.1321 5.19868C13.7603 4.82693 13.1288 4.9627 12.9427 5.45438Z',
-  'M9.26008 9.74845L6.08521 6.57358L4.31265 8.34614C4.02888 8.6299 4.11258 9.10924 4.47572 9.28005L7.67978 10.7871C7.90081 10.8911 8.16331 10.8452 8.33603 10.6725L9.26008 9.74845Z',
-  'M9.39656 9.61192L6.22168 6.43704L7.99424 4.66448C8.278 4.38072 8.75735 4.46442 8.92815 4.82756L10.4352 8.03162C10.5392 8.25265 10.4933 8.51515 10.3206 8.68787L10.0964 8.91208L8.93569 5.83962L8.85034 5.92497L10.0025 9.00596L9.39656 9.61192Z',
-  'M7.92865 3.43283L7.07519 2.57937C6.84894 2.35312 6.48212 2.35312 6.25587 2.57937L4.30997 4.52526L5.98276 6.19804L7.21966 4.96115L6.91303 4.1412L6.99838 4.05586L7.30728 4.87353L7.92865 4.25215C8.1549 4.0259 8.1549 3.65908 7.92865 3.43283Z',
-  'M4.17346 4.66183L5.84625 6.33462L3.90035 8.28051C3.6741 8.50676 3.30728 8.50676 3.08103 8.28051L2.22757 7.42705C2.00132 7.2008 2.00132 6.83398 2.22757 6.60773L4.17346 4.66183Z',
-  'M13.9711 14.4602L17.146 17.6351L15.3734 19.4076C15.0897 19.6914 14.6103 19.6077 14.4395 19.2446L12.9325 16.0405C12.8285 15.8195 12.8743 15.557 13.0471 15.3842L13.9711 14.4602Z',
-  'M14.1077 14.3237L17.2826 17.4985L19.0552 15.726C19.3389 15.4422 19.2552 14.9629 18.8921 14.7921L15.688 13.285C15.467 13.1811 15.2045 13.2269 15.0318 13.3996L14.8076 13.6238L17.88 14.7845L17.7947 14.8699L14.7137 13.7177L14.1077 14.3237Z',
-  'M20.2868 15.7916L21.1403 16.6451C21.3665 16.8713 21.3665 17.2382 21.1403 17.4644L19.1944 19.4103L17.5216 17.7375L18.7585 16.5006L19.5784 16.8072L19.6638 16.7219L18.8461 16.413L19.4675 15.7916C19.6937 15.5654 20.0606 15.5654 20.2868 15.7916Z',
-  'M19.0579 19.5469L17.3851 17.8741L15.4392 19.82C15.2129 20.0462 15.2129 20.4131 15.4392 20.6393L16.2926 21.4928C16.5189 21.719 16.8857 21.719 17.112 21.4928L19.0579 19.5469Z',
-];
-
-// Per-path scatter vectors: each part flies in its own direction
-const SCATTER: { x: number; y: number; r: number }[] = [
-  { x:  18, y: -14, r:  20 }, // main body       → up-right
-  { x: -14, y:  16, r: -15 }, // bottom tip       → down-left
-  { x:  22, y: -10, r:  25 }, // top-right wing   → up-right
-  { x: -18, y:   8, r: -20 }, // left panel 1     → left
-  { x: -22, y:  10, r: -25 }, // left panel 2     → left-down
-  { x:  -6, y: -20, r:  15 }, // top-left         → up
-  { x: -16, y: -16, r: -30 }, // top-left rect    → up-left
-  { x:  14, y:  14, r:  18 }, // bottom-right 1   → down-right
-  { x:  18, y:  16, r:  22 }, // bottom-right 2   → down-right
-  { x:  24, y:   6, r:  20 }, // bottom connector → right
-  { x:  20, y:  12, r:  15 }, // bottom corner    → right-down
-];
-
-// Logo paths inlined (mirrors SidebarLogo, no internal import)
-const WING =
-  'M0 7.15385C6.69231 1.61538 16.5385 0.0769231 20.5385 0C20.5385 0 21 0 21 0.461538C21 0.923077 20.5385 0.923077 20.5385 0.923077C16.5385 1 4.74038 3.23077 0 7.15385Z';
-
-const ICON_PATHS = [
-  'M6.36937 4.57819L5.89631 4.10512C5.8461 4.05492 5.77801 4.02672 5.70702 4.02672L5.204 4.02672C5.133 4.02672 5.06491 4.05492 5.01471 4.10512L3.32804 5.79179C3.27784 5.84199 3.24964 5.91008 3.24964 5.98108L3.24964 6.4841C3.24964 6.5551 3.27784 6.62318 3.32804 6.67339L3.80111 7.14645L4.27417 7.61951C4.32437 7.66971 4.39246 7.69792 4.46345 7.69792H4.96648C5.03747 7.69792 5.10556 7.66971 5.15576 7.61951L6.84243 5.93284C6.89263 5.88264 6.92083 5.81455 6.92083 5.74356L6.92083 5.24054C6.92083 5.16954 6.89263 5.10145 6.84243 5.05125L6.36937 4.57819Z',
-  'M3.70657 7.24097L3.2335 6.7679C3.1833 6.7177 3.11521 6.6895 3.04422 6.6895L2.96661 6.6895C2.89562 6.6895 2.82753 6.7177 2.77733 6.7679L2.63477 6.91046C2.58457 6.96066 2.55636 7.02875 2.55636 7.09975L2.55636 7.17735C2.55636 7.24835 2.58457 7.31644 2.63477 7.36664L3.10783 7.8397L3.58089 8.31276C3.63109 8.36297 3.69918 8.39117 3.77018 8.39117L3.84778 8.39117C3.91878 8.39117 3.98687 8.36297 4.03707 8.31276L4.17963 8.17021C4.22983 8.12 4.25803 8.05192 4.25803 7.98092L4.25803 7.90331C4.25803 7.83232 4.22983 7.76423 4.17963 7.71403L3.70657 7.24097Z',
-  'M5.97353 2.51737L5.71548 3.19908C5.66274 3.33841 5.69656 3.4957 5.8019 3.60104L7.34652 5.14566C7.45185 5.251 7.60915 5.28482 7.74847 5.23208L8.43019 4.97403C8.65712 4.88813 8.71978 4.59667 8.5482 4.42509L7.91348 3.79037L7.91348 3.14549C7.91348 3.08396 7.8636 3.03407 7.80207 3.03407L7.15719 3.03407L6.52246 2.39935C6.35089 2.22778 6.05943 2.29044 5.97353 2.51737Z',
-  'M4.27381 4.49924L2.80849 3.03391L1.99038 3.85201C1.85942 3.98298 1.89805 4.20422 2.06565 4.28305L3.54445 4.97861C3.64646 5.0266 3.76761 5.00544 3.84733 4.92572L4.27381 4.49924Z',
-  'M4.33686 4.43625L2.87153 2.97092L3.68964 2.15282C3.8206 2.02185 4.04184 2.06048 4.12067 2.22809L4.81623 3.70688C4.86422 3.8089 4.84306 3.93005 4.76334 4.00976L4.65986 4.11325L4.12415 2.69519L4.08476 2.73458L4.61653 4.15658L4.33686 4.43625Z',
-  'M3.65933 1.58433L3.26542 1.19043C3.161 1.086 2.9917 1.086 2.88727 1.19043L1.98917 2.08853L2.76122 2.86059L3.3321 2.28971L3.19058 1.91127L3.22997 1.87188L3.37254 2.24927L3.65933 1.96248C3.76375 1.85806 3.76375 1.68876 3.65933 1.58433Z',
-  'M1.92614 2.15162L2.6982 2.92368L1.80009 3.82178C1.69567 3.9262 1.52637 3.9262 1.42195 3.82178L1.02804 3.42788C0.923617 3.32345 0.923618 3.15415 1.02804 3.04973L1.92614 2.15162Z',
-  'M6.44824 6.6739L7.91356 8.13923L7.09546 8.95733C6.96449 9.0883 6.74326 9.04967 6.66442 8.88206L5.96886 7.40327C5.92088 7.30125 5.94204 7.1801 6.02175 7.10038L6.44824 6.6739Z',
-  'M6.51125 6.61091L7.97658 8.07624L8.79469 7.25813C8.92565 7.12717 8.88702 6.90593 8.71942 6.8271L7.24062 6.13154C7.13861 6.08355 7.01746 6.10471 6.93774 6.18442L6.83426 6.28791L8.25232 6.82362L8.21292 6.86301L6.79093 6.33124L6.51125 6.61091Z',
-  'M9.36314 7.28837L9.75704 7.68227C9.86146 7.7867 9.86146 7.956 9.75704 8.06042L8.85894 8.95853L8.08688 8.18647L8.65776 7.61559L9.0362 7.75711L9.07559 7.71772L8.6982 7.57516L8.98499 7.28837C9.08941 7.18394 9.25871 7.18394 9.36314 7.28837Z',
-  'M8.79591 9.02157L8.02385 8.24952L7.12575 9.14762C7.02133 9.25204 7.02133 9.42134 7.12575 9.52577L7.51966 9.91967C7.62408 10.0241 7.79338 10.0241 7.8978 9.91967L8.79591 9.02157Z',
-];
-
-const TEXT_PATHS: { d: string; rule?: 'evenodd' }[] = [
-  { d: 'M0 9.46154H2.76923L4.15385 6.69231H10.1538L11.5385 9.46154H14.3077L8.76923 8.36303e-07H5.53846L0 9.46154ZM5.53846 4.61538L7.15385 2.07692L8.76923 4.61538H5.53846Z', rule: 'evenodd' },
-  { d: 'M36.4615 9.46154H39.2308L40.6154 6.69231H46.6154L48 9.46154H50.7692L45.2308 8.36303e-07H42L36.4615 9.46154ZM42 4.61538L43.6154 2.07692L45.2308 4.61538H42Z', rule: 'evenodd' },
-  { d: 'M14.7692 9.46154H17.5385V2.76923L24.4615 6.23077V9.46154H27.2308V8.36303e-07L24.4615 1.21047e-07V3.92308L17.5385 8.36303e-07H14.7692V9.46154Z' },
-  { d: 'M32.3077 9.46154V2.30769H28.1538V1.21047e-07H39.2308V2.30769H35.0769V9.46154H32.3077Z' },
-  { d: 'M51.2308 9.46154V4.61538H60.4615C60.7164 4.61538 60.9231 4.40875 60.9231 4.15385V2.76923C60.9231 2.51433 60.7164 2.30769 60.4615 2.30769H51.2308V1.21047e-07H60.9231C62.9538 1.21047e-07 63.4615 1.38462 63.4615 2.07692V4.84615C63.4615 6.13846 62.5385 6.69231 60.9231 6.69231L62.5385 9.46154H59.7692L58.1538 6.69231H54V9.46154H51.2308Z' },
-  { d: 'M64.1538 9.46154H66.9231V8.36303e-07H64.1538V9.46154Z' },
-  { d: 'M77.5385 9.46154H67.8462V7.15385H76.8462C77.2285 7.15385 77.5385 6.84389 77.5385 6.46154C77.5385 6.07919 77.2285 5.76923 76.8462 5.76923H70.1538C68.3077 5.76923 67.8462 3.92308 67.8462 2.76923C67.8462 1.61539 68.7692 8.36303e-07 70.6154 0H78.9231V2.07692L70.8462 2.07692C70.4638 2.07692 70.1538 2.38688 70.1538 2.76923C70.1538 3.15158 70.4638 3.46154 70.8462 3.46154L77.5385 3.46154C79.6154 3.46154 80.3077 5.53846 80.3077 6.46154C80.3077 7.48134 79.6154 9.46154 77.5385 9.46154Z' },
-];
-
-// ─── Animation timings (ms) ───────────────────────────────────────────────────
-const MS = {
-  enter:    1300,
-  morphIn:   600,
-  hold:     2500,
-  morphOut:  700,
-  exit:      900,
-};
+import {
+  ANIMATION_MS,
+  ICON_PATHS,
+  SAT_PATHS,
+  SCATTER_DATA,
+  TEXT_PATHS,
+  WING_PATH,
+} from '../constants';
 
 const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
 // ─── Satellite sub-component ──────────────────────────────────────────────────
-// Each path is a motion.path so it can scatter/assemble individually
 function SplashSatellite({ scattered }: { scattered: boolean }) {
   return (
     <svg
@@ -83,16 +22,16 @@ function SplashSatellite({ scattered }: { scattered: boolean }) {
       height={120}
       viewBox="0 0 24 24"
       fill="none"
-      style={{ overflow: 'visible' }}
+      className="overflow-visible"
     >
       <g clipPath="url(#splash-sat-clip)">
-        {SAT.map((d, i) => {
-          const v = SCATTER[i];
+        {SAT_PATHS.map((d, i) => {
+          const v = SCATTER_DATA[i] ?? { x: 0, y: 0, r: 0 };
           return (
             <motion.path
               key={i}
               d={d}
-              fill="#EEEEEE"
+              className="fill-icon-primary"
               initial={{ opacity: 1, x: 0, y: 0, rotate: 0 }}
               animate={
                 scattered
@@ -118,7 +57,6 @@ function SplashSatellite({ scattered }: { scattered: boolean }) {
 }
 
 // ─── Logo sub-component ───────────────────────────────────────────────────────
-// Three groups (wings / icon / text) animate in with staggered delay
 function SplashLogo({ visible }: { visible: boolean }) {
   const S = 4;
   const W = 80.308 * S; // 321.232px
@@ -140,15 +78,15 @@ function SplashLogo({ visible }: { visible: boolean }) {
   const textOut  = { opacity: 0, y: 14 };
 
   return (
-    <div style={{ width: W, height: H, position: 'relative' }}>
+    <div className="relative" style={{ width: W, height: H }}>
 
       {/* ── Left wing ── */}
       <motion.div
         initial={wingsOut}
         animate={visible ? wingsIn : wingsOut}
         transition={t(visible ? 0 : 0.12)}
+        className="absolute"
         style={{
-          position: 'absolute',
           width: 21 * S,
           height: 7.154 * S,
           left: 12.46 * S,
@@ -156,22 +94,22 @@ function SplashLogo({ visible }: { visible: boolean }) {
         }}
       >
         <svg
-          style={{ display: 'block', width: '100%', height: '100%' }}
+          className="block h-full w-full"
           fill="none"
           preserveAspectRatio="none"
           viewBox="0 0 21 7.15385"
         >
-          <path d={WING} fill="#EEEEEE" />
+          <path d={WING_PATH} className="fill-icon-primary" />
         </svg>
       </motion.div>
 
-      {/* ── Right wing (SVG-level flip to avoid transform conflict) ── */}
+      {/* ── Right wing ── */}
       <motion.div
         initial={wingsOut}
         animate={visible ? wingsIn : wingsOut}
         transition={t(visible ? 0.04 : 0.08)}
+        className="absolute"
         style={{
-          position: 'absolute',
           width: 21 * S,
           height: 7.154 * S,
           left: 46.15 * S,
@@ -179,12 +117,12 @@ function SplashLogo({ visible }: { visible: boolean }) {
         }}
       >
         <svg
-          style={{ display: 'block', width: '100%', height: '100%', transform: 'scaleX(-1) scaleY(-1)' }}
+          className="block h-full w-full -scale-x-100 -scale-y-100"
           fill="none"
           preserveAspectRatio="none"
           viewBox="0 0 21 7.15385"
         >
-          <path d={WING} fill="#EEEEEE" />
+          <path d={WING_PATH} className="fill-icon-primary" />
         </svg>
       </motion.div>
 
@@ -193,8 +131,8 @@ function SplashLogo({ visible }: { visible: boolean }) {
         initial={iconOut}
         animate={visible ? iconIn : iconOut}
         transition={t(visible ? 0.08 : 0.04)}
+        className="absolute"
         style={{
-          position: 'absolute',
           left: 34.15 * S,
           top: 0,
           width: 11.0769 * S,
@@ -202,14 +140,14 @@ function SplashLogo({ visible }: { visible: boolean }) {
         }}
       >
         <svg
-          style={{ display: 'block', width: '100%', height: '100%' }}
+          className="block h-full w-full"
           fill="none"
           preserveAspectRatio="none"
           viewBox="0 0 11.0769 11.0769"
         >
           <g clipPath="url(#splash-icon-clip)">
             {ICON_PATHS.map((d, i) => (
-              <path key={i} d={d} fill="#EEEEEE" />
+              <path key={i} d={d} className="fill-icon-primary" />
             ))}
           </g>
           <defs>
@@ -225,8 +163,8 @@ function SplashLogo({ visible }: { visible: boolean }) {
         initial={textOut}
         animate={visible ? textIn : textOut}
         transition={t(visible ? 0.16 : 0)}
+        className="absolute"
         style={{
-          position: 'absolute',
           left: 0,
           top: 14.54 * S,
           width: W,
@@ -234,7 +172,7 @@ function SplashLogo({ visible }: { visible: boolean }) {
         }}
       >
         <svg
-          style={{ display: 'block', width: '100%', height: '100%' }}
+          className="block h-full w-full"
           fill="none"
           preserveAspectRatio="none"
           viewBox="0 0 80.3077 9.46154"
@@ -243,7 +181,7 @@ function SplashLogo({ visible }: { visible: boolean }) {
             <path
               key={i}
               d={d}
-              fill="#EEEEEE"
+              className="fill-icon-primary"
               {...(rule ? { clipRule: rule, fillRule: rule } : {})}
             />
           ))}
@@ -254,167 +192,163 @@ function SplashLogo({ visible }: { visible: boolean }) {
 }
 
 // ─── Main component ───────────────────────────────────────────────────────────
-//
-// Curved-path technique: two nested divs, each animated on one axis only.
-// Because X and Y have DIFFERENT easing curves, the combined trajectory is a
-// genuine arc — not a straight line with timing applied to both axes equally.
-//
-//   outer div  → X translation + scale + opacity + rotate
-//   inner div  → Y translation only
-//
 export function SplashScreen() {
-  const [xRef, animateX] = useAnimate(); // outer: X axis
-  const [yRef, animateY] = useAnimate(); // inner: Y axis
+  const [xRef, animateX] = useAnimate();
+  const [yRef, animateY] = useAnimate();
 
-  const [showLogo,  setShowLogo]  = useState(false);
-  const [mounted,   setMounted]   = useState(true);
+  const [showLogo, setShowLogo] = useState(false);
+  const [mounted, setMounted] = useState(true);
   const [flashGlow, setFlashGlow] = useState(false);
 
   useEffect(() => {
+    let isCancelled = false;
+
     async function sequence() {
-      // ── 1. Enter: curved orbital arc, bottom-left → centre ───────────────
-      //
-      // X uses easeOut  (moves right quickly at first, then settles smoothly)
-      // Y uses easeIn   (slow to lift at first, then accelerates upward)
-      //
-      // At the midpoint, X is ~75 % done while Y is only ~25 % done.
-      // The satellite is therefore far to the right of the straight-line path,
-      // tracing a low, sweeping arc from bottom-left into the centre.
-      //
+      // 1. Enter: Curved orbital arc
       await Promise.all([
-        animateX(xRef.current, { x: '0vw', scale: 1, opacity: 1, rotate: 0 }, {
-          duration: MS.enter / 1000,
-          ease: [0.25, 0.1, 0.25, 1], // easeOut
-        }),
-        animateY(yRef.current, { y: '0vh' }, {
-          duration: MS.enter / 1000,
-          ease: [0.42, 0, 1, 1], // easeIn  (different → curve)
-        }),
+        animateX(
+          xRef.current,
+          { x: '0vw', scale: 1, opacity: 1, rotate: 0 },
+          {
+            duration: ANIMATION_MS.enter / 1000,
+            ease: [0.25, 0.1, 0.25, 1], // easeOut
+          }
+        ),
+        animateY(
+          yRef.current,
+          { y: '0vh' },
+          {
+            duration: ANIMATION_MS.enter / 1000,
+            ease: [0.42, 0, 1, 1], // easeIn
+          }
+        ),
       ]);
 
-      // ── 2. Morph → logo ───────────────────────────────────────────────────
+      if (isCancelled) return;
+
+      // 2. Morph phase 1: Satellite → Logo
       setFlashGlow(true);
       setShowLogo(true);
-      await sleep(MS.morphIn);
+      await sleep(ANIMATION_MS.morphIn);
       setFlashGlow(false);
 
-      // ── 3. Hold ───────────────────────────────────────────────────────────
-      await sleep(MS.hold);
+      if (isCancelled) return;
 
-      // ── 4. Morph → satellite ──────────────────────────────────────────────
+      // 3. Hold phase: Branding visibility
+      await sleep(ANIMATION_MS.hold);
+
+      if (isCancelled) return;
+
+      // 4. Morph phase 2: Logo → Satellite
       setFlashGlow(true);
       setShowLogo(false);
-      await sleep(MS.morphOut);
+      await sleep(ANIMATION_MS.morphOut);
       setFlashGlow(false);
 
-      // ── 5. Exit: curved arc, centre → top-right ───────────────────────────
-      //
-      // X uses easeIn  (slow to start moving right, then accelerates away)
-      // Y uses easeOut (lifts quickly at first, then eases off)
-      //
-      // At the midpoint, Y is ~75 % done while X is only ~25 % done.
-      // The satellite first launches upward in a sweeping arc, then swings
-      // right and disappears — mirroring the entry curve in reverse.
-      //
+      if (isCancelled) return;
+
+      // 5. Exit: Accelerated orbital departure
       await Promise.all([
-        animateX(xRef.current, { x: '44vw', scale: 0.15, opacity: 0, rotate: -18 }, {
-          duration: MS.exit / 1000,
-          ease: [0.42, 0, 1, 1], // easeIn
-        }),
-        animateY(yRef.current, { y: '-44vh' }, {
-          duration: MS.exit / 1000,
-          ease: [0.25, 0.1, 0.25, 1], // easeOut  (different → curve)
-        }),
+        animateX(
+          xRef.current,
+          { x: '44vw', scale: 0.15, opacity: 0, rotate: -18 },
+          {
+            duration: ANIMATION_MS.exit / 1000,
+            ease: [0.42, 0, 1, 1], // easeIn
+          }
+        ),
+        animateY(
+          yRef.current,
+          { y: '-44vh' },
+          {
+            duration: ANIMATION_MS.exit / 1000,
+            ease: [0.25, 0.1, 0.25, 1], // easeOut
+          }
+        ),
       ]);
 
-      setMounted(false);
+      if (!isCancelled) setMounted(false);
     }
 
     sequence();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => {
+      isCancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!mounted) return null;
 
   return (
-    <div className="fixed inset-0 z-9999 flex items-center justify-center overflow-hidden bg-black">
+    <div className="fixed inset-0 z-9999 flex items-center justify-center overflow-hidden bg-surface-bg">
+      {/* Dynamic Background Layer: Ambient Glow + Grid */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+        {/* Central atmosphere */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div
+            className="rounded-rounded opacity-40"
+            style={{
+              width: '800px',
+              height: '800px',
+              background: 'radial-gradient(circle, var(--color-blue-alpha-3) 0%, transparent 70%)',
+              filter: 'blur(60px)',
+            }}
+          />
+        </div>
 
-      {/* Ambient radial glow */}
-      <div
-        className="pointer-events-none absolute inset-0 flex items-center justify-center"
-        aria-hidden
-      >
+        {/* Global grid alignment */}
         <div
-          className="rounded-full"
+          className="absolute inset-0 opacity-[0.03]"
           style={{
-            width: 600,
-            height: 600,
-            background: 'radial-gradient(circle, rgba(238,238,238,0.05) 0%, transparent 68%)',
+            backgroundImage:
+              'radial-gradient(circle, var(--color-icon-primary) 1px, transparent 1px)',
+            backgroundSize: '40px 40px',
           }}
         />
       </div>
 
-      {/* Dot-grid texture */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage:
-            'radial-gradient(circle, rgba(238,238,238,0.8) 1px, transparent 1px)',
-          backgroundSize: '32px 32px',
-        }}
-        aria-hidden
-      />
-
-      {/* ── Outer div: X axis + scale + opacity + rotate ── */}
+      {/* ── Animation Container ── */}
       <motion.div
         ref={xRef}
         className="flex items-center justify-center"
         initial={{ x: '-42vw', scale: 0.28, opacity: 0, rotate: 20 }}
       >
-        {/* ── Inner div: Y axis only ── */}
         <motion.div
           ref={yRef}
           className="relative flex items-center justify-center"
           initial={{ y: '42vh' }}
         >
-          {/* Glow burst on morph transitions */}
+          {/* Morphing Glow Burst */}
           <motion.div
-            className="pointer-events-none absolute rounded-full"
-            animate={flashGlow ? { scale: 3.5, opacity: 1 } : { scale: 0, opacity: 0 }}
+            className="pointer-events-none absolute rounded-rounded"
+            animate={flashGlow ? { scale: 3.5, opacity: 0.8 } : { scale: 0, opacity: 0 }}
             transition={{ duration: 0.28, ease: 'easeOut' }}
             style={{
-              width: 110,
-              height: 110,
-              background: 'radial-gradient(circle, rgba(238,238,238,0.22) 0%, transparent 65%)',
-              filter: 'blur(14px)',
+              width: 120,
+              height: 120,
+              background: 'radial-gradient(circle, var(--color-blue-alpha-5) 0%, transparent 65%)',
+              filter: 'blur(20px)',
             }}
             aria-hidden
           />
 
-          {/* Satellite — paths scatter when showLogo=true */}
+          {/* Focal Layer: Satellite and Logo */}
           <div className="absolute flex items-center justify-center">
             <SplashSatellite scattered={showLogo} />
           </div>
 
-          {/* Logo — groups assemble when showLogo=true */}
           <div className="absolute flex items-center justify-center">
             <SplashLogo visible={showLogo} />
           </div>
         </motion.div>
       </motion.div>
 
-      {/* Tagline — fades in with logo */}
+      {/* Corporate Tagline Layer */}
       <motion.p
-        className="pointer-events-none absolute bottom-10 select-none"
-        animate={showLogo ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
-        initial={{ opacity: 0, y: 8 }}
-        transition={{ duration: 0.45, ease: 'easeOut' }}
-        style={{
-          color: 'rgba(238,238,238,0.20)',
-          fontSize: 11,
-          letterSpacing: '0.32em',
-          textTransform: 'uppercase',
-        }}
+        className="pointer-events-none absolute bottom-12 select-none font-body text-xs font-weight-regular uppercase tracking-[0.4em] text-text-secondary/30"
+        animate={showLogo ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+        initial={{ opacity: 0, y: 10 }}
+        transition={{ duration: 0.5, delay: 0.2, ease: 'easeOut' }}
       >
         Mission Operations Platform
       </motion.p>
