@@ -19,11 +19,14 @@ Data and timings are centralized in [`constants.ts`](file:///Users/koushikmondal
 
 ## Animation Lifecycle
 
-1. **Enter (1300ms)**: Outer container follows a curved orbital arc (X: -42vw to 0, Y: 42vh to 0) while scaling up and rotating into view.
-2. **Morph-In (600ms)**: Satellite paths scatter outward while logo components (wings, mark, text) assemble inward. A glow flash emphasizes the transition.
-3. **Hold (2500ms)**: Static display of the Antaris logo and mission tagline.
-4. **Morph-Out (700ms)**: Logo scatters back to hidden states while satellite paths re-assemble. Another glow flash occurs.
-5. **Exit (900ms)**: Satellite departs horizontally with acceleration (X: 0 to 44vw, Y: 0 to -44vh) and fades out.
+| Stage | Duration | Description |
+|---|---|---|
+| **Enter** | 1300 ms | Outer container follows a curved orbital arc (X: −42 vw → 0, Y: 42 vh → 0) while scaling up and fading in. X uses `easeOut`, Y uses `easeIn` — different easing per axis produces a genuine arc rather than a straight-line diagonal. |
+| **Morph-In** | 700 ms | Each of the 11 satellite `<motion.path>` elements scatters to a pre-defined vector (see `SCATTER_DATA` in `constants.ts`). Simultaneously the logo's three groups (wings, icon mark, ANTARIS text) stagger-assemble with 0 / 80 / 160 ms delays. A radial glow burst fires at the crossover. The 700 ms window is intentionally generous so both the scatter and the assemble are fully legible. |
+| **Hold** | 2500 ms | Static display of the Antaris logo and mission tagline. |
+| **Morph-Out** | 700 ms | Logo groups dissolve in reverse stagger order; satellite paths snap back (faster 22 ms stagger). Another glow burst fires. |
+| **Exit** | 900 ms | Satellite departs on a mirrored arc to the top-right (X: 0 → 44 vw, Y: 0 → −44 vh). Y uses `easeOut`, X uses `easeIn` — the satellite first rises steeply, then swings right. |
+| **Total** | **~7 s** | Component unmounts after exit completes. |
 
 ## Integration
 

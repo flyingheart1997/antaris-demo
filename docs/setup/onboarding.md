@@ -55,7 +55,11 @@ Full reference: [docs/setup/environment.md](environment.md)
 pnpm dev
 ```
 
-Open `http://localhost:3000` — you should see the Antaris hero page.
+Open `http://localhost:3000`.
+
+On first load you will see the **splash screen** — an ~7 s animated intro where the Antaris satellite icon enters from the bottom-left on a curved orbital arc, transforms into the full Antaris logo, then departs to the top-right. After it completes, the main hero page is visible underneath.
+
+> The splash screen renders on every full page load. It is not gated behind a "first visit" flag — this is intentional. See [`docs/features/splash-screen.md`](../features/splash-screen.md) for implementation details.
 
 ---
 

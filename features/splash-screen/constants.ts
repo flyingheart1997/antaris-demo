@@ -22,18 +22,18 @@ export const SAT_PATHS = [
 
 // ─── Per-path scatter vectors ────────────────────────────────────────────────
 export const SCATTER_DATA: { x: number; y: number; r: number }[] = [
-  { x:  18, y: -14, r:  20 }, // main body       → up-right
-  { x: -14, y:  16, r: -15 }, // bottom tip       → down-left
-  { x:  22, y: -10, r:  25 }, // top-right wing   → up-right
-  { x: -18, y:   8, r: -20 }, // left panel 1     → left
-  { x: -22, y:  10, r: -25 }, // left panel 2     → left-down
-  { x:  -6, y: -20, r:  15 }, // top-left         → up
+  { x: 18, y: -14, r: 20 }, // main body       → up-right
+  { x: -14, y: 16, r: -15 }, // bottom tip       → down-left
+  { x: 22, y: -10, r: 25 }, // top-right wing   → up-right
+  { x: -18, y: 8, r: -20 }, // left panel 1     → left
+  { x: -22, y: 10, r: -25 }, // left panel 2     → left-down
+  { x: -6, y: -20, r: 15 }, // top-left         → up
   { x: -16, y: -16, r: -30 }, // top-left rect    → up-left
-  { x:  14, y:  14, r:  18 }, // bottom-right 1   → down-right
-  { x:  18, y:  16, r:  22 }, // bottom-right 2   → down-right
-  { x:  24, y:   6, r:  20 }, // bottom connector → right
-  { x:  20, y:  12, r:  15 }, // bottom corner    → right-down
-  { x: -10, y:  22, r: -10 }, // bottom-left tip  → down-left
+  { x: 14, y: 14, r: 18 }, // bottom-right 1   → down-right
+  { x: 18, y: 16, r: 22 }, // bottom-right 2   → down-right
+  { x: 24, y: 6, r: 20 }, // bottom connector → right
+  { x: 20, y: 12, r: 15 }, // bottom corner    → right-down
+  { x: -10, y: 22, r: -10 }, // bottom-left tip  → down-left
 ];
 
 // ─── Logo paths ──────────────────────────────────────────────────────────────
@@ -66,9 +66,9 @@ export const TEXT_PATHS: { d: string; rule?: 'evenodd' }[] = [
 
 // ─── Animation timings (ms) ───────────────────────────────────────────────────
 export const ANIMATION_MS = {
-  enter:    1300,
-  morphIn:   600,
-  hold:     2500,
-  morphOut:  700,
-  exit:      900,
+  enter: 1300,
+  morphIn: 700, // increased: gives scatter + assemble enough time to read
+  hold: 2500,
+  morphOut: 700,
+  exit: 900,
 };
