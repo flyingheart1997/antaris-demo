@@ -7,8 +7,12 @@ import type { CatalogItem } from "../types/catalog"
 import { mockCatalogItems } from "../utils/mock-data"
 import { Text } from "@/components/ui/text"
 
-export function CatalogList() {
-  const [selectedId, setSelectedId] = React.useState<string | null>(null)
+interface CatalogListProps {
+  selectedId: string | null
+  onSelect: (id: string) => void
+}
+
+export function CatalogList({ selectedId, onSelect }: CatalogListProps) {
 
   // Group items by category
   const groups = React.useMemo(() => {
@@ -26,7 +30,7 @@ export function CatalogList() {
   }, [])
 
   return (
-    <div className="flex-1 overflow-y-auto scrollbar-hide">
+    <div className="h-[calc(100vh-165px)] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
       <Accordion type="multiple" defaultValue={groups.map(g => g.category)}>
         {groups.map((group) => (
           <AccordionItem key={group.category} value={group.category}>
@@ -36,13 +40,13 @@ export function CatalogList() {
                 <Text type='heading' className="text-green-9">{group.count}</Text>
               </div>
             </AccordionTrigger>
-            <AccordionContent className="pr-12">
+            <AccordionContent>
               {group.items.map((item) => (
                 <CatalogCard
                   key={item.id}
                   item={item}
                   selected={selectedId === item.id}
-                  onClick={() => setSelectedId(item.id)}
+                  onClick={() => onSelect(item.id)}
                 />
               ))}
             </AccordionContent>

@@ -144,12 +144,15 @@
       "description": "Satellite component catalog — browse and select hardware for a mission. UI-only, mock data, no oRPC routes yet.",
       "files": {
         "pages": [
-          "app/catalog/page.tsx",
-          "app/catalog/layout.tsx"
+          "app/(antaris)/catalog/page.tsx",
+          "app/(antaris)/catalog/layout.tsx"
         ],
         "components": [
           "features/catalog/components/catalog-card.tsx",
-          "features/catalog/components/catalog-category-group.tsx"
+          "features/catalog/components/catalog-category-group.tsx",
+          "features/catalog/components/catalog-list.tsx",
+          "features/catalog/components/catalog-sidepanel.tsx",
+          "features/catalog/components/catalog-stats.tsx"
         ],
         "types": "features/catalog/types/catalog.ts",
         "mock": "features/catalog/utils/mock-data.ts",
@@ -157,7 +160,9 @@
       },
       "exports": [
         "CatalogCard",
-        "CatalogCategoryGroup"
+        "CatalogCategoryGroup",
+        "CatalogSidepanel",
+        "CatalogStats"
       ],
       "doc": "docs/features/catalog.md",
       "_note": "Backend routes (oRPC) not yet implemented — uses static mock data"

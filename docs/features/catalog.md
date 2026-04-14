@@ -12,8 +12,8 @@ The Catalog feature lets operators browse and select satellite hardware componen
 
 | Route | Component | Description |
 |---|---|---|
-| `/catalog` | `app/catalog/page.tsx` | Component grid (client) |
-| `/catalog` layout | `app/catalog/layout.tsx` | Full-screen container, `bg-surface-bg` |
+| `/catalog` | `app/(antaris)/catalog/page.tsx` | Catalog workspace with sidepanel selection and stats detail panel |
+| `/catalog` layout | `app/(antaris)/catalog/layout.tsx` | Full-screen container, `bg-surface-bg` |
 
 ---
 
@@ -24,7 +24,10 @@ features/catalog/
 ├── index.ts                          # Barrel exports
 ├── components/
 │   ├── catalog-card.tsx              # Satellite component card (uses Card selected state)
-│   └── catalog-category-group.tsx   # Collapsible category group (WIP — mostly commented out)
+│   ├── catalog-category-group.tsx    # Collapsible category group (WIP — mostly commented out)
+│   ├── catalog-list.tsx              # Left-side grouped catalog list with item selection
+│   ├── catalog-sidepanel.tsx         # Filter + grouped list + create custom action
+│   └── catalog-stats.tsx             # Figma-style stats panel for the selected item
 ├── hooks/                            # Reserved for future Zustand store
 ├── types/
 │   └── catalog.ts                    # CatalogItem, CatalogCategoryGroup interfaces
@@ -48,6 +51,7 @@ interface CatalogItem {
     size?: string
     mass?: string
     power?: string
+    gsd?: string
     swath?: string
     [key: string]: string | undefined
   }
@@ -83,6 +87,18 @@ Wraps the `Card` component with catalog-specific layout:
 
 **Important:** The `selected` prop on `Card` triggers the `CardMask` SVG overlay — dark green gradient background + right-side bump with lime-green glow (source: Figma node 2895:297).
 
+## CatalogStats Component
+
+`features/catalog/components/catalog-stats.tsx`
+
+Renders the selected catalog item in the right-hand panel using the Figma "Stats" composition:
+- Header with selected component name and category
+- Five specification rows: size, mass, power, GSD, swath
+- Angled segmented meters with a green guide line and right-aligned value labels
+- Lightweight normalization so each spec can map to a useful fill amount without backend metadata
+
+The panel is wired into `app/(antaris)/catalog/page.tsx`, and selection is controlled at the page level so clicking a list card updates the detail panel.
+
 ---
 
 ## Page Pattern
@@ -90,7 +106,7 @@ Wraps the `Card` component with catalog-specific layout:
 The catalog page is a `'use client'` component (no SSR prefetch yet — no oRPC routes):
 
 ```tsx
-// app/catalog/page.tsx
+// app/(antaris)/catalog/page.tsx
 'use client'
 
 export default function CatalogPage() {

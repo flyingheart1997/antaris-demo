@@ -88,6 +88,7 @@ interface ButtonProps
   VariantProps<typeof buttonVariants> {
   selected?: boolean
   advanced?: boolean
+  asChild?: boolean
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -99,12 +100,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     size,
     selected = false,
     advanced = false,
+    asChild = false,
     children,
     ...props
   }, ref) => {
-
+    const Comp = asChild ? Slot : "button"
     return (
-      <button
+      <Comp
         ref={ref}
         data-slot="button"
         data-variant={variant}
@@ -118,7 +120,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {children}
-      </button>
+      </Comp>
     )
   }
 )

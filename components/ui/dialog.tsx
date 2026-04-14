@@ -2,7 +2,6 @@ import * as DialogPrimitive from "@radix-ui/react-dialog"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { IconButton } from "@/components/ui/icon-button"
 
 function Dialog({
   ...props
@@ -44,13 +43,17 @@ function DialogOverlay({
 function DialogContent({
   className,
   children,
+  overlayClassName,
+  overlayStyle,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Content> & {
   showCloseButton?: boolean
+  overlayClassName?: string
+  overlayStyle?: React.CSSProperties
 }) {
   return (
     <DialogPortal>
-      <DialogOverlay />
+      <DialogOverlay className={overlayClassName} style={overlayStyle} />
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(

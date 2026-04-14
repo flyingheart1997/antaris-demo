@@ -27,7 +27,7 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <head />
-      <body suppressHydrationWarning className="antialiased">
+      <body suppressHydrationWarning className="antialiased bg-surface-bg">
         <AllProviders token={token ?? null}>
           <SplashScreen />
           <Toaster />

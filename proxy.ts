@@ -7,6 +7,7 @@ export function proxy(request: NextRequest) {
         '/',         // ✅ home page
         '/login',
         '/preview',
+        '/catalog',
         '/component-docs'
     ]
 

@@ -11,13 +11,10 @@ import { CardMask } from "./card-mask"
  * state.hover    — green-alpha-2 bg + green-alpha-4 border on hover
  * state.disabled — 50% opacity, non-interactive
  *
- * Shadow spec (Figma: effects/shadow/surface/primary):
- *   box-shadow: 2px 0 20px 0 rgba(9, 9, 9, 0.25)
- *
  * Backdrop blur spec (Figma: effects/bg_blur-60 / 2 = 30px)
  */
 const cardVariants = cva(
-  "inline-flex flex-col relative transition-all duration-300 backdrop-blur-60",
+  "inline-flex flex-col relative transition-all duration-300 backdrop-blur-[30px]",
   {
     variants: {
       size: {
@@ -27,8 +24,8 @@ const cardVariants = cva(
         "4": "p-20 rounded-lg",
       },
       state: {
-        default: "border-stroke-primary hover:border-gray-10 bg-surface-primary shadow-[2px_0_20px_0_rgba(9,9,9,0.25)]",
-        emphasis: "border-green-alpha-2 bg-green-alpha-2 shadow-[2px_0_20px_0_rgba(9,9,9,0.25)]",
+        default: "border-stroke-primary hover:border-gray-10 bg-surface-primary",
+        emphasis: "border-green-alpha-2 bg-green-alpha-2",
         disabled: "opacity-60 pointer-events-none border-stroke-primary bg-surface-primary",
       },
       stroke: {

@@ -203,7 +203,8 @@ features/
 ```
 hooks/
 ├── use-auth.ts             # Authentication hook: token, user, isAuthenticated
-└── use-mobile.ts           # Mobile viewport detection hook
+├── use-mobile.ts           # Mobile viewport detection hook
+└── use-modal.ts            # Global modal management hook (singleton)
 ```
 
 ### `lib/` — Core Libraries

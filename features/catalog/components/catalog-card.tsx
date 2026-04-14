@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card"
 import type { CatalogItem } from "../types/catalog"
 import { Badge } from "@/components/ui/badge"
+import { Text } from "@/components/ui/text"
 
 interface CatalogCardProps extends React.HTMLAttributes<HTMLDivElement> {
   item: CatalogItem
@@ -23,19 +24,21 @@ const CatalogCard = React.forwardRef<HTMLDivElement, CatalogCardProps>(
       <Card
         ref={ref}
         state='default'
-        selected={true}
+        selected={selected}
         size="3"
-        className="bg-[rgba(240,240,240,0.02)]"
+        className={cn(selected ? 'w-[96%]' : 'w-full')}
         {...props}
       >
-        <CardHeader className="p-0 flex flex-col gap-2 relative z-10">
-          <CardTitle className="font-heading text-base font-semibold text-white/95 leading-tight group-hover:text-white">
-            {item.name}
+        <CardHeader className="p-0 flex flex-row items-center justify-between gap-2 relative z-10">
+          <CardTitle>
+            <Text type='heading' size='lg' color='primary'>
+              {item.name}
+            </Text>
           </CardTitle>
           {item.category && (
-            <span className="font-body text-[10px] text-white/30 font-medium uppercase tracking-wider">
+            <Text type='heading' size='sm' color='secondary' className="opacity-80">
               {item.category}
-            </span>
+            </Text>
           )}
         </CardHeader>
 
@@ -50,10 +53,12 @@ const CatalogCard = React.forwardRef<HTMLDivElement, CatalogCardProps>(
           {item.tags.map((tag) => (
             <Badge
               key={tag}
-              variant="solid"
+              size='md'
+              variant="soft"
               color='neutral'
+              className="p-6"
             >
-              {tag}
+              <Text type='body' size='xs' color='secondary'>{tag}</Text>
             </Badge>
           ))}
         </CardFooter>
@@ -67,12 +72,12 @@ function SpecItem({ label, value }: { label: string; value?: string }) {
   if (!value) return null
   return (
     <div className="flex flex-col gap-1">
-      <span className="font-body text-[9px] text-white/20 font-bold uppercase tracking-tight">
+      <Text type='body' size='sm' color='secondary' className="opacity-80">
         {label}
-      </span>
-      <span className="font-heading text-sm text-white/80 font-medium leading-none group-hover:text-white/90">
+      </Text>
+      <Text type='heading' size='md' color='secondary'>
         {value}
-      </span>
+      </Text>
     </div>
   )
 }

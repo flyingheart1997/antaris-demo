@@ -3,27 +3,39 @@
 import { Button } from "@/components/ui/button"
 import { CustomIcon, UploadIcon } from "@/icons"
 import { Text } from "@/components/ui/text"
-import { Separator } from "@/components/ui/separator"
+import { useModal } from "@/hooks/use-modal"
+import { IconButton } from "@/components/ui/icon-button"
 
 export function CreateCustomButton() {
+  const { openModal } = useModal("Catalog")
+
   return (
-    <div className="pb-3 mt-auto">
+    <div className="flex items-center gap-4">
       <Button
-        size='lg'
-        variant="surface"
-        className="w-full"
+        size="lg"
+        variant="soft"
+        color='accent'
+        className="flex-1"
       >
-        <div className="flex items-center justify-between w-full opacity-80">
-          <div className="flex items-center gap-4">
-            <CustomIcon />
-            <Text type='heading'>Create Custom</Text>
-          </div>
-          <div className="flex items-center gap-4">
-            <Separator orientation="vertical" />
-            <UploadIcon className="w-14 h-14" />
-          </div>
-        </div>
+        <CustomIcon />
+        <Text type="heading">Add Component</Text>
       </Button>
+      <IconButton
+        size='lg'
+        variant='soft'
+        color='accent'
+        onClick={() =>
+          openModal({
+            mode: "Upload",
+            data: {
+              source: "catalog-create-custom",
+            },
+            accept: ".csv,.json",
+          })
+        }
+      >
+        <UploadIcon className="h-14 w-14" />
+      </IconButton>
     </div>
   )
 }

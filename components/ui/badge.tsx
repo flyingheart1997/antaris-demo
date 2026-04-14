@@ -23,7 +23,7 @@ const badgeVariants = cva(
         info: "",
       },
       size: {
-        sm: "px-4 py-2 text-md rounded-md gap-4",
+        sm: "px-4 py-2 text-sm rounded-md gap-4",
         md: "px-6 py-4 text-md rounded-md gap-4",
         lg: "px-8 py-6 text-lg rounded-md gap-4",
       },
@@ -78,8 +78,6 @@ interface BadgeProps
   extends Omit<React.ComponentProps<"span">, "color">,
   VariantProps<typeof badgeVariants> {
   asChild?: boolean
-  iconStart?: React.ReactNode
-  iconEnd?: React.ReactNode
 }
 
 const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
@@ -88,10 +86,8 @@ const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
     variant,
     color,
     size,
-    asChild = false,
-    iconStart,
-    iconEnd,
     children,
+    asChild = false,
     ...props
   }, ref) => {
     const Comp = asChild ? Slot : "span"
@@ -106,25 +102,7 @@ const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
         className={cn(badgeVariants({ variant, color, size }), className)}
         {...props}
       >
-        {asChild ? (
-          children
-        ) : (
-          <>
-            {iconStart && (
-              <span className="inline-flex shrink-0 leading-none" data-slot="badge-icon-start">
-                {iconStart}
-              </span>
-            )}
-            <span className="truncate text-font-size-md" data-slot="badge-text">
-              {children}
-            </span>
-            {iconEnd && (
-              <span className="inline-flex shrink-0 leading-none" data-slot="badge-icon-end">
-                {iconEnd}
-              </span>
-            )}
-          </>
-        )}
+        {children}
       </Comp>
     )
   }
