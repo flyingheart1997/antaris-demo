@@ -144,5 +144,5 @@ export default function CatalogPage() {
 ## See Also
 
 - [`docs/architecture/component-system.md`](../architecture/component-system.md) — Card component + selected state mask
-- [`docs/modules/orpc-server.md`](../modules/orpc-server.md) — Pattern to follow when adding catalog oRPC routes
+- [`docs/modules/trpc-api.md`](../modules/trpc-api.md) — Pattern to follow when adding catalog tRPC procedures
 - [`docs/features/user-management.md`](./user-management.md) — Reference implementation for the full feature pattern

@@ -2,21 +2,23 @@
 
 ## Overview
 
-The API layer is built on **oRPC** — a type-safe RPC framework that generates fully-typed clients from server-side route definitions. All API communication goes through the oRPC abstraction layer, with the exception of authentication routes which use standard Next.js API routes.
+The API layer is built on **tRPC v11** — a type-safe RPC framework that generates fully-typed clients directly from server-side router definitions. All API communication goes through the tRPC abstraction layer, except authentication routes which use standard Next.js API routes.
 
 ---
 
 ## API Endpoint Structure
 
-### oRPC Routes (Type-Safe RPC)
+### tRPC Routes (Type-Safe RPC)
 
-| Endpoint | Method | Path | Description | Security |
+All tRPC routes are served at `/rpc` via the catch-all handler.
+
+| Procedure | Type | Path | Description | Security |
 |---|---|---|---|---|
-| `user.list` | GET | `/rpc/users` | List all users | None (public read) |
-| `user.details` | GET | `/rpc/user/{userId}` | Get user by ID | None (public read) |
-| `user.create` | POST | `/rpc/user` | Create a new user | Standard + Rate Limit |
-| `user.update` | PUT | `/rpc/user/{userId}` | Update user by ID | Standard + Rate Limit |
-| `user.delete` | DELETE | `/rpc/user/{userId}` | Delete user by ID | Standard |
+| `user.list` | query | `/rpc` | List all users | None (public read) |
+| `user.details` | query | `/rpc` | Get user by ID | None (public read) |
+| `user.create` | mutation | `/rpc` | Create a new user | Standard + Rate Limit |
+| `user.update` | mutation | `/rpc` | Update user by ID | Standard + Rate Limit |
+| `user.delete` | mutation | `/rpc` | Delete user by ID | Standard |
 
 ### Auth Routes (Next.js API Routes)
 
@@ -28,69 +30,78 @@ The API layer is built on **oRPC** — a type-safe RPC framework that generates 
 
 ---
 
-## oRPC Architecture
+## tRPC Architecture
 
-### Router Registry
+```
+lib/trpc.server.ts              → Sets globalThis.$trpcClient (direct-call, no HTTP) for SSR
+lib/trpc.ts                     → Isomorphic client: server=direct-call, client=HTTP batch
+lib/query/client.ts             → TanStack Query QueryClient
+lib/query/hydration.tsx         → SSR hydration helpers (HydrateClient, getQueryClient)
+app/(server)/middlewares/base.ts → initTRPC — context, router, publicProcedure, middleware
+app/(server)/middlewares/arcjet/ → Arcjet WAF + rate-limit tRPC middlewares
+app/(server)/router/            → Procedure definitions (user.ts, ...)
+app/(server)/rpc/[[...rest]]/   → fetchRequestHandler — HTTP bridge to tRPC router
+```
+
+### App Router
 
 ```typescript
 // app/(server)/router/index.ts
-export const router = {
-    user: {
-        list: listusers,
-        details: getuser,
-        create: createuser,
-        update: updateuser,
-        delete: deleteuser
-    },
-    mission: {}  // Future: satellite mission operations
-}
+export const appRouter = router({
+    user: userRouter,
+    // mission: missionRouter,
+})
+export type AppRouter = typeof appRouter
 ```
 
-### Route Definition Pattern
-
-Every oRPC route follows this structure:
+### Procedure Definition Pattern
 
 ```typescript
-export const listusers = base
-    .use(optionalSecurityMiddleware)   // Security layer
-    .route({
-        method: 'GET',                // HTTP method
-        path: '/users',               // REST-like path
-        summary: 'List all users',    // OpenAPI summary
-        tags: ['user'],               // OpenAPI tags
-    })
-    .input(z.void())                  // Zod input schema
-    .output(z.object({                // Zod output schema
-        success: z.boolean(),
-        data: z.array(userSchema)
-    }))
-    .handler(async () => {            // Business logic
-        // ...
-    })
+// app/(server)/router/user.ts
+export const userRouter = router({
+    list: publicProcedure
+        .query(async () => {
+            // Business logic — can call external REST APIs
+            const response = await fetch('https://api.example.com/users')
+            return { success: true, data: users }
+        }),
+
+    create: publicProcedure
+        .use(requireStandardSequrityMiddleware) // WAF + bot detection
+        .use(requireRatelimitSequrityMiddleware) // sliding window rate limit
+        .input(userFormSchema)                  // Zod validation
+        .mutation(async ({ input }) => {
+            // ...
+        }),
+})
 ```
 
-### Base Middleware
+### Context
 
-All routes extend from the base middleware which provides:
-- Request context typing (`{ request: Request }`)
-- Standard error definitions:
+All procedures receive the raw `Request` object for security middleware inspection:
 
 ```typescript
-{
-    RATE_LIMIT_EXCEEDED: "You have been rate limited",
-    FORBIDDEN: "You do not have access to this resource",
-    NOT_FOUND: "The requested resource was not found",
-    BAD_REQUEST: "The request was invalid",
-    INTERNAL_SERVER_ERROR: "Something went wrong on the server",
-    UNAUTHORIZED: "You are not authorized to access this resource"
+// app/(server)/middlewares/base.ts
+export type Context = {
+    request: Request
 }
+const t = initTRPC.context<Context>().create()
+```
+
+The HTTP handler injects the context:
+```typescript
+// app/(server)/rpc/[[...rest]]/route.ts
+fetchRequestHandler({
+    router: appRouter,
+    createContext: ({ req }) => ({ request: req }),
+})
 ```
 
 ---
 
 ## Security Middleware Stack
 
-### Standard Security (`requireStandardSequrityMiddleware` — note: typo in source, actual function name kept as-is)
+### Standard Security (`requireStandardSequrityMiddleware`)
 
 Applied to: `create`, `update`, `delete` operations
 
@@ -98,12 +109,7 @@ Includes:
 1. **Shield (WAF)** — Blocks SQL injection, XSS, path traversal
 2. **Bot Detection** — Blocks automated requests, allows search engines and monitors
 
-```typescript
-// Allowed bot categories
-allow: ["CATEGORY:SEARCH_ENGINE", "CATEGORY:MONITOR", "CATEGORY:PREVIEW"]
-```
-
-### Rate Limiting (`requireRatelimitSequrityMiddleware` — note: typo in source, actual function name kept as-is)
+### Rate Limiting (`requireRatelimitSequrityMiddleware`)
 
 Applied to: `create`, `update` operations
 
@@ -112,34 +118,55 @@ Configuration:
 - **Limit:** 1 request per minute per user
 - **Mode:** LIVE (enforced)
 
-### Middleware Chain Example
+### Middleware Composition
 
-```
-create user request
-  → base (context + error types)
-  → standard security (WAF + bot detection)
-  → rate limit (1 req/min)
-  → handler (business logic)
+```typescript
+// tRPC middleware — same chain as before, different syntax
+publicProcedure
+    .use(requireStandardSequrityMiddleware) // throws TRPCError on violation
+    .use(requireRatelimitSequrityMiddleware)
+    .input(schema)
+    .mutation(handler)
 ```
 
 ---
 
 ## Client-Side Usage
 
-### TanStack Query Integration
+### TanStack Query Integration (via `trpc` proxy)
 
-oRPC automatically generates TanStack Query options:
+`lib/trpc.ts` exports a typed `trpc` proxy that mirrors the old oRPC interface:
 
 ```typescript
-// Query (read)
-const { data } = useQuery(orpc.user.list.queryOptions())
+import { trpc } from '@/lib/trpc'
+
+// Query (read) — for useSuspenseQuery / prefetchQuery
+const queryOpts = trpc.user.list.queryOptions()
+// { queryKey: [['trpc','user','list']], queryFn: () => ... }
 
 // Mutation (write)
+const mutOpts = trpc.user.create.mutationOptions()
+// { mutationFn: (data) => ... }
+
+// Stable cache key (for invalidation)
+const key = trpc.user.list.queryKey()
+```
+
+### Hooks in Client Components
+
+```typescript
+'use client'
+import { useMutation, useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
+import { trpc } from '@/lib/trpc'
+
+// Query
+const { data } = useSuspenseQuery(trpc.user.list.queryOptions())
+
+// Mutation
+const queryClient = useQueryClient()
 const mutation = useMutation({
-    ...orpc.user.create.mutationOptions(),
-    onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: orpc.user.list.queryKey() })
-    }
+    ...trpc.user.create.mutationOptions(),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: trpc.user.list.queryKey() }),
 })
 ```
 
@@ -147,72 +174,100 @@ const mutation = useMutation({
 
 ```typescript
 // Server Component
+import { trpc } from '@/lib/trpc'
+import { getQueryClient, HydrateClient } from '@/lib/query/hydration'
+
 const queryClient = getQueryClient()
-await queryClient.prefetchQuery(orpc.user.list.queryOptions())
-// Data is hydrated to client — no loading state
+await queryClient.prefetchQuery(trpc.user.list.queryOptions())
+// lib/trpc.server.ts sets globalThis.$trpcClient to a direct-call client
+// → no HTTP round-trip during SSR, identical to oRPC's pattern
+
+return (
+    <HydrateClient client={queryClient}>
+        <Suspense><UsersList /></Suspense>
+    </HydrateClient>
+)
 ```
 
 ---
 
-## Request/Response Schemas
+## Error Handling
 
-### User Schema (Output)
+tRPC errors use `TRPCError` with typed error codes:
 
 ```typescript
-{
-    _id: string,
-    name: string,
-    gender: string,
-    username: string,
-    email: string,
-    address: {
-        street: string,
-        suite: string,
-        city: string,
-        zipcode: string,
-        geo: { lat: string, lng: string }
+import { TRPCError } from '@trpc/server'
+
+throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' })
+throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Something went wrong' })
+throw new TRPCError({ code: 'FORBIDDEN', message: 'Access denied' })
+throw new TRPCError({ code: 'TOO_MANY_REQUESTS', message: 'Rate limited' })
+```
+
+---
+
+## Adding a New API Route
+
+1. Create the route file `app/(server)/router/<domain>.ts`
+2. Define a `router({ ... })` with typed procedures
+3. Register it in `app/(server)/router/index.ts` → `appRouter`
+4. Add entries to `lib/trpc.ts` → `trpc` proxy (queryOptions, mutationOptions, queryKey)
+5. The client is automatically typed — no code generation step
+
+```typescript
+// 1. Define in app/(server)/router/mission.ts
+export const missionRouter = router({
+    list: publicProcedure.query(async () => { /* ... */ }),
+    create: publicProcedure
+        .use(requireStandardSequrityMiddleware)
+        .input(missionSchema)
+        .mutation(async ({ input }) => { /* ... */ }),
+})
+
+// 2. Register in app/(server)/router/index.ts
+export const appRouter = router({
+    user: userRouter,
+    mission: missionRouter,
+})
+
+// 3. Extend lib/trpc.ts proxy
+mission: {
+    list: {
+        queryKey: () => [['trpc', 'mission', 'list']] as const,
+        queryOptions: () => ({ queryKey: ..., queryFn: () => trpcClient.mission.list.query() }),
     },
-    phone: string,
-    website: string,
-    company: {
-        name: string,
-        catchPhrase: string,
-        bs: string
+    create: {
+        mutationOptions: () => ({ mutationFn: (data) => trpcClient.mission.create.mutate(data) }),
     },
-    avatar: string  // Auto-generated DiceBear URL
 }
 ```
 
-### User Form Schema (Input for Create/Update)
+---
+
+## HTTP Handler
 
 ```typescript
-{
-    name: string (3-50 chars),
-    username: string (3-20 chars, alphanumeric + underscore),
-    email: string (valid email),
-    gender: string (min 4 chars),
-    address: {
-        street: string (min 2),
-        city: string (min 2),
-        suite: string (min 2),
-        zipcode: string (5-6 digits),
-        geo: { lat: string (number), lng: string (number) }
-    },
-    phone: string (7-20 chars, digits + special),
-    website: string,
-    company: {
-        name: string (min 2),
-        catchPhrase: string (min 2),
-        bs: string (min 2)
-    }
-}
+// app/(server)/rpc/[[...rest]]/route.ts
+import { fetchRequestHandler } from '@trpc/server/adapters/fetch'
+import { appRouter } from '@/app/(server)/router'
+
+const handler = (req: Request) =>
+    fetchRequestHandler({
+        endpoint: '/rpc',
+        req,
+        router: appRouter,
+        createContext: ({ req }) => ({ request: req }),
+        onError({ error }) { console.error('[tRPC error]', error) },
+    })
+
+export { handler as GET, handler as POST, handler as PUT, handler as DELETE, handler as PATCH }
 ```
 
 ---
 
 ## External API
 
-Currently using **CrudCrud** as a REST API:
+Currently using **CrudCrud** as a demo REST API (called from inside tRPC procedures):
 
 | Method | URL | Purpose |
 |---|---|---|
@@ -223,26 +278,3 @@ Currently using **CrudCrud** as a REST API:
 | DELETE | `https://crudcrud.com/api/{key}/users/{id}` | Delete user |
 
 > **Note:** In production, this will be replaced with the Antaris ATMOS backend at `NEXT_PUBLIC_BACKEND_BASE_URL`.
-
----
-
-## HTTP Handler
-
-The catch-all route handler at `app/(server)/rpc/[[...rest]]/route.ts` maps all HTTP methods to the oRPC handler:
-
-```typescript
-const handler = new RPCHandler(router, {
-    interceptors: [
-        onError((error) => console.error(error)),
-    ],
-})
-
-// Maps: GET, POST, PUT, PATCH, DELETE, HEAD → handleRequest
-async function handleRequest(request: Request) {
-    const { response } = await handler.handle(request, {
-        prefix: '/rpc',
-        context: { request },
-    })
-    return response ?? new Response('Not found', { status: 404 })
-}
-```

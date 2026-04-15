@@ -9,17 +9,17 @@ Full CRUD (Create, Read, Update, Delete) application for managing system users. 
 
 ```mermaid
 graph TD
-    A["/users page (Server Component)"] --> B["Prefetch user list via oRPC"]
+    A["/users page (Server Component)"] --> B["Prefetch user list via tRPC"]
     B --> C["HydrateClient boundary"]
     C --> D["UsersList (Client Component)"]
-    D --> E["useQuery(orpc.user.list)"]
+    D --> E["useQuery(trpc.user.list)"]
     E --> F["Render UserCard grid"]
     F --> G["Click edit → useUserModal.openUpdate()"]
     G --> H["UserModal opens"]
     H --> I["UserForm (react-hook-form + Zod)"]
-    I --> J["Submit → useMutation(orpc.user.update)"]
+    I --> J["Submit → useMutation(trpc.user.update)"]
     J --> K["Arcjet security check"]
-    K --> L["oRPC handler → PUT external API"]
+    K --> L["tRPC procedure → PUT external API"]
     L --> M["invalidateQueries → refetch list"]
 ```
 
@@ -40,7 +40,7 @@ graph TD
 | `features/users/components/create-user-button.tsx` | Button that triggers create modal |
 | `features/users/hooks/useUserModal.ts` | Zustand store for modal state |
 | `features/users/types/user-schema.ts` | Zod schema for user form validation |
-| `app/(server)/router/user.ts` | oRPC route definitions (server-side) |
+| `app/(server)/router/user.ts` | tRPC `userRouter` procedure definitions (server-side) |
 
 ---
 
@@ -50,30 +50,30 @@ graph TD
 ```typescript
 // app/users/page.tsx
 const queryClient = getQueryClient()
-await queryClient.prefetchQuery(orpc.user.list.queryOptions())
+await queryClient.prefetchQuery(trpc.user.list.queryOptions())
 ```
 
 ### Read (Client-side)
 ```typescript
 // features/users/components/users-list.tsx
-const { data } = useQuery(orpc.user.list.queryOptions())
+const { data } = useQuery(trpc.user.list.queryOptions())
 ```
 
 ### Create
 ```typescript
 useMutation({
-    ...orpc.user.create.mutationOptions(),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: orpc.user.list.queryKey() })
+    ...trpc.user.create.mutationOptions(),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: trpc.user.list.queryKey() })
 })
 ```
 
 ### Update
 ```typescript
 useMutation({
-    ...orpc.user.update.mutationOptions(),
+    ...trpc.user.update.mutationOptions(),
     onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: orpc.user.list.queryKey() })
-        queryClient.invalidateQueries({ queryKey: orpc.user.details.queryKey({ input: { userId } }) })
+        queryClient.invalidateQueries({ queryKey: trpc.user.list.queryKey() })
+        queryClient.invalidateQueries({ queryKey: trpc.user.details.queryKey({ input: { userId } }) })
     }
 })
 ```
@@ -81,8 +81,8 @@ useMutation({
 ### Delete
 ```typescript
 useMutation({
-    ...orpc.user.delete.mutationOptions(),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: orpc.user.list.queryKey() })
+    ...trpc.user.delete.mutationOptions(),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: trpc.user.list.queryKey() })
 })
 ```
 
@@ -91,8 +91,8 @@ useMutation({
 ## State Handling
 
 ### Server State (TanStack Query)
-- User list: cached with key `orpc.user.list.queryKey()`  
-- User details: cached with key `orpc.user.details.queryKey({ input: { userId } })`
+- User list: cached with key `trpc.user.list.queryKey()`  
+- User details: cached with key `trpc.user.details.queryKey({ input: { userId } })`
 - staleTime: 60 seconds
 
 ### UI State (Zustand — `useUserModal`)

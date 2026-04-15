@@ -1,10 +1,14 @@
 import z from 'zod'
-import { base } from '../middlewares/base'
+import { router, publicProcedure, TRPCError } from '../middlewares/base'
 import { userFormSchema } from '@/features/users/types/user-schema'
 import { requireStandardSequrityMiddleware } from '../middlewares/arcjet/standard'
 import { requireRatelimitSequrityMiddleware } from '../middlewares/arcjet/ratelimit'
 import { revalidatePath } from 'next/cache'
 import { getAccessToken } from '@/lib/auth/session'
+
+// ---------------------------------------------------------------------------
+// Schemas
+// ---------------------------------------------------------------------------
 
 const addressSchema = z.object({
     street: z.string(),
@@ -38,181 +42,109 @@ const userSchema = z.object({
 
 export type User = z.infer<typeof userSchema>
 
-export const listusers = base
-    .route({
-        method: 'GET',
-        path: '/users',
-        summary: 'List all users',
-        tags: ['user'],
-    })
-    .input(z.void())
-    .output(z.object({ success: z.boolean(), data: z.array(userSchema) }))
-    .handler(async () => {
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+const API_BASE = 'https://crudcrud.com/api/2edff70db4f5491fa99c84b95d12331f'
+
+function buildAvatar(user: Record<string, string>) {
+    const seed = encodeURIComponent(user.username || user.email || user.name)
+    return `https://api.dicebear.com/7.x/personas/svg?seed=${seed}&size=2048`
+}
+
+// ---------------------------------------------------------------------------
+// User router
+// ---------------------------------------------------------------------------
+
+export const userRouter = router({
+    list: publicProcedure.query(async () => {
         try {
-            const response = await fetch('https://crudcrud.com/api/f99a643319874c9fb7d66b9c2afbf422/users')
+            const response = await fetch(`${API_BASE}/users`)
             if (!response.ok) {
                 return {
                     success: false,
-                    data: []
+                    data: [] as User[],
+                    error: `API ${response.status} ${response.statusText}`,
                 }
             }
-            const users = await response.json()
+
+            const users: Record<string, string>[] = await response.json()
             return {
                 success: true,
-                data: users.map((user: any) => {
-                    const seed = encodeURIComponent(user.username || user.email || user.name)
-
-                    return userSchema.parse({
-                        ...user,
-                        avatar: `https://api.dicebear.com/7.x/personas/svg?seed=${seed}&size=2048`,
-                    })
-                })
+                data: users.map(u =>
+                    userSchema.parse({ ...u, avatar: buildAvatar(u) }),
+                ),
             }
-        } catch (error) {
-            return {
-                success: false,
-                data: []
-            }
+        } catch (err) {
+            const reason = err instanceof Error ? err.message : 'Unknown error'
+            return { success: false, data: [] as User[], error: reason }
         }
-    })
+    }),
 
-export const getuser = base
-    .route({
-        method: 'GET',
-        path: '/user/{userId}',
-        summary: 'Get user by ID',
-        tags: ['user'],
-    })
-    .input(z.object({ userId: z.string() }))
-    .output(userSchema)
-    .handler(async ({ input, errors }) => {
-        try {
-            const response = await fetch(`https://crudcrud.com/api/f99a643319874c9fb7d66b9c2afbf422/users/${input.userId}`)
+    details: publicProcedure
+        .input(z.object({ userId: z.string() }))
+        .query(async ({ input }) => {
+            const response = await fetch(`${API_BASE}/users/${input.userId}`)
             if (!response.ok) {
-                throw errors.INTERNAL_SERVER_ERROR({
-                    message: 'Error getting user',
-                })
+                throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' })
             }
+            const user: Record<string, string> = await response.json()
+            return userSchema.parse({ ...user, avatar: buildAvatar(user) })
+        }),
 
-            const user = await response.json()
-            const seed = encodeURIComponent(user.username || user.email || user.name)
-            return userSchema.parse({
-                ...user,
-                avatar: `https://api.dicebear.com/7.x/personas/svg?seed=${seed}&size=2048`,
-            })
-        } catch (error) {
-            throw errors.INTERNAL_SERVER_ERROR({
-                message: 'Error getting user',
-            })
-        }
-    })
-
-
-export const createuser = base
-    .use(requireStandardSequrityMiddleware)
-    .use(requireRatelimitSequrityMiddleware)
-    .route({
-        method: 'POST',
-        path: '/user',
-        summary: 'Create user',
-        tags: ['user'],
-    })
-    .input(userFormSchema)
-    .output(z.void())
-    .handler(async ({ input, errors }) => {
-        try {
+    create: publicProcedure
+        .use(requireStandardSequrityMiddleware)
+        .use(requireRatelimitSequrityMiddleware)
+        .input(userFormSchema)
+        .mutation(async ({ input }) => {
             const token = await getAccessToken()
-            console.log("✅ Create User - Extracted Token:", token)
-            
-            const response = await fetch('https://crudcrud.com/api/f99a643319874c9fb7d66b9c2afbf422/users', {
+            const response = await fetch(`${API_BASE}/users`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+                    ...(token ? { Authorization: `Bearer ${token}` } : {}),
                 },
                 body: JSON.stringify(input),
             })
             if (!response.ok) {
-                throw errors.INTERNAL_SERVER_ERROR({
-                    message: 'Error creating user',
-                })
+                throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Error creating user' })
             }
-        } catch (error) {
-            throw errors.INTERNAL_SERVER_ERROR({
-                message: 'Error creating user',
-            })
-        }
-    })
+        }),
 
-export const updateuser = base
-    .use(requireStandardSequrityMiddleware)
-    .use(requireRatelimitSequrityMiddleware)
-    .route({
-        method: 'PUT',
-        path: '/user/{userId}',
-        summary: 'Update user by ID',
-        tags: ['user'],
-    })
-    .input(z.object({ userId: z.string(), data: userFormSchema }))
-    .output(z.void())
-    .handler(async ({ input, errors }) => {
-        try {
+    update: publicProcedure
+        .use(requireStandardSequrityMiddleware)
+        .use(requireRatelimitSequrityMiddleware)
+        .input(z.object({ userId: z.string(), data: userFormSchema }))
+        .mutation(async ({ input }) => {
             const token = await getAccessToken()
-            console.log("✅ Update User - Extracted Token:", token)
-
-            const response = await fetch(`https://crudcrud.com/api/f99a643319874c9fb7d66b9c2afbf422/users/${input.userId}`, {
+            const response = await fetch(`${API_BASE}/users/${input.userId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+                    ...(token ? { Authorization: `Bearer ${token}` } : {}),
                 },
                 body: JSON.stringify(input.data),
             })
             if (!response.ok) {
-                throw errors.INTERNAL_SERVER_ERROR({
-                    message: 'Error updating user',
-                })
+                throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Error updating user' })
             }
-
             revalidatePath(`/users/${input.userId}`)
-        } catch (error) {
-            throw errors.INTERNAL_SERVER_ERROR({
-                message: 'Error updating user',
-            })
-        }
-    })
+        }),
 
-export const deleteuser = base
-    .use(requireStandardSequrityMiddleware)
-    .route({
-        method: 'DELETE',
-        path: '/user/{userId}',
-        summary: 'Delete user by ID',
-        tags: ['user'],
-    })
-    .input(z.object({ userId: z.string() }))
-    .output(z.void())
-    .handler(async ({ input, errors }) => {
-        try {
+    delete: publicProcedure
+        .use(requireStandardSequrityMiddleware)
+        .input(z.object({ userId: z.string() }))
+        .mutation(async ({ input }) => {
             const token = await getAccessToken()
-            console.log("✅ Delete User - Extracted Token:", token)
-
-            const response = await fetch(`https://crudcrud.com/api/f99a643319874c9fb7d66b9c2afbf422/users/${input.userId}`, {
+            const response = await fetch(`${API_BASE}/users/${input.userId}`, {
                 method: 'DELETE',
                 headers: {
-                    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-                }
+                    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                },
             })
             if (!response.ok) {
-                throw errors.INTERNAL_SERVER_ERROR({
-                    message: 'Error deleting user',
-                })
+                throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Error deleting user' })
             }
-        } catch (error) {
-            throw errors.INTERNAL_SERVER_ERROR({
-                message: 'Error deleting user',
-            })
-        }
-    })
-
-
+        }),
+})

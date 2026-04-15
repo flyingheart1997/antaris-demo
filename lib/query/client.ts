@@ -1,29 +1,17 @@
 import { defaultShouldDehydrateQuery, QueryClient } from '@tanstack/react-query'
-import { serializer } from '../serializer'
 
 export function createQueryClient() {
     return new QueryClient({
         defaultOptions: {
             queries: {
-                queryKeyHashFn(queryKey) {
-                    const [json, meta] = serializer.serialize(queryKey)
-                    return JSON.stringify({ json, meta })
-                },
-                // refetchOnWindowFocus: true, // Default true hi hota hai, par yahan confirm kar sakte hain
-                staleTime: 60 * 1000, // > 0 to prevent immediate refetching on mount
+                // Prevents immediate refetch on mount for SSR-prefetched data
+                staleTime: 60 * 1000,
             },
             dehydrate: {
-                shouldDehydrateQuery: query => defaultShouldDehydrateQuery(query) || query.state.status === 'pending',
-                serializeData(data) {
-                    const [json, meta] = serializer.serialize(data)
-                    return { json, meta }
-                },
+                // Also dehydrate pending (in-flight) queries so Suspense boundaries hydrate correctly
+                shouldDehydrateQuery: query =>
+                    defaultShouldDehydrateQuery(query) || query.state.status === 'pending',
             },
-            hydrate: {
-                deserializeData(data) {
-                    return serializer.deserialize(data.json, data.meta)
-                }
-            },
-        }
+        },
     })
 }

@@ -245,8 +245,16 @@ In addition to custom icons, the codebase uses:
 
 | Library | Import | Usage |
 |---|---|---|
-| Lucide | `import { SomeIcon } from 'lucide-react'` | General UI icons (Mail, Globe, Phone, etc.) |
-| HugeIcons | `import { Cancel01Icon } from '@hugeicons/core-free-icons'` | Specific UI icons (close button, etc.) |
+| **Lucide** | `import { SomeIcon } from 'lucide-react'` | General UI icons — **primary third-party library** |
 | Tabler | `import { ... } from '@tabler/icons-react'` | Available, minimal usage |
 
-**Rule:** Use custom icons from `@/icons` for satellite/domain-specific concepts. Use Lucide for generic UI actions (close, edit, delete, settings, etc.).
+**Rule:** Use custom icons from `@/icons` for satellite/domain-specific concepts. Use **Lucide** for all generic UI actions (X/close, ChevronRight, Edit, Trash, Info, AlertTriangle, Loader2, etc.).
+
+> HugeIcons (`@hugeicons/react`, `@hugeicons/core-free-icons`) has been **removed**. All former HugeIcons usages have been replaced with Lucide equivalents:
+> - `Cancel01Icon` → `X`
+> - `ArrowRight01Icon` → `ChevronRight`
+> - `CheckmarkCircle02Icon` → `CheckCircle2`
+> - `InformationCircleIcon` → `Info`
+> - `Alert02Icon` → `AlertTriangle`
+> - `MultiplicationSignCircleIcon` → `XCircle`
+> - `Loading03Icon` → `Loader2`

@@ -3,7 +3,7 @@
 import { useMemo } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { orpc } from '@/lib/orpc'
+import { trpc } from '@/lib/trpc'
 import { toast } from 'sonner'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Avatar, AvatarImage, AvatarFallback, AvatarIndicator } from '@/components/ui/avatar'
@@ -21,14 +21,14 @@ const UserDetails = () => {
     const queryClient = useQueryClient()
 
     const { data: user, isLoading, isError } = useQuery(
-        orpc.user.details.queryOptions({ input: { userId: userId as string }, retry: false })
+        trpc.user.details.queryOptions({ input: { userId: userId as string }, retry: false })
     )
 
     const deleteUserMutation = useMutation({
-        ...orpc.user?.delete.mutationOptions(),
+        ...trpc.user.delete.mutationOptions(),
         onSuccess: async () => {
             await queryClient.invalidateQueries({
-                queryKey: orpc.user?.list.queryKey(),
+                queryKey: trpc.user.list.queryKey(),
             })
             toast.success('Operator terminated successfully')
             router.push("/users")

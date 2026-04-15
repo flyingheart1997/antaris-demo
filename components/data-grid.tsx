@@ -7,7 +7,7 @@ import { LucideIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface DataGridProps<T> {
-    queryOptions: UseSuspenseQueryOptions<any, any, { success: boolean, data: T[] }>
+    queryOptions: UseSuspenseQueryOptions<any, any, { success: boolean; data: T[]; error?: string }>
     renderItem: (item: T) => React.ReactNode
     emptyProps: {
         icon: LucideIcon
@@ -25,17 +25,14 @@ export function DataGrid<T>({
     emptyProps,
     gridClassName
 }: DataGridProps<T>) {
-    // Use TanStack Query's suspense feature
     const { data: response } = useSuspenseQuery(queryOptions)
-    
-    // Check for success flag (oRPC pattern)
+
     if (!response.success) {
-        throw new Error("Failed to load data")
+        throw new Error(response.error ?? 'Failed to load data')
     }
 
     const items = response.data
 
-    // Handle Empty State
     if (!items || items.length === 0) {
         return <EmptyState {...emptyProps} />
     }

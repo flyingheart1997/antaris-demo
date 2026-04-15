@@ -1,10 +1,22 @@
-import { os } from "@orpc/server";
+import { initTRPC, TRPCError } from '@trpc/server'
 
-export const base = os.$context<{ request: Request }>().errors({
-    RATE_LIMIT_EXCEEDED: { message: "You have been rate limited" },
-    FORBIDDEN: { message: "You do not have access to this resource" },
-    NOT_FOUND: { message: "The requested resource was not found" },
-    BAD_REQUEST: { message: "The request was invalid" },
-    INTERNAL_SERVER_ERROR: { message: "Something went wrong on the server" },
-    UNAUTHORIZED: { message: "You are not authorized to access this resource" },
-})
+/**
+ * Request context passed to every tRPC procedure.
+ * The HTTP handler injects the raw Request object so that
+ * security middlewares (Arcjet) can inspect headers/IP.
+ */
+export type Context = {
+    request: Request
+}
+
+const t = initTRPC.context<Context>().create()
+
+export const router = t.router
+export const publicProcedure = t.procedure
+export const middleware = t.middleware
+export const createCallerFactory = t.createCallerFactory
+
+/**
+ * Re-export TRPCError so domain modules don't need a direct import from @trpc/server.
+ */
+export { TRPCError }

@@ -7,13 +7,12 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
-import { HugeiconsIcon } from "@hugeicons/react"
-import { Cancel01Icon } from "@hugeicons/core-free-icons"
+import { X } from "lucide-react"
 import { useUserModal } from "../hooks/useUserModal"
 import { UserForm } from "./user-form"
 import { userFormSchema, UserType } from "../types/user-schema"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { orpc } from "@/lib/orpc"
+import { trpc } from "@/lib/trpc"
 import { toast } from "sonner"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -30,10 +29,10 @@ const UserModal = () => {
     })
 
     const createUserMutation = useMutation({
-        ...orpc.user.create.mutationOptions(),
+        ...trpc.user.create.mutationOptions(),
         onSuccess: async () => {
             await queryClient.invalidateQueries({
-                queryKey: orpc.user.list.queryKey(),
+                queryKey: trpc.user.list.queryKey(),
             })
             form.reset()
             toast.success('User created successfully')
@@ -45,13 +44,13 @@ const UserModal = () => {
     })
 
     const updateUserMutation = useMutation({
-        ...orpc.user.update.mutationOptions(),
+        ...trpc.user.update.mutationOptions(),
         onSuccess: async () => {
             await queryClient.invalidateQueries({
-                queryKey: orpc.user.list.queryKey()
+                queryKey: trpc.user.list.queryKey()
             })
             await queryClient.invalidateQueries({
-                queryKey: orpc.user.details.queryKey({ input: { userId: userId! } }),
+                queryKey: trpc.user.details.queryKey({ input: { userId: userId! } }),
                 exact: true
             })
 
@@ -89,7 +88,7 @@ const UserModal = () => {
                     </DialogTitle>
                     <DialogClose asChild className="shrink-0">
                         <IconButton variant="ghost" size="sm">
-                            <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} className="text-white" />
+                            <X strokeWidth={2} className="text-white" />
                         </IconButton>
                     </DialogClose>
                 </DialogHeader>

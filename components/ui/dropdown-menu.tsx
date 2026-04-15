@@ -2,11 +2,9 @@
 
 import * as React from "react"
 import { DropdownMenu as DropdownMenuPrimitive } from "radix-ui"
-import { Check } from "lucide-react"
+import { Check, ChevronRight } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { HugeiconsIcon } from "@hugeicons/react"
-import { ArrowRight01Icon } from "@hugeicons/core-free-icons"
 
 const DropdownMenuContext = React.createContext<{
   size?: "md" | "lg"
@@ -155,10 +153,7 @@ function DropdownMenuItem({
       <span className="flex-1 truncate">{children}</span>
       {hotkey && <DropdownMenuShortcut>{hotkey}</DropdownMenuShortcut>}
       {subTrigger && (
-        <HugeiconsIcon
-          icon={ArrowRight01Icon}
-          className="ml-auto size-14 shrink-0 opacity-60"
-        />
+        <ChevronRight className="ml-auto size-14 shrink-0 opacity-60" />
       )}
     </DropdownMenuPrimitive.Item>
   )
@@ -337,10 +332,7 @@ function DropdownMenuSubTrigger({
         </span>
       )}
       <span className="flex-1 truncate">{children}</span>
-      <HugeiconsIcon
-        icon={ArrowRight01Icon}
-        className="ml-auto size-14 shrink-0 opacity-60"
-      />
+      <ChevronRight className="ml-auto size-14 shrink-0 opacity-60" />
     </DropdownMenuPrimitive.SubTrigger>
   )
 }

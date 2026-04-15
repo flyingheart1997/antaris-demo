@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useUserModal } from '../hooks/useUserModal'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { orpc } from '@/lib/orpc'
+import { trpc } from '@/lib/trpc'
 import { toast } from 'sonner'
 
 const UserCard = ({ user }: { user: User }) => {
@@ -25,10 +25,10 @@ const UserCard = ({ user }: { user: User }) => {
     const queryClient = useQueryClient()
 
     const deleteUserMutation = useMutation({
-        ...orpc.user.delete.mutationOptions(),
+        ...trpc.user.delete.mutationOptions(),
         onSuccess: async () => {
             await queryClient.invalidateQueries({
-                queryKey: orpc.user.list.queryKey(),
+                queryKey: trpc.user.list.queryKey(),
             })
             toast.success('User deleted successfully')
         },

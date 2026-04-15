@@ -336,8 +336,8 @@ HTTP PUT /rpc/user/{userId}
     │  → updateuser handler → fetch to CrudCrud → revalidatePath()
     ▼
 onSuccess callback
-    │  queryClient.invalidateQueries(orpc.user.list.queryKey())
-    │  queryClient.invalidateQueries(orpc.user.details.queryKey({ input: { userId } }))
+    │  queryClient.invalidateQueries(trpc.user.list.queryKey())
+    │  queryClient.invalidateQueries(trpc.user.details.queryKey({ input: { userId } }))
     │  form.reset()
     │  toast.success('User updated successfully')
     │  close() → sets open=false in store
@@ -370,7 +370,7 @@ useEffect(() => { fetch('/rpc/users').then(setUsers) }, [])
 const { data: token } = useQuery(['token'], getToken)
 
 // ✅ GOOD — server data in TanStack Query
-const { data } = useSuspenseQuery(orpc.user.list.queryOptions())
+const { data } = useSuspenseQuery(trpc.user.list.queryOptions())
 
 // ✅ GOOD — auth token in Zustand
 const { token } = useAuth()

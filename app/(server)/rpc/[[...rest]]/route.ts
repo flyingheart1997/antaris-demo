@@ -1,27 +1,20 @@
-import { RPCHandler } from '@orpc/server/fetch'
-import { onError } from '@orpc/server'
-import { router } from '@/app/(server)/router'
+import { fetchRequestHandler } from '@trpc/server/adapters/fetch'
+import { appRouter } from '@/app/(server)/router'
 
-const handler = new RPCHandler(router, {
-    interceptors: [
-        onError((error) => {
-            console.error(error)
-        }),
-    ],
-})
-
-async function handleRequest(request: Request) {
-    const { response } = await handler.handle(request, {
-        prefix: '/rpc',
-        context: { request }, // Provide initial context if needed
+const handler = (req: Request) =>
+    fetchRequestHandler({
+        endpoint: '/rpc',
+        req,
+        router: appRouter,
+        createContext: ({ req }) => ({ request: req }),
+        onError({ error }) {
+            console.error('[tRPC error]', error)
+        },
     })
 
-    return response ?? new Response('Not found', { status: 404 })
-}
-
-export const HEAD = handleRequest
-export const GET = handleRequest
-export const POST = handleRequest
-export const PUT = handleRequest
-export const PATCH = handleRequest
-export const DELETE = handleRequest
+export const GET = handler
+export const POST = handler
+export const PUT = handler
+export const PATCH = handler
+export const DELETE = handler
+export const HEAD = handler

@@ -91,7 +91,7 @@ export { Example, exampleVariants }
 ```tsx
 // Prefetch data on the server, hydrate to client
 const queryClient = getQueryClient()
-await queryClient.prefetchQuery(orpc.user.list.queryOptions())
+await queryClient.prefetchQuery(trpc.user.list.queryOptions())
 
 return (
   <HydrateClient client={queryClient}>
@@ -103,15 +103,15 @@ return (
 ### Client Components
 ```tsx
 // Read from hydrated cache — no loading flicker
-const { data } = useQuery(orpc.user.list.queryOptions())
+const { data } = useQuery(trpc.user.list.queryOptions())
 ```
 
 ### Mutations
 ```tsx
 const mutation = useMutation({
-  ...orpc.user.create.mutationOptions(),
+  ...trpc.user.create.mutationOptions(),
   onSuccess: () => {
-    queryClient.invalidateQueries({ queryKey: orpc.user.list.queryKey() })
+    queryClient.invalidateQueries({ queryKey: trpc.user.list.queryKey() })
   },
 })
 ```

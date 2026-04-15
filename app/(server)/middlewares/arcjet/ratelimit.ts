@@ -1,31 +1,32 @@
-import arcjet, { slidingWindow } from "@/lib/arcjet"
-import { base } from "../base"
+import arcjet, { slidingWindow } from '@/lib/arcjet'
+import { middleware, TRPCError } from '../base'
 
-const buildRatelimitAj = () => (
+const buildRatelimitAj = () =>
     arcjet.withRule(
         slidingWindow({
             mode: 'LIVE',
             interval: '1m',
-            max: 1
-        })
+            max: 1,
+        }),
     )
-)
 
-export const requireRatelimitSequrityMiddleware = base
-    .$context<{ request: Request }>()
-    .middleware(async ({ context, next, errors }) => {
-        const decisions = await buildRatelimitAj().protect(context.request, {
-            userId: "use676fuyg9r123764897hj87tig", // This is a unique identifier for the user
-        })
+export const requireRatelimitSequrityMiddleware = middleware(async ({ ctx, next }) => {
+    const decisions = await buildRatelimitAj().protect(ctx.request, {
+        userId: 'use676fuyg9r123764897hj87tig',
+    })
 
-        if (decisions.isDenied()) {
-            if (decisions.reason.isRateLimit()) {
-                throw errors.RATE_LIMIT_EXCEEDED()
-            }
-            throw errors.FORBIDDEN({
-                message: 'Request blocked by security policy',
+    if (decisions.isDenied()) {
+        if (decisions.reason.isRateLimit()) {
+            throw new TRPCError({
+                code: 'TOO_MANY_REQUESTS',
+                message: 'You have been rate limited',
             })
         }
+        throw new TRPCError({
+            code: 'FORBIDDEN',
+            message: 'Request blocked by security policy',
+        })
+    }
 
-        return next()
-    })
+    return next()
+})

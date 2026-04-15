@@ -120,12 +120,16 @@ The base HTTP URL for the ATMOS backend REST API. Currently the app uses CrudCru
 
 | | |
 |---|---|
-| **Required** | No (WebSocket not implemented yet) |
-| **Prefix** | `NEXT_PUBLIC_` |
-| **Where used** | Reserved for real-time telemetry/mission data streams |
-| **Format** | `wss://` URL |
+| **Required** | No (required only when using WebSocket features) |
+| **Prefix** | `NEXT_PUBLIC_` (browser-safe — not a secret) |
+| **Where used** | `lib/websocket.ts` → `WebSocketManager._buildUrl()` |
+| **Format** | `wss://` URL, must end with `/` |
+| **Staging value** | `wss://app-flatsat.antaris-staging.cloud/ws/` |
 
-WebSocket endpoint for real-time satellite data. Not currently consumed by any code — reserved for future telemetry features.
+WebSocket base URL for real-time satellite data (telemetry, mission events, command feedback).
+Endpoint paths are appended per connection: `wss://…/ws/<endpoint>/`.
+
+See [`docs/modules/websocket.md`](../modules/websocket.md) for the full WebSocket module documentation.
 
 ---
 

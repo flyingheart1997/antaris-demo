@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 import { UsersList } from '@/features/users'
-import { orpc } from '@/lib/orpc'
+import { trpc } from '@/lib/trpc'
 import { getQueryClient, HydrateClient } from '@/lib/query/hydration'
 import { CardGridSkeleton } from '@/components/skeletons'
 import { PageShell } from '@/components/page-shell'
@@ -10,7 +10,7 @@ const Users = async () => {
     const queryClient = getQueryClient()
 
     // Prefetch on the server for better initial performance
-    await queryClient.prefetchQuery(orpc.user.list.queryOptions())
+    await queryClient.prefetchQuery(trpc.user.list.queryOptions())
 
     // const { success, data: users } = await queryClient.fetchQuery(orpc.user.list.queryOptions())
 

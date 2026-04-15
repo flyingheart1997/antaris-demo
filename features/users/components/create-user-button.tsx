@@ -13,8 +13,8 @@ const CreateUserButton = () => {
             size="lg"
             className='rounded-2xl px-10 font-bold text-base shadow-xl shadow-accent/20 hover:shadow-accent/30 transition-all uppercase tracking-widest'
             onClick={openCreate}
-            leadingIcon={<Plus />}
         >
+            <Plus />
             Provision Operator
         </Button>
     )

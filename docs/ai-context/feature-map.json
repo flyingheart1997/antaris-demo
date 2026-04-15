@@ -55,7 +55,7 @@
       ]
     },
     "authentication": {
-      "description": "Keycloak OAuth 2.0 + UMA authentication with httpOnly cookie session management",
+      "description": "Keycloak OAuth 2.0 + UMA authentication with httpOnly cookie session management and silent token refresh",
       "files": {
         "api-routes": [
           "app/api/auth/[...route]/route.ts"
@@ -67,23 +67,25 @@
         "store": "store/auth-store.ts",
         "provider": "providers/auth-provider.tsx",
         "hook": "hooks/use-auth.ts",
-        "middleware": "proxy.ts"
+        "middleware": "middleware.ts",
+        "route-guard": "proxy.ts"
       },
-      "flow": "Keycloak login → OAuth code → token exchange → UMA ticket → httpOnly cookies → Zustand hydration"
+      "flow": "Keycloak login → OAuth code → token exchange → UMA ticket → httpOnly cookies → middleware refresh → Zustand hydration"
     },
-    "orpc-api": {
-      "description": "Type-safe RPC API layer with server/client isomorphic access",
+    "trpc-api": {
+      "description": "Type-safe RPC API layer built on tRPC v11 with server/client isomorphic access",
       "files": {
         "server": [
           "app/(server)/router/index.ts",
           "app/(server)/router/user.ts",
           "app/(server)/middlewares/base.ts",
+          "app/(server)/middlewares/arcjet/standard.ts",
+          "app/(server)/middlewares/arcjet/ratelimit.ts",
           "app/(server)/rpc/[[...rest]]/route.ts"
         ],
         "client": [
-          "lib/orpc.ts",
-          "lib/orpc.server.ts",
-          "lib/serializer.ts"
+          "lib/trpc.ts",
+          "lib/trpc.server.ts"
         ],
         "query": [
           "lib/query/client.ts",
@@ -100,7 +102,17 @@
         ],
         "mission": [],
         "_mission_note": "Placeholder — satellite mission operations. Empty until ATMOS mission API is integrated."
-      }
+      },
+      "doc": "docs/modules/trpc-api.md"
+    },
+    "websocket": {
+      "description": "WebSocket client with auto-reconnect, auth token injection, and typed message handling",
+      "files": {
+        "lib": "lib/websocket.ts",
+        "hook": "hooks/use-websocket.ts"
+      },
+      "env": "NEXT_PUBLIC_WEBSOCKET_BACKEND_BASE_URL",
+      "doc": "docs/modules/websocket.md"
     },
     "component-docs": {
       "description": "Interactive component documentation portal with live previews, props tables, and code examples",
@@ -141,7 +153,7 @@
       }
     },
     "catalog": {
-      "description": "Satellite component catalog — browse and select hardware for a mission. UI-only, mock data, no oRPC routes yet.",
+      "description": "Satellite component catalog — browse and select hardware for a mission. UI-only, mock data, no tRPC routes yet.",
       "files": {
         "pages": [
           "app/(antaris)/catalog/page.tsx",
@@ -165,7 +177,7 @@
         "CatalogStats"
       ],
       "doc": "docs/features/catalog.md",
-      "_note": "Backend routes (oRPC) not yet implemented — uses static mock data"
+      "_note": "Backend routes (tRPC) not yet implemented — uses static mock data"
     },
     "design-system": {
       "description": "Figma-synced design tokens and 37 UI components",
@@ -175,7 +187,7 @@
           "styles/src/antaris-theme.css",
           "styles/src/tokens.generated.ts",
           "styles/src/fonts.generated.tsx",
-          "styles/build.js"
+          "styles/sd.config.mjs"
         ],
         "figma-source": "styles/figma/",
         "globals": "app/globals.css",
@@ -186,66 +198,24 @@
         ]
       },
       "component-list": [
-        "accordion",
-        "alert-dialog",
-        "animated-group",
-        "avatar",
-        "badge",
-        "button",
-        "card",
-        "checkbox",
-        "collapsible",
-        "drawer",
-        "dialog",
-        "dropdown-menu",
-        "field",
-        "form",
-        "frame",
-        "icon-button",
-        "input-group",
-        "input",
-        "kbd",
-        "label",
-        "radio-group",
-        "resizable",
-        "scroll-area",
-        "select",
-        "separator",
-        "sheet",
-        "field",
-        "input-range",
-        "sidebar",
-        "skeleton",
-        "sonner",
-        "spinner",
-        "table",
-        "tabs",
-        "text-effect",
-        "text",
-        "textarea",
-        "toaster",
-        "tooltip"
+        "accordion", "alert-dialog", "animated-group", "avatar", "badge",
+        "button", "card", "checkbox", "collapsible", "drawer", "dialog",
+        "dropdown-menu", "field", "form", "frame", "icon-button",
+        "input-group", "input", "kbd", "label", "radio-group", "resizable",
+        "scroll-area", "select", "separator", "sheet", "input-range",
+        "sidebar", "skeleton", "sonner", "spinner", "table", "tabs",
+        "text-effect", "text", "textarea", "toaster", "tooltip"
       ]
     },
     "component-previews": {
       "description": "Interactive preview pages for each design system component",
       "files": {
         "pages": [
-          "app/preview/button/",
-          "app/preview/card/",
-          "app/preview/checkbox/",
-          "app/preview/drawer/",
-          "app/preview/custom-text/",
-          "app/preview/input/",
-          "app/preview/radio/",
-          "app/preview/separator-test/",
-          "app/preview/side-nav/",
-          "app/preview/sidebar-test/",
-          "app/preview/tabs/",
-          "app/preview/icon-button/",
-          "app/preview/input-range/",
-          "app/preview/field/",
-          "app/preview/sheet/",
+          "app/preview/button/", "app/preview/card/", "app/preview/checkbox/",
+          "app/preview/drawer/", "app/preview/custom-text/", "app/preview/input/",
+          "app/preview/radio/", "app/preview/separator-test/", "app/preview/side-nav/",
+          "app/preview/sidebar-test/", "app/preview/tabs/", "app/preview/icon-button/",
+          "app/preview/input-range/", "app/preview/field/", "app/preview/sheet/",
           "app/preview/accordion/"
         ]
       }
@@ -278,12 +248,16 @@
       ]
     },
     "icons": {
-      "description": "Custom SVG icon system with build pipeline",
+      "description": "Custom SVG icon system with build pipeline. Lucide for generic UI icons.",
       "files": {
         "source": "icons/svg/",
         "generated": "icons/src/",
         "build": "icons/build.js",
         "barrel": "icons/index.ts"
+      },
+      "third-party": {
+        "lucide-react": "General UI icons (primary third-party library)",
+        "@tabler/icons-react": "Available, minimal usage"
       }
     },
     "splash-screen": {

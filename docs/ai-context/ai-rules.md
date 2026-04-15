@@ -43,8 +43,8 @@ After identifying the task type, read the relevant docs:
 → Read `docs/features/design-system.md` — token reference, known typos, do/don't patterns
 
 **If touching API routes or data fetching:**
-→ Read `docs/modules/orpc-server.md` — route definition pattern, middleware chain
-→ Read `docs/modules/orpc-client-tanstack.md` — how queries/mutations work on client
+→ Read `docs/modules/trpc-api.md` — procedure definition pattern, middleware chain, client usage
+→ Read `docs/architecture/api-architecture.md` — full endpoint table and security middleware stack
 
 **If touching state (Zustand stores, modal logic):**
 → Read `docs/modules/state-management.md` — which store owns what, store/TanStack Query boundary
@@ -82,7 +82,7 @@ A "new feature" = new page, new domain module, new major capability.
 
 **Before writing code, verify:**
 - [ ] Does a similar feature already exist in `features/`? Check `feature-map.json`.
-- [ ] Does the feature need a new oRPC route? Check `app/(server)/router/index.ts` for the namespace.
+- [ ] Does the feature need a new tRPC route? Check `app/(server)/router/index.ts` for the namespace.
 - [ ] Does the feature need a new Zustand store or can it reuse `useUserModal` pattern?
 - [ ] Does the feature need new UI components or can it use existing `components/ui/`?
 
@@ -91,27 +91,28 @@ A "new feature" = new page, new domain module, new major capability.
 features/your-feature/
 ├── index.ts                  ← barrel exports, first file you create
 ├── components/
-│   ├── your-list.tsx         ← DataGrid + orpc query
+│   ├── your-list.tsx         ← DataGrid + trpc query
 │   ├── your-card.tsx         ← single item display
 │   ├── your-form.tsx         ← React Hook Form + Zod
 │   └── your-modal.tsx        ← Dialog + useMutation
 ├── hooks/
 │   └── useYourModal.ts       ← Zustand store for modal (open/mode/data)
 └── types/
-    └── your-schema.ts        ← Zod schema (imported by BOTH server route AND client form)
+    └── your-schema.ts        ← Zod schema (imported by BOTH tRPC procedure AND client form)
 ```
 
-**oRPC route structure:**
+**tRPC route structure:**
 ```
-app/(server)/router/your-domain.ts   ← handlers
-app/(server)/router/index.ts         ← register: your: { list, create, update, delete }
+app/(server)/router/your-domain.ts   ← procedures (router export)
+app/(server)/router/index.ts         ← register in appRouter: your: yourRouter
+lib/trpc.ts                          ← add queryOptions/mutationOptions/queryKey to trpc proxy
 ```
 
 **After writing code:**
 - [ ] Update `docs/ai-context/feature-map.json` — add new feature entry
 - [ ] Create `docs/features/your-feature.md` — document the feature
 - [ ] Update `docs/ai-context/folder-structure.md` if new directories added
-- [ ] Update `docs/modules/orpc-api.md` if new routes added
+- [ ] Update `docs/modules/trpc-api.md` if new routes added
 
 ---
 
@@ -176,43 +177,50 @@ className={cn("base-class", isActive && "active-class", className)}
 
 ### Playbook D: API / Data Layer Change
 
-Changes to oRPC routes, handlers, or data fetching logic.
+Changes to tRPC procedures, handlers, or data fetching logic.
 
 **Pre-flight:** Run mandatory pre-flight Phase 1 + Phase 2 (API section).
 
-**Before writing any route or query change:**
-- [ ] Read `docs/modules/orpc-server.md` in full — understand the exact chain
-- [ ] Read `docs/modules/orpc-client-tanstack.md` — understand how the client consumes this route
-- [ ] Check the existing route in `app/(server)/router/` — read the full handler
+**Before writing any procedure or query change:**
+- [ ] Read `docs/modules/trpc-api.md` in full — understand the exact procedure pattern
+- [ ] Read `docs/architecture/api-architecture.md` — understand how the client consumes this route
+- [ ] Check the existing router in `app/(server)/router/` — read the full handler
 - [ ] Check if security middleware is required — ALL write operations (create/update/delete) need Arcjet
 
 **Security middleware rules (HARD — no exceptions):**
 ```typescript
-// ✅ Correct for write operations
-export const createItem = base
-    .use(requireStandardSequrityMiddleware)    // WAF + bot detection
-    .use(requireRatelimitSequrityMiddleware)   // rate limit
-    .route(...)
+// ✅ Correct for write operations (create/update)
+export const yourRouter = router({
+    create: publicProcedure
+        .use(requireStandardSequrityMiddleware)    // WAF + bot detection
+        .use(requireRatelimitSequrityMiddleware)   // rate limit
+        .input(schema)
+        .mutation(async ({ input }) => { ... }),
 
-// ✅ Correct for delete
-export const deleteItem = base
-    .use(requireStandardSequrityMiddleware)    // WAF + bot only (no rate limit on delete)
-    .route(...)
+    // ✅ Correct for delete (no rate limit)
+    delete: publicProcedure
+        .use(requireStandardSequrityMiddleware)
+        .input(z.object({ id: z.string() }))
+        .mutation(async ({ input }) => { ... }),
 
-// ❌ NEVER — write operation without security middleware
-export const createItem = base
-    .route(...)   // missing middleware — this is a security hole
+    // ❌ NEVER — write operation without security middleware
+    create: publicProcedure
+        .input(schema)
+        .mutation(...)  // missing middleware — this is a security hole
+})
 ```
 
 **Query key rules:**
 - After any mutation → invalidate ALL affected query keys
-- Use `orpc.namespace.operation.queryKey()` — never hardcode query key arrays
+- Use `trpc.namespace.operation.queryKey()` — never hardcode query key arrays
 - If update changes a list item AND a detail view → invalidate BOTH
+- When adding new procedures: extend the `trpc` proxy in `lib/trpc.ts`
 
 **After changing:**
 - [ ] Update `docs/architecture/api-architecture.md` if routes changed
-- [ ] Update `docs/ai-context/feature-map.json` → `orpc-api.namespaces`
-- [ ] Update `docs/modules/orpc-api.md` if new routes added
+- [ ] Update `docs/ai-context/feature-map.json` → `trpc-api.namespaces`
+- [ ] Update `docs/modules/trpc-api.md` if new procedures added
+- [ ] Extend `trpc` proxy in `lib/trpc.ts` with matching `queryOptions`/`mutationOptions`/`queryKey`
 
 ---
 
@@ -234,7 +242,7 @@ const useUserModal = create(...)    // open, mode, form data for modal
 const useAuthStore = create(...)    // token, isLoading — hydrated from server
 
 // ✅ TanStack Query — API data
-const { data } = useQuery(orpc.user.list.queryOptions())
+const { data } = useQuery(trpc.user.list.queryOptions())
 
 // ❌ Never — storing API response in Zustand
 const useUsersStore = create((set) => ({
@@ -266,8 +274,8 @@ These are architectural rules. Violating any of them will break the system.
 const [users, setUsers] = useState([])
 useEffect(() => { fetch('/api/users').then(...).then(setUsers) }, [])
 
-// ✅ Always use oRPC + TanStack Query
-const { data } = useQuery(orpc.user.list.queryOptions())
+// ✅ Always use tRPC + TanStack Query
+const { data } = useQuery(trpc.user.list.queryOptions())
 ```
 
 **Why:** oRPC provides type safety, automatic caching, deduplication, and SSR hydration. Raw fetch bypasses all of this.
@@ -386,8 +394,8 @@ Use this matrix — find your change type and update the corresponding docs:
 | New component in `components/ui/` | `docs/features/design-system.md` (component list), `docs/architecture/component-system.md` |
 | Modified component variant/props | `docs/architecture/component-system.md`, `app/component-docs/config/components.ts` |
 | New feature module in `features/` | `docs/ai-context/feature-map.json`, create `docs/features/your-feature.md` |
-| New oRPC route | `docs/ai-context/feature-map.json` (namespaces), `docs/architecture/api-architecture.md`, `docs/modules/orpc-api.md` |
-| Changed oRPC route (input/output) | `docs/architecture/api-architecture.md` (schemas section) |
+| New tRPC procedure | `docs/ai-context/feature-map.json` (namespaces), `docs/architecture/api-architecture.md`, `docs/modules/trpc-api.md`, extend `lib/trpc.ts` proxy |
+| Changed tRPC procedure (input/output) | `docs/architecture/api-architecture.md` (schemas section), `docs/modules/trpc-api.md` |
 | New/changed Zustand store | `docs/modules/state-management.md` |
 | New/changed provider | `docs/modules/providers.md`, `docs/ai-context/feature-map.json` (providers section) |
 | New/changed auth logic | `docs/features/authentication.md` |
@@ -408,11 +416,11 @@ Docs that exist in isolation are useless. Every new or updated doc **must be lin
 
 **When you CREATE a new doc file (e.g., `docs/features/missions.md`):**
 - Add a `## See Also` section at the bottom of the new doc linking to related docs
-  - Example: new feature doc → link to `orpc-server.md` (route pattern), `state-management.md` (store pattern), `api-architecture.md` (routes)
+  - Example: new feature doc → link to `trpc-api.md` (procedure pattern), `state-management.md` (store pattern), `api-architecture.md` (routes)
 - Update `docs/ai-context/feature-map.json` → add the doc path in the feature's `"doc"` field
 - Update `docs/ai-context/folder-structure.md` → add the new file to the `/docs` section
 - Update any existing doc that covers related concepts to mention the new doc
-  - Example: if you created `docs/features/missions.md`, update `docs/modules/orpc-api.md` to mention the missions routes section
+  - Example: if you created `docs/features/missions.md`, update `docs/modules/trpc-api.md` to mention the missions routes section
 
 **When you UPDATE an existing doc:**
 - Verify all existing links in the file still point to valid paths/sections
@@ -423,7 +431,7 @@ Docs that exist in isolation are useless. Every new or updated doc **must be lin
 - [ ] `feature-map.json` has the doc path in the correct feature entry
 - [ ] `folder-structure.md` lists the new file
 - [ ] At least one existing related doc links back to the new doc
-- [ ] All links use relative paths from the `/docs` root (e.g., `../modules/orpc-server.md`)
+- [ ] All links use relative paths from the `/docs` root (e.g., `../modules/trpc-api.md`)
 
 ---
 
@@ -432,10 +440,10 @@ Docs that exist in isolation are useless. Every new or updated doc **must be lin
 If you catch yourself doing any of these, stop immediately and re-read the relevant doc.
 
 🚩 Writing `fetch('/api/...')` inside a React component
-→ You are bypassing oRPC. Read `docs/modules/orpc-client-tanstack.md`.
+→ You are bypassing tRPC. Read `docs/modules/trpc-api.md`.
 
 🚩 Using `useState` + `useEffect` to fetch data
-→ You are reinventing TanStack Query. Read `docs/modules/orpc-client-tanstack.md`.
+→ You are reinventing TanStack Query. Read `docs/modules/trpc-api.md`.
 
 🚩 Adding `create(...)` in Zustand to store users, missions, or any server data
 → Server data belongs in TanStack Query. Read `docs/modules/state-management.md`.
@@ -447,7 +455,7 @@ If you catch yourself doing any of these, stop immediately and re-read the relev
 → Pages go in route directories. Components go in `features/` or `components/`. Read `docs/ai-context/folder-structure.md`.
 
 🚩 Writing a `create` or `update` route handler without `.use(requireStandardSequrityMiddleware)`
-→ Security middleware is mandatory on write operations. Read `docs/modules/orpc-server.md`.
+→ Security middleware is mandatory on write operations. Read `docs/modules/trpc-api.md`.
 
 🚩 Importing from `@/features/users/components/user-card` (internal path)
 → Import from the barrel: `@/features/users`. Read `docs/ai-context/coding-rules.md`.
@@ -469,37 +477,45 @@ If you catch yourself doing any of these, stop immediately and re-read the relev
 ```typescript
 // Server Component (page.tsx)
 const queryClient = getQueryClient()
-await queryClient.prefetchQuery(orpc.your.route.queryOptions())
+await queryClient.prefetchQuery(trpc.your.route.queryOptions())
 return <HydrateClient client={queryClient}><YourClientComponent /></HydrateClient>
 
 // Client Component — reads from hydrated cache
-const { data } = useSuspenseQuery(orpc.your.route.queryOptions())
+const { data } = useSuspenseQuery(trpc.your.route.queryOptions())
 ```
 
 ### Mutation with cache update
 ```typescript
 const mutation = useMutation({
-    ...orpc.your.create.mutationOptions(),
+    ...trpc.your.create.mutationOptions(),
     onSuccess: async () => {
-        await queryClient.invalidateQueries({ queryKey: orpc.your.list.queryKey() })
+        await queryClient.invalidateQueries({ queryKey: trpc.your.list.queryKey() })
         toast.success('Created successfully')
     },
     onError: (error) => toast.error(error.message),
 })
 ```
 
-### New oRPC route
+### New tRPC procedure
 ```typescript
-export const yourRoute = base
-    .use(requireStandardSequrityMiddleware)    // required for write ops
-    .use(requireRatelimitSequrityMiddleware)   // required for create/update
-    .route({ method: 'POST', path: '/your-path', summary: '...', tags: ['your-tag'] })
-    .input(yourZodSchema)
-    .output(z.void())
-    .handler(async ({ input, errors }) => {
-        try { /* business logic */ }
-        catch { throw errors.INTERNAL_SERVER_ERROR({ message: '...' }) }
-    })
+// app/(server)/router/your-domain.ts
+export const yourRouter = router({
+    create: publicProcedure
+        .use(requireStandardSequrityMiddleware)    // required for write ops
+        .use(requireRatelimitSequrityMiddleware)   // required for create/update
+        .input(yourZodSchema)
+        .mutation(async ({ input }) => {
+            try { /* business logic */ }
+            catch { throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: '...' }) }
+        }),
+})
+
+// lib/trpc.ts — add to trpc proxy
+your: {
+    create: {
+        mutationOptions: () => ({ mutationFn: (data) => trpcClient.your.create.mutate(data) }),
+    },
+},
 ```
 
 ### Styling

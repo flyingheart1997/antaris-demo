@@ -318,7 +318,7 @@ Generic list renderer wired to `useSuspenseQuery`. Must be inside a `<Suspense>`
 
 ```typescript
 <DataGrid<User>
-    queryOptions={orpc.user.list.queryOptions() as any}
+    queryOptions={trpc.user.list.queryOptions() as any}
     renderItem={(user) => <UserCard user={user} />}
     emptyProps={{
         icon: Users,

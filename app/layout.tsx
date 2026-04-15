@@ -1,4 +1,4 @@
-import '@/lib/orpc.server' // for pre-rendering ssr
+import '@/lib/trpc.server' // bootstrap direct-call client for SSR prefetch
 
 import type { Metadata } from "next";
 import "./globals.css";

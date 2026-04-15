@@ -13,7 +13,7 @@ These rules ensure documentation stays in sync with code changes. **Stale docume
 |---|---|
 | **New UI component** in `components/ui/` | • `docs/ai-context/feature-map.json` → add to `design-system.component-list` |
 | **New feature module** in `features/` | • Create `docs/features/<name>.md`<br/>• `docs/ai-context/feature-map.json` → add new feature entry<br/>• `docs/ai-context/folder-structure.md` → add feature directory |
-| **New oRPC route** | • `docs/ai-context/feature-map.json` → add to `orpc-api.namespaces`<br/>• `docs/modules/orpc-api.md` → document new route<br/>• `docs/architecture/api-architecture.md` → add to endpoint table |
+| **New tRPC procedure** | • `docs/ai-context/feature-map.json` → add to `trpc-api.namespaces`<br/>• `docs/modules/trpc-api.md` → document new procedure<br/>• `docs/architecture/api-architecture.md` → add to endpoint table<br/>• `lib/trpc.ts` → extend `trpc` proxy with `queryOptions`/`mutationOptions`/`queryKey` |
 | **New provider** | • `docs/modules/providers.md` → add provider and explain position<br/>• `docs/ai-context/feature-map.json` → update providers list |
 | **New Zustand store** | • `docs/modules/state-management.md` → document new store<br/>• `docs/ai-context/folder-structure.md` → add to store directory |
 | **New dependency** added to `package.json` | • `docs/ai-context/tech-stack.md` → add to appropriate section |
