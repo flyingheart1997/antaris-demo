@@ -86,8 +86,8 @@ const UserDetails = () => {
                                 variant="surface"
                                 color="accent"
                                 className="w-full rounded-2xl font-bold text-base shadow-sm"
-                                leadingIcon={<Edit2 className='h-4.5 w-4.5' />}
                             >
+                                <Edit2 className='h-4.5 w-4.5' />
                                 Modify Profile
                             </Button>
                             <Button
@@ -95,8 +95,8 @@ const UserDetails = () => {
                                 variant="soft"
                                 color="error"
                                 className="w-full rounded-2xl font-bold text-base"
-                                leadingIcon={<Trash2 className='h-4.5 w-4.5' />}
                             >
+                                <Trash2 className='h-4.5 w-4.5' />
                                 Terminate Access
                             </Button>
                         </div>

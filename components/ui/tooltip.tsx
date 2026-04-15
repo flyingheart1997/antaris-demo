@@ -6,7 +6,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const tooltipContentVariants = cva(
-  "z-50 inline-flex items-center animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 text-text-primary border-[0.5px] border-stroke-primary px-8 py-6 rounded-md text-md font-regular backdrop-blur-40 bg-surface-bg",
+  "z-50 inline-flex items-center animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 text-text-primary border border-stroke-primary px-8 py-6 rounded-md text-md font-regular backdrop-blur-40 bg-surface-bg",
   {
     variants: {},
     defaultVariants: {},

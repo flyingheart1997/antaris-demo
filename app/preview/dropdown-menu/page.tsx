@@ -5,6 +5,7 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuItemText,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -14,9 +15,10 @@ import {
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
+  DropdownMenuShortcut,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
-import { User, Settings, LogOut, Plus, Trash2, Copy, Edit, Mail, MessageSquare, PlusCircle } from "lucide-react"
+import { User, Settings, LogOut, Plus, Trash2, Mail, MessageSquare, PlusCircle } from "lucide-react"
 import * as React from "react"
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -41,18 +43,24 @@ export default function DropdownMenuPreview() {
           <DropdownMenuTrigger asChild>
             <Button variant="surface" color="neutral">Open MD Menu</Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent size="md">
-            <DropdownMenuGroup groupLabel="My Account" bottomSeparator>
-              <DropdownMenuItem leadingIcon={<User className="size-14" />} hotkey="⇧⌘P">
-                Profile
+          <DropdownMenuContent>
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuItem>
+                <User className="size-14" />
+                <DropdownMenuItemText>Profile</DropdownMenuItemText>
+                <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
               </DropdownMenuItem>
-              <DropdownMenuItem leadingIcon={<Settings className="size-14" />} hotkey="⌘S">
-                Settings
+              <DropdownMenuItem>
+                <Settings className="size-14" />
+                <DropdownMenuItemText>Settings</DropdownMenuItemText>
+                <DropdownMenuShortcut>⇧⌘S</DropdownMenuShortcut>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem color="error" leadingIcon={<LogOut className="size-14" />}>
-              Logout
+            <DropdownMenuItem color="error">
+              <LogOut className="size-14" />
+              <DropdownMenuItemText>Log Out</DropdownMenuItemText>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -64,17 +72,23 @@ export default function DropdownMenuPreview() {
             <Button variant="surface" color="neutral">Open LG Menu</Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent size="lg">
-            <DropdownMenuGroup groupLabel="Personal Settings" bottomSeparator>
-              <DropdownMenuItem leadingIcon={<User className="size-16" />} hotkey="⇧⌘P">
-                Profile Management
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>Personal Settings</DropdownMenuLabel>
+              <DropdownMenuItem>
+                <User className="size-14 shrink-0" />
+                <DropdownMenuItemText>Profile Management</DropdownMenuItemText>
+                <DropdownMenuShortcut>⇧⌘S</DropdownMenuShortcut>
               </DropdownMenuItem>
-              <DropdownMenuItem leadingIcon={<Settings className="size-16" />} hotkey="⌘S">
-                Application Settings
+              <DropdownMenuItem>
+                <Settings className="size-14 shrink-0" />
+                <DropdownMenuItemText>Application Settings</DropdownMenuItemText>
+                <DropdownMenuShortcut>⇧⌘S</DropdownMenuShortcut>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem color="error" leadingIcon={<LogOut className="size-16" />}>
-              Terminate Session
+            <DropdownMenuItem color="error">
+              <LogOut className="size-16 shrink-0" />
+              <DropdownMenuItemText>Terminate Session</DropdownMenuItemText>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -85,21 +99,34 @@ export default function DropdownMenuPreview() {
           <DropdownMenuTrigger asChild>
             <Button variant="surface" color="neutral">Workflows</Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent size="md">
-            <DropdownMenuGroup groupLabel="Collaboration" bottomSeparator>
+          <DropdownMenuContent>
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>Collaboration</DropdownMenuLabel>
               <DropdownMenuSub>
-                <DropdownMenuSubTrigger leadingIcon={<User className="size-14" />}>
-                  Invite Team
+                <DropdownMenuSubTrigger>
+                  <User className="size-14" />
+                  <DropdownMenuItemText hideTooltip>Invite Team</DropdownMenuItemText>
                 </DropdownMenuSubTrigger>
                 <DropdownMenuSubContent>
-                  <DropdownMenuItem leadingIcon={<Mail className="size-14" />}>Via Email</DropdownMenuItem>
-                  <DropdownMenuItem leadingIcon={<MessageSquare className="size-14" />}>Via Discord</DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Mail className="size-14" />
+                    <DropdownMenuItemText>Via Email</DropdownMenuItemText>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <MessageSquare className="size-14" />
+                    <DropdownMenuItemText>Via Discord</DropdownMenuItemText>
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem leadingIcon={<PlusCircle className="size-14" />}>Custom Link</DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <PlusCircle className="size-14" />
+                    <DropdownMenuItemText>Custom Link</DropdownMenuItemText>
+                  </DropdownMenuItem>
                 </DropdownMenuSubContent>
               </DropdownMenuSub>
-              <DropdownMenuItem leadingIcon={<Plus className="size-14" />} hotkey="⌘T">
-                New Org
+              <DropdownMenuItem>
+                <Plus className="size-14" />
+                <DropdownMenuItemText>New Org</DropdownMenuItemText>
+                <DropdownMenuShortcut>⌘T</DropdownMenuShortcut>
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
@@ -112,14 +139,14 @@ export default function DropdownMenuPreview() {
             <DropdownMenuTrigger asChild>
               <Button variant="surface" color="neutral">Options</Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent size="md" >
+            <DropdownMenuContent>
               <DropdownMenuLabel>View Mode</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuCheckboxItem checked={checked} onCheckedChange={setChecked}>
-                Show Grid
+                <DropdownMenuItemText>Show Grid</DropdownMenuItemText>
               </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem checked={false}>
-                Show Hidden
+                <DropdownMenuItemText>Show Hidden</DropdownMenuItemText>
               </DropdownMenuCheckboxItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -128,13 +155,13 @@ export default function DropdownMenuPreview() {
             <DropdownMenuTrigger asChild>
               <Button variant="surface" color="neutral">Position: {position}</Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent size="md" >
+            <DropdownMenuContent>
               <DropdownMenuLabel>Alignment</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuRadioGroup value={position} onValueChange={setPosition}>
-                <DropdownMenuRadioItem value="top">Top</DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="bottom">Bottom</DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="right">Right</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="top"><DropdownMenuItemText>Top</DropdownMenuItemText></DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="bottom"><DropdownMenuItemText>Bottom</DropdownMenuItemText></DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="right"><DropdownMenuItemText>Right</DropdownMenuItemText></DropdownMenuRadioItem>
               </DropdownMenuRadioGroup>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -146,9 +173,10 @@ export default function DropdownMenuPreview() {
           <DropdownMenuTrigger asChild>
             <Button variant="surface" color="neutral">Danger Zone</Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent size="md" >
-            <DropdownMenuItem leadingIcon={<Trash2 className="size-14" />} color="error">
-              Delete Forever
+          <DropdownMenuContent>
+            <DropdownMenuItem color="error">
+              <Trash2 className="size-14" />
+              <DropdownMenuItemText>Delete Forever</DropdownMenuItemText>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

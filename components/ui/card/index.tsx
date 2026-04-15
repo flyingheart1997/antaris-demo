@@ -29,7 +29,7 @@ const cardVariants = cva(
         disabled: "opacity-60 pointer-events-none border-stroke-primary bg-surface-primary",
       },
       stroke: {
-        true: "border-[0.5px]",
+        true: "border",
         false: "border-none",
       },
       insetContent: {

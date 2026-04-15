@@ -6,6 +6,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { ChevronDown, ChevronUp } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { Tooltip } from "./tooltip"
 
 const SelectContext = React.createContext<{ size?: "md" | "lg"; readOnly?: boolean }>({
   size: "md",
@@ -13,21 +14,21 @@ const SelectContext = React.createContext<{ size?: "md" | "lg"; readOnly?: boole
 })
 
 const selectTriggerVariants = cva(
-  "group/select relative flex items-center justify-between w-auto min-w-0 transition-all outline-none disabled:pointer-events-none disabled:opacity-50 rounded-md select-none border border-solid",
+  "group/select relative flex items-center justify-between w-auto min-w-0 transition-all outline-none disabled:pointer-events-none disabled:opacity-50 rounded-md select-none border border-solid px-6 gap-6 font-regular font-body",
   {
     variants: {
       variant: {
-        surface: "bg-surface-primary backdrop-blur-40 border-gray-11 data-[placeholder]:border-gray-8 hover:!border-gray-11 group-hover/select:!border-gray-11 data-[state=open]:border-stroke-selected data-[read-only=true]:bg-gray-2 data-[read-only=true]:border-gray-11",
-        solid: "bg-surface-bg border-gray-11 data-[placeholder]:border-gray-8 hover:!border-gray-11 group-hover/select:!border-gray-11 data-[state=open]:border-stroke-selected data-[read-only=true]:bg-gray-2 data-[read-only=true]:border-gray-11",
-        neutral: "bg-surface-primary border-gray-8 data-[placeholder]:border-gray-8",
+        surface: "bg-surface-primary backdrop-blur-40 border-gray-11 data-[placeholder]:text-text-secondary data-[placeholder]:border-gray-8 hover:!border-gray-11 hover:!text-text-primary group-hover/select:!text-text-primary group-hover/select:!border-gray-11 data-[state=open]:border-stroke-selected data-[read-only=true]:bg-gray-2 data-[read-only=true]:text-text-primary data-[read-only=true]:border-gray-11",
+        solid: "bg-surface-bg border-gray-11 data-[placeholder]:text-text-secondary data-[placeholder]:border-gray-8 hover:!border-gray-11 hover:!text-text-primary group-hover/select:!text-text-primary group-hover/select:!border-gray-11 data-[state=open]:border-stroke-selected data-[read-only=true]:bg-gray-2 data-[read-only=true]:text-text-primary data-[read-only=true]:border-gray-11",
+        neutral: "bg-surface-primary border-gray-8 data-[placeholder]:text-text-secondary text-text-secondary ",
       },
       color: {
         primary: "",
-        error: "border-stroke-error!",
+        error: "border-stroke-error! text-text-error-subtle data-[placeholder]:text-text-error-subtle",
       },
       size: {
-        md: "h-24 text-md font-regular",
-        lg: "h-28 text-lg font-regular",
+        md: "h-24 text-md",
+        lg: "h-28 text-lg",
       },
     },
     defaultVariants: {
@@ -54,20 +55,16 @@ function Select({
 }
 
 const SelectGroup = SelectPrimitive.Group
-
 const SelectValue = SelectPrimitive.Value
 
 interface SelectTriggerProps
   extends Omit<React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>, "color">,
-  VariantProps<typeof selectTriggerVariants> {
-  leadingIcon?: React.ReactNode
-  trailingIcon?: React.ReactNode | boolean
-}
+  VariantProps<typeof selectTriggerVariants> { }
 
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   SelectTriggerProps
->(({ className, variant, color, size, leadingIcon, trailingIcon = true, children, ...props }, ref) => {
+>(({ className, variant, color, size, children, ...props }, ref) => {
   const context = React.useContext(SelectContext)
   const effectiveSize = size || context.size
   const isReadOnly = context.readOnly
@@ -84,33 +81,10 @@ const SelectTrigger = React.forwardRef<
       data-read-only={isReadOnly}
       {...props}
     >
-      <div className="flex items-center justify-start gap-[inherit] h-full min-w-35 font-[inherit]">
-        {leadingIcon && (
-          <span className="flex shrink-0 items-center justify-center px-4 pointer-events-none text-icon-secondary opacity-50 group-data-state-open/select:text-icon-primary group-data-[color=error]/select:text-text-error-subtle! font-[inherit]">
-            {leadingIcon}
-          </span>
-        )}
-        <span className={
-          cn("flex-1 truncate text-start text-text-primary opacity-100 group-data-placeholder/select:opacity-60 group-data-state-open/select:opacity-100 group-data-[read-only=true]/select:opacity-100 group-data-[color=error]/select:text-text-error-subtle! font-[inherit]",
-            leadingIcon ? 'pr-6' : 'px-6'
-          )
-        }>
-          {children}
-        </span>
-      </div>
-      {trailingIcon !== false && (
-        <SelectPrimitive.Icon asChild>
-          <div className="flex shrink-0 items-center justify-center px-4 font-[inherit]">
-            {trailingIcon === true ? (
-              <ChevronDown className="size-12 shrink-0 text-icon-secondary transition-transform duration-300 ease-in-out group-data-[state=open]/select:rotate-180 group-data-[state=open]/select:text-icon-primary " />
-            ) : (
-              <span className="flex shrink-0 items-center justify-center pointer-events-none font-[inherit]">
-                {trailingIcon}
-              </span>
-            )}
-          </div>
-        </SelectPrimitive.Icon>
-      )}
+      {children}
+      <SelectPrimitive.Icon asChild>
+        <ChevronDown className="pointer-events-none size-12 font-[inherit] text-icon-secondary transition-transform duration-300 ease-in-out group-data-[state=open]/select:rotate-180 group-data-[state=open]/select:text-icon-primary" />
+      </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   )
 })
@@ -197,7 +171,7 @@ const SelectLabel = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Label
     ref={ref}
-    className={cn("text-text-secondary px-2 py-0.5 text-lg font-medium uppercase tracking-wider", className)}
+    className={cn("text-text-primary opacity-60 px-2 py-0.5 text-sm font-regular font-body", className)}
     {...props}
   />
 ))
@@ -206,7 +180,7 @@ SelectLabel.displayName = "SelectLabel"
 const SelectItem = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item> & { size?: "md" | "lg" }
->(({ className, children, size, ...props }, ref) => {
+>(({ className, size, children, ...props }, ref) => {
   const context = React.useContext(SelectContext)
   const effectiveSize = size || context.size
 
@@ -214,30 +188,44 @@ const SelectItem = React.forwardRef<
     <SelectPrimitive.Item
       ref={ref}
       className={cn(
-        "group/select-item relative flex w-full h-24 cursor-default select-none items-center rounded-md pr-4 pl-6 outline-none transition-colors duration-100 hover:bg-surface-hover focus:bg-surface-hover focus:text-text-primary data-disabled:pointer-events-none data-disabled:opacity-50 font-[inherit]",
+        "group/select-item relative flex w-full h-24 cursor-default select-none items-center rounded-md pr-4 pl-6 outline-none transition-colors duration-100 hover:bg-surface-hover focus:bg-surface-hover focus:text-text-primary data-disabled:pointer-events-none data-disabled:opacity-50 font-[inherit] gap-6",
         size === "lg" ? "text-lg" : "text-md",
         className
       )}
       data-size={effectiveSize}
       {...props}
     >
-      <div className="flex items-center gap-4 w-full font-[inherit]">
-        <SelectPrimitive.ItemIndicator className="flex shrink-0 items-center justify-center">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="size-12 text-icon-primary">
-            <path d="M10 3L4.5 8.5L2 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </SelectPrimitive.ItemIndicator>
-        {!props.asChild && (
-          <SelectPrimitive.ItemText>
-            <span className="truncate flex-1">{children}</span>
-          </SelectPrimitive.ItemText>
-        )}
-        {props.asChild && children}
-      </div>
+      {children}
     </SelectPrimitive.Item>
   )
 })
 SelectItem.displayName = "SelectItem"
+
+const SelectItemText = React.forwardRef<
+  React.ElementRef<typeof SelectPrimitive.ItemText>,
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.ItemText> & {
+    side?: "top" | "bottom" | "left" | "right"
+    hideTooltip?: boolean
+  }
+>(({ className, side = "right", hideTooltip = false, children, ...props }, ref) => {
+  return (
+    <Tooltip content={children} side={side} hidden={hideTooltip}>
+      <SelectPrimitive.ItemText
+        ref={ref}
+        data-slot="dropdown-menu-item-text"
+        {...props}
+        className="flex-1"
+        asChild
+      >
+        <span className={cn(
+          "min-w-0 flex-1 truncate",
+          className
+        )}>{children}</span>
+      </SelectPrimitive.ItemText>
+    </Tooltip>
+  )
+})
+SelectItemText.displayName = "SelectItemText"
 
 const SelectSeparator = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Separator>,
@@ -259,6 +247,7 @@ export {
   SelectContent,
   SelectLabel,
   SelectItem,
+  SelectItemText,
   SelectSeparator,
   SelectScrollUpButton,
   SelectScrollDownButton,

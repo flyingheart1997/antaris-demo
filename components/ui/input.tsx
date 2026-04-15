@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 const inputVariants = cva(
   [
     "group/input-field relative flex items-center w-full min-w-0 transition-all outline-none rounded-md px-6",
-    "border-[0.5px] focus-visible:outline-none disabled:opacity-40 disabled:pointer-events-none",
+    "border focus-visible:outline-none disabled:opacity-40 disabled:pointer-events-none",
   ].join(" "),
   {
     variants: {

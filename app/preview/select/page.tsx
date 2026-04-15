@@ -6,6 +6,7 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
+  SelectItemText,
   SelectLabel,
   SelectSeparator,
   SelectTrigger,
@@ -40,12 +41,18 @@ export default function SelectPreview() {
             <div className="space-y-8">
               <p className="text-xs font-mono text-text-disabled uppercase">Surface (md)</p>
               <Select size="md">
-                <SelectTrigger >
+                <SelectTrigger>
                   <SelectValue placeholder="Choose option" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="opt1">Option 1</SelectItem>
-                  <SelectItem value="opt2">Option 2</SelectItem>
+                  <SelectItem value="Option 1">
+                    <Globe className="size-14" />
+                    <SelectItemText>Option 1</SelectItemText>
+                  </SelectItem>
+                  <SelectItem value="Option 2">
+                    <User className="size-14" />
+                    <SelectItemText>Option 2</SelectItemText>
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -57,8 +64,12 @@ export default function SelectPreview() {
                   <SelectValue placeholder="Choose option" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="opt1">Option 1</SelectItem>
-                  <SelectItem value="opt2">Option 2</SelectItem>
+                  <SelectItem value="opt1">
+                    <SelectItemText>Option 1</SelectItemText>
+                  </SelectItem>
+                  <SelectItem value="opt2">
+                    <SelectItemText>Option 2</SelectItemText>
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -72,8 +83,14 @@ export default function SelectPreview() {
                   <SelectValue placeholder="Choose option" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="opt1">Option 1</SelectItem>
-                  <SelectItem value="opt2">Option 2</SelectItem>
+                  <SelectItem value="opt1">
+                    <Globe className="size-14" />
+                    <SelectItemText>Option 1</SelectItemText>
+                  </SelectItem>
+                  <SelectItem value="opt2">
+                    <User className="size-14" />
+                    <SelectItemText>Option 2</SelectItemText>
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -85,8 +102,14 @@ export default function SelectPreview() {
                   <SelectValue placeholder="Choose option" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="opt1">Option 1</SelectItem>
-                  <SelectItem value="opt2">Option 2</SelectItem>
+                  <SelectItem value="opt1">
+                    <Globe className="size-14" />
+                    <SelectItemText>Option 1</SelectItemText>
+                  </SelectItem>
+                  <SelectItem value="opt2">
+                    <User className="size-14" />
+                    <SelectItemText>Option 2</SelectItemText>
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -97,24 +120,43 @@ export default function SelectPreview() {
       <Section title="With Leading Icons">
         <div className="flex flex-wrap gap-24">
           <Select size="md">
-            <SelectTrigger leadingIcon={<Globe className="size-14" />} >
+            <SelectTrigger>
+              <Globe className="size-14" />
               <SelectValue placeholder="Select region" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="us">United States</SelectItem>
-              <SelectItem value="eu">European Union</SelectItem>
-              <SelectItem value="ap">Asia Pacific</SelectItem>
+              <SelectItem value="us">
+                <Globe className="size-14" />
+                <SelectItemText>United States</SelectItemText>
+              </SelectItem>
+              <SelectItem value="eu">
+                <Globe className="size-14" />
+                <SelectItemText>European Union</SelectItemText>
+              </SelectItem>
+              <SelectItem value="ap">
+                <SelectItemText>Asia Pacific</SelectItemText>
+              </SelectItem>
             </SelectContent>
           </Select>
 
           <Select size="lg">
-            <SelectTrigger leadingIcon={<Shield className="size-16" />} >
+            <SelectTrigger>
+              <Shield className="size-16" />
               <SelectValue placeholder="Security Level" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="low">Standard Protection</SelectItem>
-              <SelectItem value="mid">Advanced Shield</SelectItem>
-              <SelectItem value="high">Enterprise Core</SelectItem>
+              <SelectItem value="low">
+                <Shield className="size-14" />
+                <SelectItemText>Standard Protection</SelectItemText>
+              </SelectItem>
+              <SelectItem value="mid">
+                <Shield className="size-14" />
+                <SelectItemText>Advanced Shield</SelectItemText>
+              </SelectItem>
+              <SelectItem value="high">
+                <Shield className="size-14" />
+                <SelectItemText>Enterprise Core</SelectItemText>
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -122,20 +164,31 @@ export default function SelectPreview() {
 
       <Section title="Complex Groups & Separators">
         <Select size="md">
-          <SelectTrigger leadingIcon={<Command className="size-14" />} >
+          <SelectTrigger>
+            <Command className="size-14" />
             <SelectValue placeholder="Select resource" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
               <SelectLabel>Automations</SelectLabel>
-              <SelectItem value="zap"><div className="flex items-center gap-8"><Zap className="size-14 text-text-warning" /> Zapier Trigger</div></SelectItem>
-              <SelectItem value="webhook"><div className="flex items-center gap-8"><Bell className="size-14 text-text-info" /> Webhook Listener</div></SelectItem>
+              <SelectItem value="zap">
+                <Zap className="size-14 text-text-warning" />
+                <SelectItemText>Zapier Trigger</SelectItemText>
+              </SelectItem>
+              <SelectItem value="webhook">
+                <Bell className="size-14 text-text-info" />
+                <SelectItemText>Webhook Listener</SelectItemText>
+              </SelectItem>
             </SelectGroup>
             <SelectSeparator />
             <SelectGroup>
               <SelectLabel>Administration</SelectLabel>
-              <SelectItem value="billing">Cloud Billing</SelectItem>
-              <SelectItem value="usage">Resource Usage</SelectItem>
+              <SelectItem value="billing">
+                <SelectItemText>Cloud Billing</SelectItemText>
+              </SelectItem>
+              <SelectItem value="usage">
+                <SelectItemText>Resource Usage</SelectItemText>
+              </SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
@@ -150,7 +203,9 @@ export default function SelectPreview() {
                 <SelectValue placeholder="Fix critical error" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="retry">Retry Connection</SelectItem>
+                <SelectItem value="retry">
+                  <SelectItemText>Retry Connection</SelectItemText>
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -158,11 +213,13 @@ export default function SelectPreview() {
           <div className="space-y-8">
             <p className="text-xs font-mono text-text-disabled uppercase italic">Disabled State</p>
             <Select disabled>
-              <SelectTrigger >
+              <SelectTrigger>
                 <SelectValue placeholder="Locked field" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="none">Ghost option</SelectItem>
+                <SelectItem value="none">
+                  <SelectItemText>Ghost option</SelectItemText>
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -170,11 +227,13 @@ export default function SelectPreview() {
           <div className="space-y-8">
             <p className="text-xs font-mono text-text-secondary uppercase italic">Read-Only State</p>
             <Select readOnly defaultValue="read-only">
-              <SelectTrigger >
-                <SelectValue />
+              <SelectTrigger value="read-only">
+                <SelectValue placeholder='Read Only' />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="read-only">Static value</SelectItem>
+                <SelectItem value="read-only">
+                  <SelectItemText>Static value</SelectItemText>
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -182,12 +241,16 @@ export default function SelectPreview() {
           <div className="space-y-8">
             <p className="text-xs font-mono text-text-info uppercase italic">Filled State</p>
             <Select defaultValue="active">
-              <SelectTrigger >
-                <SelectValue />
+              <SelectTrigger value="active">
+                <SelectValue placeholder='Select' />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="active">Active Session</SelectItem>
-                <SelectItem value="idle">Idle Timeout</SelectItem>
+                <SelectItem value="active">
+                  <SelectItemText>Active Session</SelectItemText>
+                </SelectItem>
+                <SelectItem value="idle">
+                  <SelectItemText>Idle Timeout</SelectItemText>
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>

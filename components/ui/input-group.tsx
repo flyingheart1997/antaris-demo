@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { IconButton, iconButtonVariants } from "./icon-button"
 
 const inputGroupVariants = cva(
-  "group/input-group relative flex w-full min-w-0 items-center transition-all outline-none rounded-md border-[0.5px] focus-within:outline-none gap-6",
+  "group/input-group relative flex w-full min-w-0 items-center transition-all outline-none rounded-md border focus-within:outline-none gap-6",
   {
     variants: {
       variant: {
@@ -162,12 +162,14 @@ function InputGroupInput({
 }: React.ComponentPropsWithoutRef<"input">) {
   return (
     <input
+      name="input"
       data-slot="input-group-control"
+      suppressHydrationWarning
       className={cn(
-        "flex-1 rounded-none border-0 border-transparent bg-transparent shadow-none ring-0 outline-none",
+        "flex-1 min-w-0 pl-4 rounded-none border-0 border-transparent bg-transparent shadow-none ring-0 outline-none",
         "hover:border-transparent hover:ring-0 focus:border-transparent focus:ring-0 focus-within:ring-0",
         "focus-visible:border-transparent focus-visible:ring-0 focus-visible:outline-none",
-        "aria-selected:ring-0 dark:bg-transparent text-inherit placeholder:text-inherit",
+        "aria-selected:ring-0 dark:bg-transparent",
         className
       )}
       {...props}
