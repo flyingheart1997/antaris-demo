@@ -20,7 +20,7 @@ Antaris uses a layered error handling system. Errors are caught at different lev
 ├──────────────────────────────────────────────────────────┤
 │  Level 1 — oRPC Handler (try/catch in handlers)          │
 │  Catches: Network failures, external API errors           │
-│  Throws:  Typed ORPCError (INTERNAL_SERVER_ERROR, etc.)  │
+│  Throws:  Typed TRPCError (INTERNAL_SERVER_ERROR, etc.)  │
 └──────────────────────────────────────────────────────────┘
 ```
 
@@ -91,7 +91,7 @@ if (decisions.reason.isRateLimit())
     throw errors.RATE_LIMIT_EXCEEDED()
 ```
 
-These propagate to the client as structured `ORPCError` objects — the client receives the error code and message.
+These propagate to the client as structured `TRPCError` objects — the client receives the error code and message.
 
 ---
 
@@ -102,7 +102,7 @@ Client components that use `useQuery` (not Suspense) handle errors with explicit
 ```typescript
 // app/users/[userId]/page.tsx
 const { data: user, isLoading, isError } = useQuery(
-    orpc.user.details.queryOptions({ input: { userId }, retry: false })
+    trpc.user.details.queryOptions({ input: { userId }, retry: false })
 )
 
 if (isError && !user) return <ErrorComponent />   // ← inline error UI
@@ -119,14 +119,14 @@ Mutation errors are shown as toast notifications — they don't disrupt the UI:
 
 ```typescript
 const createUserMutation = useMutation({
-    ...orpc.user.create.mutationOptions(),
+    ...trpc.user.create.mutationOptions(),
     onError: (error) => {
         toast.error(error.message)   // ← sonner toast, non-blocking
     }
 })
 ```
 
-`error.message` is the message from the thrown `ORPCError` on the server — e.g. `"You have been rate limited"` or `"Error creating user"`.
+`error.message` is the message from the thrown `TRPCError` on the server — e.g. `"You have been rate limited"` or `"Error creating user"`.
 
 ---
 
@@ -239,7 +239,7 @@ Modal stays open (user can retry after 1 minute)
 UserDetails renders
     │
     ▼
-useQuery(orpc.user.details.queryOptions({ input: { userId }, retry: false }))
+useQuery(trpc.user.details.queryOptions({ input: { userId }, retry: false }))
     │
     ▼
 HTTP GET /rpc/user/{userId}

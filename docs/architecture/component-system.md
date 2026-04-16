@@ -9,7 +9,7 @@ Layer 3 — Composite Components      (components/*.tsx)
            page-shell, data-grid, skeletons, error, empty-state
 
 Layer 2 — Design System Primitives  (components/ui/*.tsx)
-           37 components built on Radix UI + CVA + Design Tokens
+           49 components built on Radix UI + CVA + Design Tokens
 
 Layer 1 — Foundation                (Radix UI + Tailwind v4 + CVA + CSS Variables)
 ```
@@ -172,7 +172,7 @@ All Radix state attributes (`data-state`, `data-open`, `data-disabled`) are avai
 | Dialog | `dialog.tsx` | Radix Dialog | Full-screen modal |
 | Alert Dialog | `alert-dialog.tsx` | Radix AlertDialog | Confirmation modal |
 | Sheet | `sheet.tsx` | Radix Dialog | Side drawer |
-| Drawer | `drawer.tsx` | Custom | Bottom/side drawer with resizable panels |
+| Drawer | `drawer.tsx` | Collapsible | Sidebar navigation icon drawer with DrawerTrigger, DrawerContainer, DrawerItem |
 | Dropdown Menu | `dropdown-menu.tsx` | Radix DropdownMenu | Context menus |
 | Tooltip | `tooltip.tsx` | Radix Tooltip | Hover hints |
 
@@ -182,7 +182,7 @@ All Radix state attributes (`data-state`, `data-open`, `data-disabled`) are avai
 |---|---|---|---|
 | Avatar | `avatar.tsx` | Yes — size, color | With AvatarIndicator status dot |
 | Badge | `badge.tsx` | Yes | Small status label |
-| Card | `card/index.tsx` | Yes — size (1-4), state (default/emphasis/hover/disabled), selected | Content container with Figma selected-state mask overlay |
+| Card | `card/index.tsx` | Yes — size (1-4), state (default/emphasis/disabled), selected | Content container with Figma selected-state mask overlay |
 | Text | `text.tsx` | Yes — type, size, weight, color | Typography |
 | Skeleton | `skeleton.tsx` | No | Loading placeholder shimmer |
 | Separator | `separator.tsx` | Radix Separator | Visual divider |
@@ -251,17 +251,19 @@ The Button is the most complex CVA component. Full variant matrix:
 ### Extra Props
 
 ```typescript
+// Icons are passed as children — no leadingIcon/trailingIcon props
 <Button
     variant="solid"
     color="accent"
     size="lg"
-    radius="full"                         // none | md | lg | xl | full
-    leadingIcon={<PlusIcon />}            // icon before text
-    trailingIcon={<ChevronRightIcon />}   // icon after text
-    asChild                               // renders as child element (e.g., <Link>)
-    selected                              // sets aria-pressed + data-selected
+    radius="full"       // none | md | lg | xl | full
+    asChild             // renders as child element (e.g., <Link>)
+    selected            // sets aria-pressed + data-selected
+    advanced            // adds animated corner accent borders on hover
 >
+    <PlusIcon />        {/* leading icon — first child */}
     Create Operator
+    <ChevronRightIcon />{/* trailing icon — last child */}
 </Button>
 ```
 
@@ -279,13 +281,13 @@ The Button is the most complex CVA component. Full variant matrix:
 ## Avatar — Variant Reference
 
 ```typescript
-<Avatar size="4" color="accent">
+<Avatar size="4" color="blue">   {/* color: green | blue | yellow | white | red */}
     <AvatarImage src={user.avatar} alt={user.name} />
-    <AvatarFallback>{user.name.substring(0, 2)}</AvatarFallback>
+    <AvatarFallback size="4">{user.name.substring(0, 2)}</AvatarFallback>
     <AvatarIndicator
-        color="green"    // green | yellow | red | gray
-        size="3"
-        position="bottom-right"   // top-left | top-right | bottom-left | bottom-right
+        color="green"             // green | blue | yellow | white | red
+        size="4"                  // must match parent Avatar size
+        position="bottom-right"   // top-right | bottom-right
     />
 </Avatar>
 ```
@@ -318,7 +320,7 @@ Generic list renderer wired to `useSuspenseQuery`. Must be inside a `<Suspense>`
 
 ```typescript
 <DataGrid<User>
-    queryOptions={orpc.user.list.queryOptions() as any}
+    queryOptions={trpc.user.list.queryOptions() as any}
     renderItem={(user) => <UserCard user={user} />}
     emptyProps={{
         icon: Users,

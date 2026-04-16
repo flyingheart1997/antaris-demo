@@ -1,6 +1,6 @@
 'use client'
 
-import { orpc } from "@/lib/orpc"
+import { trpc } from "@/lib/trpc"
 import UserCard from "./user-card"
 import { Users } from "lucide-react"
 import { useUserModal } from "../hooks/useUserModal"
@@ -13,7 +13,7 @@ const UsersList = () => {
 
     return (
         <DataGrid<User> 
-            queryOptions={orpc.user.list.queryOptions() as any} 
+            queryOptions={trpc.user.list.queryOptions() as any}
             renderItem={(user) => <UserCard user={user} />} 
             emptyProps={{
                 icon: Users,

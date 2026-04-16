@@ -3,7 +3,7 @@
 import { useMemo } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { orpc } from '@/lib/orpc'
+import { trpc } from '@/lib/trpc'
 import { toast } from 'sonner'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Avatar, AvatarImage, AvatarFallback, AvatarIndicator } from '@/components/ui/avatar'
@@ -21,14 +21,14 @@ const UserDetails = () => {
     const queryClient = useQueryClient()
 
     const { data: user, isLoading, isError } = useQuery(
-        orpc.user.details.queryOptions({ input: { userId: userId as string }, retry: false })
+        trpc.user.details.queryOptions({ input: { userId: userId as string }, retry: false })
     )
 
     const deleteUserMutation = useMutation({
-        ...orpc.user?.delete.mutationOptions(),
+        ...trpc.user.delete.mutationOptions(),
         onSuccess: async () => {
             await queryClient.invalidateQueries({
-                queryKey: orpc.user?.list.queryKey(),
+                queryKey: trpc.user.list.queryKey(),
             })
             toast.success('Operator terminated successfully')
             router.push("/users")
@@ -86,8 +86,8 @@ const UserDetails = () => {
                                 variant="surface"
                                 color="accent"
                                 className="w-full rounded-2xl font-bold text-base shadow-sm"
-                                leadingIcon={<Edit2 className='h-4.5 w-4.5' />}
                             >
+                                <Edit2 className='h-4.5 w-4.5' />
                                 Modify Profile
                             </Button>
                             <Button
@@ -95,8 +95,8 @@ const UserDetails = () => {
                                 variant="soft"
                                 color="error"
                                 className="w-full rounded-2xl font-bold text-base"
-                                leadingIcon={<Trash2 className='h-4.5 w-4.5' />}
                             >
+                                <Trash2 className='h-4.5 w-4.5' />
                                 Terminate Access
                             </Button>
                         </div>

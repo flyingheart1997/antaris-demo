@@ -82,8 +82,8 @@ Read these docs in order:
 1. [docs/ai-context/system-overview.md](../ai-context/system-overview.md) — What is this project and why
 2. [docs/ai-context/folder-structure.md](../ai-context/folder-structure.md) — Where everything lives
 3. [docs/architecture/system-design.md](../architecture/system-design.md) — How the system is designed
-4. [docs/modules/orpc-server.md](../modules/orpc-server.md) — How the backend works
-5. [docs/modules/orpc-client-tanstack.md](../modules/orpc-client-tanstack.md) — How data flows to the client
+4. [docs/modules/trpc-api.md](../modules/trpc-api.md) — How the API layer works (procedures, middleware, client)
+5. [docs/architecture/api-architecture.md](../architecture/api-architecture.md) — Endpoint table, data flow, SSR hydration
 6. [docs/modules/state-management.md](../modules/state-management.md) — Zustand stores
 
 ---
@@ -106,24 +106,26 @@ Both are pre-committed — you don't need to run them on a fresh clone.
 
 ## Key Concepts to Understand Before Coding
 
-### 1. oRPC — Not REST, Not tRPC
+### 1. tRPC — Type-Safe RPC (Not REST, not plain fetch)
 
-All API operations go through oRPC. There are no manual `fetch` calls in components. Learn the pattern:
+All API operations go through tRPC. There are no manual `fetch` calls in components. Learn the pattern:
 
 ```typescript
-// Reading data in a Server Component (no HTTP)
+import { trpc } from '@/lib/trpc'
+
+// Reading data in a Server Component (no HTTP — direct call)
 const queryClient = getQueryClient()
-await queryClient.prefetchQuery(orpc.user.list.queryOptions())
+await queryClient.prefetchQuery(trpc.user.list.queryOptions())
 
 // Reading data in a Client Component
-const { data } = useSuspenseQuery(orpc.user.list.queryOptions())
+const { data } = useSuspenseQuery(trpc.user.list.queryOptions())
 
 // Writing data (mutation)
-const mutation = useMutation({ ...orpc.user.create.mutationOptions() })
+const mutation = useMutation({ ...trpc.user.create.mutationOptions() })
 mutation.mutate(formData)
 ```
 
-Full detail: [docs/modules/orpc-client-tanstack.md](../modules/orpc-client-tanstack.md)
+Full detail: [docs/modules/trpc-api.md](../modules/trpc-api.md)
 
 ---
 
@@ -177,7 +179,7 @@ Follow the existing pattern in `features/users/`:
 features/your-feature/
 ├── index.ts                    # barrel exports
 ├── components/
-│   ├── your-list.tsx           # uses DataGrid + orpc query
+│   ├── your-list.tsx           # uses DataGrid + trpc query
 │   ├── your-card.tsx           # single item display
 │   ├── your-form.tsx           # React Hook Form
 │   └── your-modal.tsx          # Dialog + useMutation

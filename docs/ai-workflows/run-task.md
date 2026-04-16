@@ -58,7 +58,7 @@ Open ONLY the files listed in `feature-map.json` for the relevant feature. Under
 
 - Follow `coding-rules.md` strictly — no exceptions
 - Maintain existing architecture and patterns
-- Use existing utilities (`cn()`, `orpc`, `useAuth()`, etc.)
+- Use existing utilities (`cn()`, `trpc`, `useAuth()`, etc.)
 - Use design tokens — never hardcode colors, spacing, or typography
 - Use CVA for component variants
 - Place UI components in `components/ui/`, feature code in `features/<name>/`
@@ -86,7 +86,7 @@ After completing the task, update the relevant documentation:
 |---|---|
 | New component | `docs/ai-context/feature-map.json` |
 | New feature | `docs/features/<name>.md`, `feature-map.json` |
-| New API route | `docs/modules/orpc-api.md`, `feature-map.json` |
+| New API route | `docs/modules/trpc-api.md`, `feature-map.json`, extend `lib/trpc.ts` proxy |
 | New dependency | `docs/ai-context/tech-stack.md` |
 | New folder/file | `docs/ai-context/folder-structure.md` |
 | Architecture change | `docs/architecture/*.md` |

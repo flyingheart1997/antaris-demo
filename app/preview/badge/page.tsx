@@ -48,11 +48,11 @@ export default function BadgePreview() {
 
       <Section title="With Icons">
         <div className="flex flex-wrap gap-10">
-          <Badge iconStart={<CheckCircle size={10} />} variant="soft" color="success">Active</Badge>
-          <Badge iconStart={<AlertCircle size={10} />} variant="soft" color="error">Failed</Badge>
-          <Badge iconStart={<Info size={10} />} variant="soft" color="info">Info</Badge>
-          <Badge iconStart={<Star size={10} />} variant="solid" color="warning">Featured</Badge>
-          <Badge iconEnd={<Shield size={10} />} variant="surface" color="neutral">Verified</Badge>
+          <Badge variant="soft" color="success"><CheckCircle size={10} /> Active</Badge>
+          <Badge variant="soft" color="error"><AlertCircle size={10} /> Failed</Badge>
+          <Badge variant="soft" color="info"><Info size={10} /> Info</Badge>
+          <Badge variant="solid" color="warning"><Star size={10} /> Featured</Badge>
+          <Badge variant="surface" color="neutral">Verified <Shield size={10} /></Badge>
         </div>
       </Section>
     </div>

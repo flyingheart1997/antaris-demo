@@ -44,56 +44,52 @@ const InputRange = React.forwardRef<HTMLDivElement, InputRangeProps>(
     return (
       <div
         ref={ref}
-        className={cn("flex w-full", className)}
+        className={cn("flex w-full gap-4", className)}
         {...props}
       >
-        <div className="flex items-start gap-4">
-          <Field className="flex-1">
-            <InputGroup variant={variant} size={size}>
-              <InputGroupInput
-                className="min-w-100"
-                placeholder={minPlaceholder}
-                value={minValue}
-                onChange={onMinChange}
-              />
-              {unit && (
-                <InputGroupAddon align="inline-end">
-                  <InputGroupText>{unit}</InputGroupText>
-                </InputGroupAddon>
-              )}
-            </InputGroup>
-            {(minLabel || minLimit) && (
-              <FieldDescription className="flex justify-between px-4 select-none">
-                <span>{minLabel}</span>
-                <span>{minLimit}</span>
-              </FieldDescription>
+        <Field className="flex-1 min-w-0">
+          <InputGroup variant={variant} size={size}>
+            <InputGroupInput
+              placeholder={minPlaceholder}
+              value={minValue}
+              onChange={onMinChange}
+            />
+            {unit && (
+              <InputGroupAddon align="inline-end">
+                <InputGroupText>{unit}</InputGroupText>
+              </InputGroupAddon>
             )}
-          </Field>
+          </InputGroup>
+          {(minLabel || minLimit) && (
+            <FieldDescription className="flex justify-between px-4 select-none">
+              <span>{minLabel}</span>
+              <span>{minLimit}</span>
+            </FieldDescription>
+          )}
+        </Field>
 
-          <span className="text-gray-8 text-sm font-medium shrink-0 leading-none pt-10">─</span>
+        <span className="text-gray-8 text-sm font-medium shrink-0 leading-none pt-10">─</span>
 
-          <Field className="flex-1">
-            <InputGroup variant={variant} size={size}>
-              <InputGroupInput
-                className="min-w-100"
-                placeholder={maxPlaceholder}
-                value={maxValue}
-                onChange={onMaxChange}
-              />
-              {unit && (
-                <InputGroupAddon align="inline-end">
-                  <InputGroupText>{unit}</InputGroupText>
-                </InputGroupAddon>
-              )}
-            </InputGroup>
-            {(maxLabel || maxLimit) && (
-              <FieldDescription className="flex justify-between px-4 select-none">
-                <span>{maxLabel}</span>
-                <span>{maxLimit}</span>
-              </FieldDescription>
+        <Field className="flex-1 min-w-0">
+          <InputGroup variant={variant} size={size}>
+            <InputGroupInput
+              placeholder={maxPlaceholder}
+              value={maxValue}
+              onChange={onMaxChange}
+            />
+            {unit && (
+              <InputGroupAddon align="inline-end">
+                <InputGroupText>{unit}</InputGroupText>
+              </InputGroupAddon>
             )}
-          </Field>
-        </div>
+          </InputGroup>
+          {(maxLabel || maxLimit) && (
+            <FieldDescription className="flex justify-between px-4 select-none">
+              <span>{maxLabel}</span>
+              <span>{maxLimit}</span>
+            </FieldDescription>
+          )}
+        </Field>
       </div>
     )
   }

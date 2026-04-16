@@ -5,12 +5,10 @@ import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import { IconButton, iconButtonVariants } from "./icon-button"
 
 const inputGroupVariants = cva(
-  "group/input-group relative flex w-full min-w-0 items-center transition-all outline-none rounded-md border-[0.5px] focus-within:outline-none",
+  "group/input-group relative flex w-full min-w-0 items-center transition-all outline-none rounded-md border-[0.5px] focus-within:outline-none gap-4",
   {
     variants: {
       variant: {
@@ -90,7 +88,7 @@ const inputGroupAddonVariants = cva(
   {
     variants: {
       align: {
-        "inline-start": "pl-4 has-[>button]:ml-[-0.275rem] has-[>kbd]:ml-[-0.275rem] order-first",
+        "inline-start": "pl-6 has-[>button]:ml-[-0.275rem] has-[>kbd]:ml-[-0.275rem] order-first",
         "inline-end": "pr-4 has-[>button]:mr-[-0.275rem] has-[>kbd]:mr-[-0.275rem] order-last",
         "block-start":
           "px-4 pt-4 group-has-[>input]/input-group:pt-4 [.border-b]:pb-4 order-first w-full justify-start",
@@ -161,11 +159,19 @@ function InputGroupText({ className, ...props }: React.ComponentProps<"span">) {
 function InputGroupInput({
   className,
   ...props
-}: Omit<React.ComponentProps<typeof Input>, "size">) {
+}: React.ComponentPropsWithoutRef<"input">) {
   return (
-    <Input
+    <input
+      name="input"
       data-slot="input-group-control"
-      className={cn("rounded-none border-none hover:border-none focus:border-none hover:ring-0 border-0 bg-transparent shadow-none ring-0 focus-within:ring-0 focus:ring-0 aria-selected:ring-0 dark:bg-transparent flex-1", className)}
+      suppressHydrationWarning
+      className={cn(
+        "flex-1 min-w-0 pl-4 rounded-none border-0 border-transparent bg-transparent shadow-none ring-0 outline-none",
+        "hover:border-transparent hover:ring-0 focus:border-transparent focus:ring-0 focus-within:ring-0",
+        "focus-visible:border-transparent focus-visible:ring-0 focus-visible:outline-none",
+        "aria-selected:ring-0 dark:bg-transparent",
+        className
+      )}
       {...props}
     />
   )
@@ -174,11 +180,17 @@ function InputGroupInput({
 function InputGroupTextarea({
   className,
   ...props
-}: React.ComponentProps<typeof Textarea>) {
+}: React.ComponentPropsWithoutRef<"textarea">) {
   return (
-    <Textarea
+    <textarea
       data-slot="input-group-control"
-      className={cn("rounded-none border-none hover:border-none focus:border-none hover:ring-0 border-0 bg-transparent py-4 shadow-none ring-0 focus-visible:ring-0 aria-invalid:ring-0 dark:bg-transparent flex-1 resize-none", className)}
+      className={cn(
+        "flex-1 resize-none rounded-none border-0 border-transparent bg-transparent py-4 shadow-none ring-0 outline-none",
+        "hover:border-transparent hover:ring-0 focus:border-transparent focus:ring-0 focus-within:ring-0",
+        "focus-visible:border-transparent focus-visible:ring-0 focus-visible:outline-none",
+        "aria-invalid:ring-0 dark:bg-transparent text-inherit placeholder:text-inherit",
+        className
+      )}
       {...props}
     />
   )
@@ -193,4 +205,3 @@ export {
   InputGroupTextarea,
   inputGroupVariants,
 }
-

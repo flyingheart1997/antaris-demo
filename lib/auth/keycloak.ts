@@ -35,6 +35,28 @@ export async function exchangeCodeForToken(code: string, redirectUri: string) {
     return response.json()
 }
 
+export async function refreshAccessToken(refreshToken: string) {
+    const body = new URLSearchParams()
+    body.append('grant_type', 'refresh_token')
+    body.append('client_id', KC_CLIENT_ID)
+    body.append('refresh_token', refreshToken)
+    if (KC_CLIENT_SECRET) {
+        body.append('client_secret', KC_CLIENT_SECRET)
+    }
+
+    const response = await fetch(`${KC_URL}realms/${KC_REALM}/protocol/openid-connect/token`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString(),
+    })
+
+    if (!response.ok) {
+        throw new Error('Refresh token is expired or invalid')
+    }
+
+    return response.json() as Promise<{ access_token: string; refresh_token: string; expires_in: number }>
+}
+
 export async function getUmaTicket(accessToken: string) {
     const body = new URLSearchParams()
     body.append('grant_type', 'urn:ietf:params:oauth:grant-type:uma-ticket')

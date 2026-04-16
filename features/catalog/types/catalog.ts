@@ -7,6 +7,7 @@ export interface CatalogItem {
     size?: string;
     mass?: string;
     power?: string;
+    gsd?: string;
     swath?: string;
     [key: string]: string | undefined;
   };
@@ -17,4 +18,21 @@ export interface CatalogCategoryGroup {
   category: string;
   count: number;
   items: CatalogItem[];
+}
+
+export interface PhysicalMetric {
+  key: string
+  icon: "size" | "mass" | "power"
+  value: string
+  max: string
+  progress: number
+}
+
+export interface PhysicalMetricSource {
+  key: string
+  icon: PhysicalMetric["icon"]
+  value?: string
+  max: string
+  maxValue: number
+  fallbackValue?: string
 }

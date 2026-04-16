@@ -200,7 +200,7 @@ export const mockUsers = [
         },
     }
 ].map((user) => {
-    fetch(`https://crudcrud.com/api/f99a643319874c9fb7d66b9c2afbf422/users`, {
+    fetch(`https://crudcrud.com/api/2edff70db4f5491fa99c84b95d12331f/users`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

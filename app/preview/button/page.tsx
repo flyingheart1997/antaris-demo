@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { Button } from "@/components/ui/button"
-import { Mail, ArrowRight, Star, Loader2, Plus, Settings } from "lucide-react"
+import { Mail, ArrowRight, Star, Plus } from "lucide-react"
 
 const VARIANTS = ["solid", "soft", "surface", "outline", "ghost"] as const
 const COLORS = ["accent", "error", "warning", "info", "neutral"] as const
@@ -81,14 +81,18 @@ export default function ButtonPreview() {
           Icons, States & Loading
         </h2>
         <div className="flex flex-wrap items-center gap-16">
-          <Button leadingIcon={<Mail className="size-16" />} color="info">
+          <Button variant="outline">
+            <Mail className="size-16" />
             Leading Icon
           </Button>
-          <Button trailingIcon={<ArrowRight className="size-16" />} color="accent" variant="soft">
+          <Button variant="soft" color="accent">
+            <ArrowRight className="size-16" />
             Trailing Icon
           </Button>
-          <Button leadingIcon={<Star className="size-16" />} trailingIcon={<Plus className="size-16" />} variant="outline">
+          <Button variant="outline">
+            <Star className="size-16" />
             Double Icons
+            <Plus className="size-16" />
           </Button>
 
           <Button
@@ -131,7 +135,8 @@ export default function ButtonPreview() {
           <Button advanced variant="outline" color="neutral">
             Advanced Outline
           </Button>
-          <Button advanced variant="soft" color="info" leadingIcon={<Plus className="size-16" />}>
+          <Button advanced variant="soft" color="info">
+            <Plus className="size-16" />
             Advanced with Icon
           </Button>
           <Button advanced size="lg" variant="surface" color="warning">

@@ -1,4 +1,4 @@
-import '@/lib/orpc.server' // for pre-rendering ssr
+import '@/lib/trpc.server' // bootstrap direct-call client for SSR prefetch
 
 import type { Metadata } from "next";
 import "./globals.css";
@@ -27,7 +27,7 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <head />
-      <body suppressHydrationWarning className="antialiased">
+      <body suppressHydrationWarning className="antialiased bg-surface-bg">
         <AllProviders token={token ?? null}>
           <SplashScreen />
           <Toaster />

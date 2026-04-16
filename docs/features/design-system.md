@@ -1,7 +1,7 @@
 # Feature: Design System
 
 ## Purpose
-A Figma-synced design system providing 38 reusable UI components, design tokens (colors, spacing, typography, radii), and a token build pipeline that transforms raw Figma exports into CSS variables and Tailwind utilities.
+A Figma-synced design system providing 49 reusable UI components, design tokens (colors, spacing, typography, radii), and a token build pipeline that transforms raw Figma exports into CSS variables and Tailwind utilities.
 
 ---
 
@@ -18,7 +18,7 @@ graph LR
     E --> H["app/globals.css"]
     F --> H
     H --> I["Tailwind utilities<br/>(bg-surface-bg, text-text-primary, etc.)"]
-    I --> J["components/ui/*<br/>(37 components)"]
+    I --> J["components/ui/*<br/>(49 components)"]
 ```
 
 ---

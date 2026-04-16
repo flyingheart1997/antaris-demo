@@ -21,7 +21,8 @@ All docs live in [`/docs`](../../docs/). **Read relevant docs before writing any
 
 **Tier 2 — By domain:**
 - UI/components → `architecture/component-system.md` + `features/design-system.md`
-- API/data → `modules/orpc-server.md` + `modules/orpc-client-tanstack.md`
+- API/data → `modules/trpc-api.md` + `architecture/api-architecture.md`
+- WebSocket → `modules/websocket.md`
 - State → `modules/state-management.md`
 - Auth → `features/authentication.md`
 - Errors → `modules/error-handling.md`
@@ -41,18 +42,18 @@ Full doc map: `ai-context/folder-structure.md`
 ```
 LAYER 5 — PRESENTATION    RSC + Client Components, Zustand, TanStack Query, Tailwind+CVA
 LAYER 4 — SSR/HYDRATION   prefetch → dehydrate → HydrateClient | AuthProvider → Zustand
-LAYER 3 — API/RPC         oRPC router + handlers → Zod validation → business logic
+LAYER 3 — API/RPC         tRPC router + procedures → Zod validation → business logic
 LAYER 2 — SECURITY        Arcjet: base → WAF+bot → rate limit → handler
-LAYER 1 — AUTH/SESSION    Keycloak OAuth2 + UMA → httpOnly cookies → Zustand
+LAYER 1 — AUTH/SESSION    Keycloak OAuth2 + UMA → httpOnly cookies → middleware refresh → Zustand
 ```
 
 Diagrams → [`architecture/system-design.md`](../../docs/architecture/system-design.md), [`architecture/data-flow.md`](../../docs/architecture/data-flow.md)
 
 ### 3.2 Two Data Paths
 
-**Server Component (no HTTP):** RSC → `getQueryClient()` → `prefetchQuery(orpc.*.*)` → `HydrateClient` → client reads hydrated cache via `useSuspenseQuery`
+**Server Component (no HTTP):** RSC → `getQueryClient()` → `prefetchQuery(trpc.*.queryOptions())` → `HydrateClient` → client reads hydrated cache via `useSuspenseQuery`
 
-**Client Component (HTTP):** `useQuery/useMutation` → oRPC client → `RPCLink` → `fetch /rpc/*` → catch-all → Arcjet → handler
+**Client Component (HTTP):** `useQuery/useMutation` → tRPC client → `httpBatchLink` → `fetch /rpc` → fetchRequestHandler → Arcjet → procedure
 
 ### 3.3 State Ownership — Never Mix
 
@@ -64,11 +65,11 @@ Diagrams → [`architecture/system-design.md`](../../docs/architecture/system-de
 | Form fields | React Hook Form (component-local) |
 | Toasts | Sonner imperative (`toast.success/error`) |
 
-### 3.4 oRPC Isomorphic Bridge
+### 3.4 tRPC Isomorphic Bridge
 
-On the server, `globalThis.$client` is set → handler runs as a direct function call (no HTTP). On the client, it is undefined → falls back to HTTP via RPCLink. **Same interface. Same query keys.** That's how SSR hydration works.
+On the server, `lib/trpc.server.ts` sets `globalThis.$trpcClient` to a **direct-call link** — procedure runs in-process (no HTTP). On the client, it falls back to HTTP via `httpBatchLink`. **Same `trpc` proxy interface. Same query keys.** That's how SSR hydration works.
 
-Details → `modules/orpc-server.md`, `modules/orpc-client-tanstack.md`
+Details → `modules/trpc-api.md`, `architecture/api-architecture.md`
 
 ## 4. TASK ANALYSIS
 
@@ -91,9 +92,9 @@ Before any code: **classify → plan → gate-check → execute.**
 
 Full code → `features/user-management.md`. Follow `features/users/` structure exactly.
 
-1. **Schema** — `features/your-feature/types/your-schema.ts` — Zod, shared between oRPC `.input()` and RHF `zodResolver`
-2. **oRPC routes** — `app/(server)/router/your-domain.ts` — chain: `base → .use(middleware) → .route() → .input() → .output() → .handler()`. GET: no middleware. POST/PUT: standard+ratelimit. DELETE: standard only.
-3. **Register** — `app/(server)/router/index.ts`
+1. **Schema** — `features/your-feature/types/your-schema.ts` — Zod, shared between tRPC `.input()` and RHF `zodResolver`
+2. **tRPC routes** — `app/(server)/router/your-domain.ts` — chain: `publicProcedure → .use(middleware) → .input() → .query()/.mutation()`. Queries: no middleware. Mutations (create/update): standard+ratelimit. Delete: standard only.
+3. **Register** — `app/(server)/router/index.ts` + add `queryOptions`/`mutationOptions`/`queryKey` to `trpc` proxy in `lib/trpc.ts`
 4. **Zustand modal store** — `features/your-feature/hooks/useYourModal.ts` — open/mode/data/itemId only
 5. **RSC list page** — `app/your-route/page.tsx` — no `'use client'`. `getQueryClient()` → `prefetchQuery` → `<HydrateClient>` → `<Suspense>` → client component
 6. **List client component** — `features/your-feature/components/your-list.tsx` — use `<DataGrid>` with `queryOptions` + `renderItem` + `emptyProps`
@@ -146,7 +147,7 @@ Use only semantic tokens: `bg-surface-*`, `text-text-*`, `border-stroke-*`, sema
 | New `components/ui/` | `features/design-system.md` |
 | CVA variants | `architecture/component-system.md` |
 | New feature | `feature-map.json` + `features/your-feature.md` |
-| New/changed oRPC route | `feature-map.json` + `architecture/api-architecture.md` |
+| New/changed tRPC route | `feature-map.json` + `architecture/api-architecture.md` + `lib/trpc.ts` proxy |
 | Arcjet middleware | `features/security.md` |
 | Zustand store | `modules/state-management.md` |
 | Provider changes | `modules/providers.md` + `feature-map.json` |
@@ -164,8 +165,8 @@ Use only semantic tokens: `bg-surface-*`, `text-text-*`, `border-stroke-*`, sema
 
 | # | Law |
 |---|---|
-| 1 | Never `fetch()` from client components — route through oRPC |
-| 2 | Never create data API routes outside oRPC (auth routes excepted) |
+| 1 | Never `fetch()` from client components — route through tRPC |
+| 2 | Never create data API routes outside tRPC (auth routes excepted) |
 | 3 | Never store API data in Zustand |
 | 4 | Never skip security middleware on write operations |
 | 5 | Never use raw Tailwind color classes (`bg-gray-*`, `text-white`) |
@@ -176,7 +177,7 @@ Use only semantic tokens: `bg-surface-*`, `text-text-*`, `border-stroke-*`, sema
 ## 10. RED FLAGS — STOP AND CORRECT
 
 🚩 `useState` + `useEffect` to fetch data → use TanStack Query
-🚩 `fetch('/api/...')` inside a component → route through oRPC
+🚩 `fetch('/api/...')` inside a component → route through tRPC
 🚩 Storing API response in Zustand `set()` → belongs in TanStack Query cache
 🚩 `'use client'` on a page that only needs SSR data → remove it
 🚩 `bg-gray-*` or `text-white` in a component → use semantic tokens

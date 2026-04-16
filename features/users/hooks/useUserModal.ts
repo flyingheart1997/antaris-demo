@@ -1,21 +1,7 @@
 import { userFormSchema, UserType } from "../types/user-schema";
-import { create } from "zustand";
+import { useModal } from "@/hooks/use-modal";
+
 type Mode = "create" | "update";
-
-type UserModalStore = {
-    open: boolean;
-    mode: Mode;
-    data: UserType;
-    userId?: string;
-
-    setOpen: (value: boolean) => void;
-    openCreate: () => void;
-    openUpdate: (data: UserType & { _id: string }) => void;
-    close: () => void;
-    updateData: (data: Partial<UserType>) => void;
-    validate: () => { success: boolean; errors?: any };
-};
-
 
 function getRandomShortDescription() {
     const descriptions = [
@@ -40,69 +26,64 @@ function getRandomShortDescription() {
     return descriptions[randomIndex]
 }
 
-export const useUserModal = create<UserModalStore>((set, get) => ({
-    open: false,
-    mode: "create" as Mode,
-    data: {
-        name: '',
-        username: '',
-        email: '',
-        gender: '',
-        address: {
-            street: '',
-            suite: `Suite ${Math.floor(1000 + Math.random() * 9000)}`,
-            city: '',
-            zipcode: '',
-            geo: {
-                lat: '',
-                lng: '',
-            },
+const INITIAL_DATA: UserType = {
+    name: '',
+    username: '',
+    email: '',
+    gender: '',
+    address: {
+        street: '',
+        suite: `Suite ${Math.floor(1000 + Math.random() * 9000)}`,
+        city: '',
+        zipcode: '',
+        geo: {
+            lat: '',
+            lng: '',
         },
-        phone: '',
-        website: '',
-        company: {
-            name: '',
-            catchPhrase: getRandomShortDescription(),
-            bs: getRandomShortDescription(),
-        },
-    } as UserType,
-    userId: undefined,
-
-    setOpen: (value) => set({ open: value }),
-
-    openCreate: () => {
-        set((state) => ({
-            open: true,
-            mode: "create",
-            data: state.data,
-        }))
     },
-    openUpdate: (data) =>
-        set({
-            open: true,
+    phone: '',
+    website: '',
+    company: {
+        name: '',
+        catchPhrase: getRandomShortDescription(),
+        bs: getRandomShortDescription(),
+    },
+};
+
+export function useUserModal() {
+    const { modal, isOpen, openModal, closeModal, updateModal } = useModal("User");
+
+    const mode = (modal?.mode as Mode) || "create";
+    const data = (modal?.data as UserType) || INITIAL_DATA;
+    const userId = modal?.userId as string | undefined;
+
+    const openCreate = () => {
+        openModal({
+            mode: "create",
+            data: INITIAL_DATA,
+        });
+    };
+
+    const openUpdate = (updateData: UserType & { _id: string }) => {
+        openModal({
             mode: "update",
-            data: data as UserType,
-            userId: data._id,
-        }),
+            data: updateData as UserType,
+            userId: updateData._id,
+        });
+    };
 
-    close: () =>
-        set((state) => ({
-            open: false,
-            data: state.data,
-            userId: undefined,
-        })),
+    const close = () => closeModal();
 
-    updateData: (newData) =>
-        set((state) => ({
+    const updateData = (newData: Partial<UserType>) => {
+        updateModal({
             data: {
-                ...state.data,
+                ...data,
                 ...newData,
             } as UserType,
-        })),
+        });
+    };
 
-    validate: () => {
-        const data = get().data;
-
+    const validate = () => {
         if (!data) return { success: false };
 
         const result = userFormSchema.safeParse(data);
@@ -115,5 +96,21 @@ export const useUserModal = create<UserModalStore>((set, get) => ({
         }
 
         return { success: true };
-    },
-}));
+    };
+
+    return {
+        open: isOpen,
+        mode,
+        data,
+        userId,
+        setOpen: (value: boolean) => {
+            if (value) openCreate();
+            else close();
+        },
+        openCreate,
+        openUpdate,
+        close,
+        updateData,
+        validate,
+    };
+}

@@ -18,14 +18,14 @@
 | **class-variance-authority (CVA)** | ^0.7.1 | Component variant management |
 | **clsx** | ^2.1.1 | Conditional classname utility |
 | **tailwind-merge** | ^3.4.0 | Tailwind class deduplication |
-| **Figma Design Tokens** | Custom | Design tokens synced from Figma via `styles/build.js` |
+| **Style Dictionary** | ^4 | Design token build pipeline (Figma → CSS → Tailwind) |
 
 ## UI Component Libraries
 
 | Technology | Version | Role |
 |---|---|---|
 | **Radix UI** | Various | Headless accessible primitives (Dialog, Select, Tabs, etc.) |
-| **ShadCN UI** | ^3.6.3 (CLI) | Component scaffolding (radix-mira style) |
+| **ShadCN UI** | ^3.6.3 (CLI) | Component scaffolding |
 | **@base-ui/react** | ^1.0.0 | Base UI primitives |
 
 ### Radix UI Packages Used
@@ -42,12 +42,18 @@
 
 | Technology | Version | Role |
 |---|---|---|
-| **@orpc/server** | ^1.13.2 | Type-safe RPC server (route definitions, middleware) |
-| **@orpc/client** | ^1.13.2 | Type-safe RPC client |
-| **@orpc/tanstack-query** | ^1.13.2 | TanStack Query integration for oRPC |
+| **@trpc/server** | ^11 | Type-safe RPC server (procedure definitions, middleware) |
+| **@trpc/client** | ^11 | Type-safe RPC client (HTTP batch link + direct-call link) |
 | **@tanstack/react-query** | ^5.90.16 | Server-state management & caching |
 | **@tanstack/react-query-devtools** | ^5.91.2 | DevTools for debugging queries |
 | **Zod** | ^4.3.5 | Schema validation (shared client/server) |
+
+## Real-Time
+
+| Technology | Role |
+|---|---|
+| **Native WebSocket API** | Real-time telemetry and mission data (via `useWebSocket` hook) |
+| **WebSocketManager** (`lib/websocket.ts`) | Reconnection, auth, typed messaging |
 
 ## State Management
 
@@ -69,6 +75,7 @@
 | **Keycloak** | OAuth 2.0 / OpenID Connect identity provider |
 | **UMA (User-Managed Access)** | Fine-grained authorization |
 | **httpOnly Cookies** | Secure session storage |
+| **middleware.ts** | Silent token refresh on every request |
 
 ## Security
 
@@ -88,11 +95,9 @@
 
 | Technology | Version | Role |
 |---|---|---|
-| **@hugeicons/react** | ^1.1.4 | Primary icon set (Figma-aligned) |
-| **@hugeicons/core-free-icons** | ^3.1.1 | Free icon pack |
-| **lucide-react** | ^0.562.0 | Secondary icon set |
-| **@tabler/icons-react** | ^3.41.1 | Tertiary icon set |
-| **Custom SVG Icons** | via `@svgr/cli` | Custom icons from `icons/svg/` |
+| **lucide-react** | ^0.562.0 | General UI icons (primary icon library) |
+| **@tabler/icons-react** | ^3.41.1 | Available, minimal usage |
+| **Custom SVG Icons** | via `@svgr/cli` | Domain-specific icons (satellite, subsystems) from `icons/svg/` |
 
 ## UI Utilities
 
@@ -119,9 +124,6 @@
 
 | Font | Usage |
 |---|---|
-| **Inter** | Primary body font (`--font-sans`) |
-| **Geist Sans** | Secondary sans font |
-| **Geist Mono** | Monospace font |
 | **Space Grotesk** | Heading font (from Figma tokens) |
 | **Montserrat** | Body font (from Figma tokens) |
 | **Fira Mono** | Code font (from Figma tokens) |
@@ -131,9 +133,9 @@
 | Service | Purpose |
 |---|---|
 | **Keycloak (id.antaris-staging.cloud)** | Identity & access management |
-| **CrudCrud API** | REST API for user CRUD |
+| **CrudCrud API** | REST API for user CRUD (temporary/demo) |
+| **ATMOS Backend (app-flatsat.antaris-staging.cloud)** | Production REST (`https://`) + WebSocket (`wss://`) |
 | **DiceBear** | Avatar generation |
-| **ImageKit / Tailus** | Remote image hosting |
 | **Arcjet** | Application security SaaS |
 
 ## Environment Variables
@@ -145,6 +147,6 @@
 | `NEXT_PUBLIC_KEYCLOAK_REALM` | Keycloak realm (ATMOS) |
 | `NEXT_PUBLIC_KEYCLOAK_CLIENT_ID` | OAuth client ID |
 | `NEXT_PUBLIC_KEYCLOAK_RESOURCE_CLIENT` | UMA resource server |
-| `NEXT_PUBLIC_BACKEND_BASE_URL` | Backend API URL |
-| `NEXT_PUBLIC_WEBSOCKET_BACKEND_BASE_URL` | WebSocket URL |
+| `NEXT_PUBLIC_BACKEND_BASE_URL` | Backend REST API URL (`https://`) |
+| `NEXT_PUBLIC_WEBSOCKET_BACKEND_BASE_URL` | WebSocket URL (`wss://`) — used by `lib/websocket.ts` |
 | `NEXT_PUBLIC_APP_URL` | Application URL |

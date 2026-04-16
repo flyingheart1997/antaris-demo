@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
 
 const checkboxVariants = cva(
-  "peer relative shrink-0 transition-all outline-none disabled:pointer-events-none disabled:opacity-50 size-16 rounded-md border",
+  "peer relative shrink-0 transition-all outline-none disabled:pointer-events-none disabled:opacity-50 size-16 rounded-md border-[0.5px]",
   {
     variants: {
       variant: {

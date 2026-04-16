@@ -190,10 +190,10 @@ export default function InputPreviewPage() {
       {/* 6. Range Inputs */}
       <section className="space-y-32">
         <h2 className="text-xl font-medium text-text-primary border-b border-stroke-primary pb-8">6. Range Inputs</h2>
-        <div className="grid grid-cols-2 gap-40">
-          <Field>
+        <div className="flex items-center gap-3">
+          <Field className="flex-1 min-w-0">
             <FieldLabel>Range with Units & Limits</FieldLabel>
-            <InputRange 
+            <InputRange
               unit="Km"
               minPlaceholder="10"
               maxPlaceholder="Value"
@@ -203,10 +203,10 @@ export default function InputPreviewPage() {
               maxLimit="100"
             />
           </Field>
-          
-          <Field>
+
+          <Field className="flex-1 min-w-0">
             <FieldLabel>Surface Variant</FieldLabel>
-            <InputRange 
+            <InputRange
               variant="surface"
               unit="m"
               minPlaceholder="0"

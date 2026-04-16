@@ -99,7 +99,7 @@ app/
     ├── about/
     ├── arcjet/
     ├── input-area/
-    ├── orpc-tanstack-query/
+    ├── trpc/
     └── tech-stacks/
 ```
 
@@ -203,7 +203,8 @@ features/
 ```
 hooks/
 ├── use-auth.ts             # Authentication hook: token, user, isAuthenticated
-└── use-mobile.ts           # Mobile viewport detection hook
+├── use-mobile.ts           # Mobile viewport detection hook
+└── use-modal.ts            # Global modal management hook (singleton)
 ```
 
 ### `lib/` — Core Libraries
@@ -213,9 +214,9 @@ lib/
 ├── utils.ts                # `cn()` — Tailwind classname merge utility
 ├── arcjet.ts               # Arcjet security client initialization
 ├── mock-data.ts            # Seed data for sample users (POSTs to CrudCrud)
-├── orpc.ts                 # oRPC client (browser-side) + TanStack Query utils
-├── orpc.server.ts          # oRPC server client (SSR-side, sets globalThis.$client)
-├── serializer.ts           # oRPC JSON serializer for hydration
+├── trpc.ts                 # tRPC isomorphic client + trpc proxy (queryOptions/mutationOptions/queryKey)
+├── trpc.server.ts          # tRPC server client (SSR-side, sets globalThis.$trpcClient via direct-call link)
+├── websocket.ts            # WebSocketManager — reconnect, auth token, typed pub/sub
 ├── auth/                   # Authentication utilities
 │   ├── keycloak.ts         # Keycloak OAuth helpers (login URL, token exchange, UMA)
 │   └── session.ts          # Cookie session management (get/set/clear tokens)
