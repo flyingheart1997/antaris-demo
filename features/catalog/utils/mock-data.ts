@@ -21,7 +21,7 @@ export const mockCatalogItems: CatalogItem[] = [
     specs: {
       size: "U24",
       mass: "42.0 kg",
-      power: "150W peak",
+      power: "150 W",
       gsd: "1.5 M",
       swath: "50 km",
     },
@@ -34,7 +34,7 @@ export const mockCatalogItems: CatalogItem[] = [
     specs: {
       size: "U6",
       mass: "7.2 kg",
-      power: "15W avg",
+      power: "15 W",
       gsd: "4 M",
       swath: "10 km",
     },
@@ -73,7 +73,7 @@ export const mockCatalogItems: CatalogItem[] = [
     specs: {
       size: "U36",
       mass: "36.0 kg",
-      power: "200W perk",
+      power: "200 W",
       gsd: "1 M",
       swath: "60 km",
     },
