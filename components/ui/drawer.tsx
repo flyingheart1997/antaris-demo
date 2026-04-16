@@ -2,14 +2,52 @@
 
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import {
-  Collapsible,
-  CollapsiblePanel,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
 import { IconButton } from "@/components/ui/icon-button"
 import { ChevronDown } from "lucide-react";
 import { Tooltip } from "./tooltip";
+
+
+
+import { Collapsible as CollapsiblePrimitive } from "@base-ui/react/collapsible";
+
+
+export function Collapsible({
+  ...props
+}: CollapsiblePrimitive.Root.Props): React.ReactElement {
+  return <CollapsiblePrimitive.Root data-slot="collapsible" {...props} />;
+}
+
+export function CollapsibleTrigger({
+  className,
+  title,
+  ...props
+}: CollapsiblePrimitive.Trigger.Props): React.ReactElement {
+  return (
+    <CollapsiblePrimitive.Trigger
+      className={cn("cursor-pointer", className)}
+      data-slot="collapsible-trigger"
+      {...props}
+    />
+  );
+}
+
+export function CollapsiblePanel({
+  className,
+  ...props
+}: CollapsiblePrimitive.Panel.Props): React.ReactElement {
+  return (
+    <CollapsiblePrimitive.Panel
+      className={cn(
+        "h-(--collapsible-panel-height) overflow-hidden transition-[height] duration-200 data-ending-style:h-0 data-starting-style:h-0",
+        className,
+      )}
+      data-slot="collapsible-panel"
+      {...props}
+    />
+  );
+}
+
+
 
 function Drawer({
   className,
@@ -48,7 +86,7 @@ const DrawerTrigger = React.forwardRef<
         className={cn(
           // Ensure standard hover states and text color for the trigger. 
           // When open, we might want to preserve a particular tint if defined.
-          "flex items-center justify-center hover:bg-green-alpha-3 hover:border hover:border-stroke-selected [&_svg]:text-icon-secondary rounded-md p-0 h-40 w-40 [&_svg]:size-20 hover:[&_svg]:scale-105 [&_svg]:transition-transform [&_svg]:duration-400 [&_svg]:ease-[cubic-bezier(0.34,1.56,0.64,1)] data-panel-open:[&_svg]:text-icon-primary data-panel-open:bg-green-alpha-2 data-panel-open:border data-panel-open:border-stroke-selected",
+          "flex items-center justify-center hover:bg-green-alpha-3 hover:border-[0.5px] hover:border-stroke-selected [&_svg]:text-icon-secondary rounded-md p-0 h-40 w-40 [&_svg]:size-20 hover:[&_svg]:scale-105 [&_svg]:transition-transform [&_svg]:duration-400 [&_svg]:ease-[cubic-bezier(0.34,1.56,0.64,1)] data-panel-open:[&_svg]:text-icon-primary data-panel-open:bg-green-alpha-2 data-panel-open:border-[0.5px] data-panel-open:border-stroke-selected",
           className
         )}
         {...props}

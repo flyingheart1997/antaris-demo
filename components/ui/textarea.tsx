@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 const textareaVariants = cva(
   [
     "flex min-h-15.5 w-full transition-all outline-none rounded-md p-6",
-    "border focus-visible:outline-none disabled:opacity-40 disabled:pointer-events-none",
+    "border-[0.5px] focus-visible:outline-none disabled:opacity-40 disabled:pointer-events-none",
   ].join(" "),
   {
     variants: {

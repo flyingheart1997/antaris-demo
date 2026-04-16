@@ -20,8 +20,28 @@
   mask-image: linear-gradient(to right, black 85%, transparent 100%);
 }
 
+@utility mask-fade-right {
+  mask-image: linear-gradient(to right, black 85%, transparent 100%);
+}
+
 @utility mask-fade-left {
   mask-image: linear-gradient(to left, black 85%, transparent 100%);
+}
+
+@utility mask-fade-top {
+  mask-image: linear-gradient(to top, black 85%, transparent 100%);
+}
+
+@utility mask-fade-bottom {
+  mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+}
+
+@utility mask-fade-y {
+  mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
+}
+
+@utility mask-fade-x {
+  mask-image: linear-gradient(to right, transparent 0%, black 25%, black 75%, transparent 100%);
 }
 
 :root {

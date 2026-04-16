@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { IconButton, iconButtonVariants } from "./icon-button"
 
 const inputGroupVariants = cva(
-  "group/input-group relative flex w-full min-w-0 items-center transition-all outline-none rounded-md border focus-within:outline-none gap-6",
+  "group/input-group relative flex w-full min-w-0 items-center transition-all outline-none rounded-md border-[0.5px] focus-within:outline-none gap-4",
   {
     variants: {
       variant: {
@@ -88,7 +88,7 @@ const inputGroupAddonVariants = cva(
   {
     variants: {
       align: {
-        "inline-start": "pl-4 has-[>button]:ml-[-0.275rem] has-[>kbd]:ml-[-0.275rem] order-first",
+        "inline-start": "pl-6 has-[>button]:ml-[-0.275rem] has-[>kbd]:ml-[-0.275rem] order-first",
         "inline-end": "pr-4 has-[>button]:mr-[-0.275rem] has-[>kbd]:mr-[-0.275rem] order-last",
         "block-start":
           "px-4 pt-4 group-has-[>input]/input-group:pt-4 [.border-b]:pb-4 order-first w-full justify-start",

@@ -14,7 +14,7 @@ const SelectContext = React.createContext<{ size?: "md" | "lg"; readOnly?: boole
 })
 
 const selectTriggerVariants = cva(
-  "group/select relative flex items-center justify-between w-auto min-w-0 transition-all outline-none disabled:pointer-events-none disabled:opacity-50 rounded-md select-none border border-solid px-6 gap-6 font-regular font-body",
+  "group/select relative flex items-center justify-between w-auto min-w-0 transition-all outline-none disabled:pointer-events-none disabled:opacity-50 rounded-md select-none border-[0.5px] border-solid px-6 gap-6 font-regular font-body",
   {
     variants: {
       variant: {
@@ -137,7 +137,7 @@ const SelectContent = React.forwardRef<
         <SelectPrimitive.Content
           ref={ref}
           className={cn(
-            "relative z-50 max-h-96 w-(--radix-select-trigger-width) overflow-hidden rounded-md border border-stroke-selected bg-surface-primary/0 backdrop-blur-60 text-text-primary shadow-xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 duration-100 p-4",
+            "relative z-50 max-h-96 w-(--radix-select-trigger-width) overflow-hidden rounded-md border-[0.5px] border-stroke-selected bg-surface-primary/0 backdrop-blur-60 text-text-primary shadow-xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 duration-100 p-4",
             position === "popper" &&
             "data-[side=bottom]:translate-y-4 data-[side=left]:-translate-x-4 data-[side=right]:translate-x-4 data-[side=top]:-translate-y-4",
             className

@@ -198,14 +198,15 @@
         ]
       },
       "component-list": [
-        "accordion", "alert-dialog", "animated-group", "avatar", "badge",
+        "accordion", "alert-dialog", "avatar", "badge",
         "button", "card", "checkbox", "collapsible", "drawer", "dialog",
-        "dropdown-menu", "field", "form", "frame", "icon-button",
-        "input-group", "input", "kbd", "label", "radio-group", "resizable",
+        "dropdown-menu", "icon-button",
+        "input-group", "input", "kbd", "radio-group", "resizable",
         "scroll-area", "select", "separator", "sheet", "input-range",
         "sidebar", "skeleton", "sonner", "spinner", "table", "tabs",
-        "text-effect", "text", "textarea", "toaster", "tooltip"
-      ]
+        "text", "textarea", "toaster", "tooltip"
+      ],
+      "_count": "43 components total"
     },
     "component-previews": {
       "description": "Interactive preview pages for each design system component",
@@ -215,7 +216,7 @@
           "app/preview/drawer/", "app/preview/custom-text/", "app/preview/input/",
           "app/preview/radio/", "app/preview/separator-test/", "app/preview/side-nav/",
           "app/preview/sidebar-test/", "app/preview/tabs/", "app/preview/icon-button/",
-          "app/preview/input-range/", "app/preview/field/", "app/preview/sheet/",
+          "app/preview/input-range/", "app/preview/sheet/",
           "app/preview/accordion/"
         ]
       }

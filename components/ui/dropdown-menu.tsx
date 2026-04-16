@@ -50,7 +50,7 @@ const DropdownMenuContent = React.forwardRef<
         sideOffset={sideOffset}
         align={align}
         className={cn(
-          "flex flex-col gap-2 data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 bg-surface-bg border border-stroke-primary min-w-50 rounded-lg p-6 shadow-xl duration-100 z-50 max-h-(--radix-dropdown-menu-content-available-height) w-(--radix-dropdown-menu-trigger-width) origin-(--radix-dropdown-menu-content-transform-origin) overflow-x-hidden overflow-y-auto data-[state=closed]:overflow-hidden",
+          "flex flex-col gap-2 data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 bg-surface-bg border-[0.5px] border-stroke-primary min-w-50 rounded-lg p-6 shadow-xl duration-100 z-50 max-h-(--radix-dropdown-menu-content-available-height) w-(--radix-dropdown-menu-trigger-width) origin-(--radix-dropdown-menu-content-transform-origin) overflow-x-hidden overflow-y-auto data-[state=closed]:overflow-hidden",
           className
         )}
         {...props}
@@ -146,7 +146,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
       checked={checked}
       {...props}
     >
-      <span className="flex size-16 items-center justify-center shrink-0 border border-stroke-primary rounded-sm group-data-[state=checked]:border-white/40">
+      <span className="flex size-16 items-center justify-center shrink-0 border-[0.5px] border-stroke-primary rounded-sm group-data-[state=checked]:border-white/40">
         <DropdownMenuPrimitive.ItemIndicator className="flex items-center justify-center">
           <Check className="size-14" strokeWidth={3} />
         </DropdownMenuPrimitive.ItemIndicator>
@@ -181,7 +181,7 @@ const DropdownMenuRadioItem = React.forwardRef<
       )}
       {...props}
     >
-      <span className="flex size-16 items-center justify-center shrink-0 border border-stroke-primary rounded-full group-data-[state=checked]:border-white/40">
+      <span className="flex size-16 items-center justify-center shrink-0 border-[0.5px] border-stroke-primary rounded-full group-data-[state=checked]:border-white/40">
         <DropdownMenuPrimitive.ItemIndicator className="flex items-center justify-center">
           <div className="size-6 rounded-full" />
         </DropdownMenuPrimitive.ItemIndicator>
@@ -291,7 +291,7 @@ const DropdownMenuSubContent = React.forwardRef<
         data-size={effectiveSize}
         sideOffset={sideOffset}
         className={cn(
-          "data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 bg-surface-bg border border-stroke-primary min-w-50 rounded-lg p-6 shadow-xl duration-100 z-50 origin-(--radix-dropdown-menu-content-transform-origin) overflow-hidden",
+          "data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 bg-surface-bg border-[0.5px] border-stroke-primary min-w-50 rounded-lg p-6 shadow-xl duration-100 z-50 origin-(--radix-dropdown-menu-content-transform-origin) overflow-hidden",
           className
         )}
         {...props}

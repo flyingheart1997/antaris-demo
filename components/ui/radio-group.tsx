@@ -23,7 +23,7 @@ const radioGroupItemVariants = cva(
 )
 
 const radioCircleVariants = cva(
-  "relative flex aspect-square size-16 shrink-0 items-center justify-center rounded-full transition-all border",
+  "relative flex aspect-square size-16 shrink-0 items-center justify-center rounded-full transition-all border-[0.5px]",
   {
     variants: {
       variant: {
