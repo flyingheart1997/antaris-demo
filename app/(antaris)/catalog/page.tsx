@@ -7,14 +7,15 @@ import {
   CatalogStats,
   getPhysicalMetrics,
   mockCatalogItems,
+  useCatalogSelection,
 } from "@/features/catalog"
+import CatalogComponentPreview from "@/features/catalog/components/preview/catalog-component-preview"
 
 export default function CatalogIndexPage() {
-  const [selectedId, setSelectedId] = React.useState<string | null>(mockCatalogItems[0]?.id ?? null)
-
+  const { selectedComponents } = useCatalogSelection()
   const selectedItem = React.useMemo(
-    () => mockCatalogItems.find((item) => item.id === selectedId) ?? mockCatalogItems[0],
-    [selectedId]
+    () => selectedComponents[selectedComponents.length - 1] || mockCatalogItems[0],
+    [selectedComponents]
   )
 
   const physicalMetrics = React.useMemo(
@@ -51,18 +52,11 @@ export default function CatalogIndexPage() {
   )
 
   return (
-    <div className="h-full w-full flex gap-12">
-      <CatalogSidepanel selectedId={selectedId} onSelect={setSelectedId} />
-      <section className="flex-1 min-w-0">
-        {selectedItem ? (
-          <div className="flex h-full flex-col gap-16">
-            <div className="w-125 mx-auto">
-              <MetricProgress metrics={physicalMetrics} />
-            </div>
-            <CatalogStats item={selectedItem} />
-          </div>
-        ) : null}
+    <main className="flex h-full w-full min-w-0 gap-12">
+      <CatalogSidepanel />
+      <section className="min-w-0 flex-1 overflow-hidden">
+        <CatalogComponentPreview />
       </section>
-    </div>
+    </main>
   )
 }

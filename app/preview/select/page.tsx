@@ -47,11 +47,11 @@ export default function SelectPreview() {
                 <SelectContent>
                   <SelectItem value="Option 1">
                     <Globe className="size-14" />
-                    <SelectItemText>Option 1</SelectItemText>
+                    <SelectItemText title="Option 1">Option 1</SelectItemText>
                   </SelectItem>
                   <SelectItem value="Option 2">
                     <User className="size-14" />
-                    <SelectItemText>Option 2</SelectItemText>
+                    <SelectItemText title="Option 2">Option 2</SelectItemText>
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -65,10 +65,10 @@ export default function SelectPreview() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="opt1">
-                    <SelectItemText>Option 1</SelectItemText>
+                    <SelectItemText title="Option 1">Option 1</SelectItemText>
                   </SelectItem>
                   <SelectItem value="opt2">
-                    <SelectItemText>Option 2</SelectItemText>
+                    <SelectItemText title="Option 2">Option 2</SelectItemText>
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -78,18 +78,18 @@ export default function SelectPreview() {
           <div className="flex flex-wrap gap-24 items-end">
             <div className="space-y-8">
               <p className="text-xs font-mono text-text-disabled uppercase">Solid (md)</p>
-              <Select size="md">
-                <SelectTrigger variant="solid" >
+              <Select size="md" variant="solid">
+                <SelectTrigger>
                   <SelectValue placeholder="Choose option" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="opt1">
                     <Globe className="size-14" />
-                    <SelectItemText>Option 1</SelectItemText>
+                    <SelectItemText title="Option 1">Option 1</SelectItemText>
                   </SelectItem>
                   <SelectItem value="opt2">
                     <User className="size-14" />
-                    <SelectItemText>Option 2</SelectItemText>
+                    <SelectItemText title="Option 2">Option 2</SelectItemText>
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -97,18 +97,18 @@ export default function SelectPreview() {
 
             <div className="space-y-8">
               <p className="text-xs font-mono text-text-disabled uppercase">Solid (lg)</p>
-              <Select size="lg">
-                <SelectTrigger variant="solid" >
+              <Select size="lg" variant="solid">
+                <SelectTrigger>
                   <SelectValue placeholder="Choose option" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="opt1">
                     <Globe className="size-14" />
-                    <SelectItemText>Option 1</SelectItemText>
+                    <SelectItemText title="Option 1">Option 1</SelectItemText>
                   </SelectItem>
                   <SelectItem value="opt2">
                     <User className="size-14" />
-                    <SelectItemText>Option 2</SelectItemText>
+                    <SelectItemText title="Option 2">Option 2</SelectItemText>
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -127,14 +127,14 @@ export default function SelectPreview() {
             <SelectContent>
               <SelectItem value="us">
                 <Globe className="size-14" />
-                <SelectItemText>United States</SelectItemText>
+                <SelectItemText title="United States">United States</SelectItemText>
               </SelectItem>
               <SelectItem value="eu">
                 <Globe className="size-14" />
-                <SelectItemText>European Union</SelectItemText>
+                <SelectItemText title="European Union">European Union</SelectItemText>
               </SelectItem>
               <SelectItem value="ap">
-                <SelectItemText>Asia Pacific</SelectItemText>
+                <SelectItemText title="Asia Pacific">Asia Pacific</SelectItemText>
               </SelectItem>
             </SelectContent>
           </Select>
@@ -147,15 +147,15 @@ export default function SelectPreview() {
             <SelectContent>
               <SelectItem value="low">
                 <Shield className="size-14" />
-                <SelectItemText>Standard Protection</SelectItemText>
+                <SelectItemText title="Standard Protection">Standard Protection</SelectItemText>
               </SelectItem>
               <SelectItem value="mid">
                 <Shield className="size-14" />
-                <SelectItemText>Advanced Shield</SelectItemText>
+                <SelectItemText title="Advanced Shield">Advanced Shield</SelectItemText>
               </SelectItem>
               <SelectItem value="high">
                 <Shield className="size-14" />
-                <SelectItemText>Enterprise Core</SelectItemText>
+                <SelectItemText title="Enterprise Core">Enterprise Core</SelectItemText>
               </SelectItem>
             </SelectContent>
           </Select>
@@ -173,21 +173,21 @@ export default function SelectPreview() {
               <SelectLabel>Automations</SelectLabel>
               <SelectItem value="zap">
                 <Zap className="size-14 text-text-warning" />
-                <SelectItemText>Zapier Trigger</SelectItemText>
+                <SelectItemText title="Zapier Trigger">Zapier Trigger</SelectItemText>
               </SelectItem>
               <SelectItem value="webhook">
                 <Bell className="size-14 text-text-info" />
-                <SelectItemText>Webhook Listener</SelectItemText>
+                <SelectItemText title="Webhook Listener">Webhook Listener</SelectItemText>
               </SelectItem>
             </SelectGroup>
             <SelectSeparator />
             <SelectGroup>
               <SelectLabel>Administration</SelectLabel>
               <SelectItem value="billing">
-                <SelectItemText>Cloud Billing</SelectItemText>
+                <SelectItemText title="Cloud Billing">Cloud Billing</SelectItemText>
               </SelectItem>
               <SelectItem value="usage">
-                <SelectItemText>Resource Usage</SelectItemText>
+                <SelectItemText title="Resource Usage">Resource Usage</SelectItemText>
               </SelectItem>
             </SelectGroup>
           </SelectContent>
@@ -198,13 +198,13 @@ export default function SelectPreview() {
         <div className="flex flex-wrap gap-24 items-end">
           <div className="space-y-8">
             <p className="text-xs font-mono text-text-error uppercase italic">Error State</p>
-            <Select>
-              <SelectTrigger color="error" >
+            <Select color="error">
+              <SelectTrigger>
                 <SelectValue placeholder="Fix critical error" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="retry">
-                  <SelectItemText>Retry Connection</SelectItemText>
+                  <SelectItemText title="Retry Connection">Retry Connection</SelectItemText>
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -218,7 +218,7 @@ export default function SelectPreview() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="none">
-                  <SelectItemText>Ghost option</SelectItemText>
+                  <SelectItemText title="Ghost option">Ghost option</SelectItemText>
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -232,7 +232,7 @@ export default function SelectPreview() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="read-only">
-                  <SelectItemText>Static value</SelectItemText>
+                  <SelectItemText title="Static value">Static value</SelectItemText>
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -246,10 +246,10 @@ export default function SelectPreview() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="active">
-                  <SelectItemText>Active Session</SelectItemText>
+                  <SelectItemText title="Active Session">Active Session</SelectItemText>
                 </SelectItem>
                 <SelectItem value="idle">
-                  <SelectItemText>Idle Timeout</SelectItemText>
+                  <SelectItemText title="Idle Timeout">Idle Timeout</SelectItemText>
                 </SelectItem>
               </SelectContent>
             </Select>

@@ -3,7 +3,7 @@
 import * as React from "react"
 import { Text } from "@/components/ui/text"
 import { cn } from "@/lib/utils"
-import type { CatalogItem } from "../types/catalog"
+import type { CatalogItem } from "../types/catalog-data-types"
 import { StatProgress } from "@/components/stat-progress"
 
 const STAT_CONFIG = [

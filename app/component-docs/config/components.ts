@@ -152,24 +152,19 @@ import { Mail, ArrowRight, Settings } from "lucide-react"
     slug: "tabs",
     name: "Tabs",
     category: "UI",
-    summary: "Segmented navigation control with 3 visual variants, 3 sizes, icon and badge support.",
+    summary: "Segmented navigation control with 2 sizes, focused on a unified high-fidelity design.",
     description:
-      "Tabs provides accessible keyboard-navigable tab navigation built on Radix UI Tabs. Three visual variants (surface, underline, soft) × three sizes (sm, md, lg). Supports leading/trailing icons and numeric badge counts. The variant and size context is propagated automatically from TabsList to all TabsTrigger children.",
+      "Tabs provide accessible keyboard-navigable tab navigation built on Radix UI Tabs. Features a high-fidelity, CSS-driven design with 2 sizes (md, lg). The size configuration is applied at the root <Tabs> component and propagates automatically to trigger states (hover, active, disabled) using CSS variables and group modifiers.",
     variants: [
-      { label: "Surface", description: "Pill-style tabs inside a container with active state card effect." },
-      { label: "Underline", description: "Minimal bottom-border indicator, full-width line." },
-      { label: "Soft", description: "Low-profile with green tint on active tab." },
+      { label: "Size md", description: "Default compact size with 32px height and refined spacing." },
+      { label: "Size lg", description: "Prominent size with 40px height and standard padding." },
     ],
     props: [
-      { name: "variant (TabsList)", type: "'surface' | 'underline' | 'soft'", default: "'surface'", description: "Visual style of the tab list." },
-      { name: "size (TabsList)", type: "'sm' | 'md' | 'lg'", default: "'md'", description: "Height and font-size of the tab list." },
-      { name: "iconStart (TabsTrigger)", type: "React.ReactNode", default: "—", description: "Icon rendered before trigger label." },
-      { name: "iconEnd (TabsTrigger)", type: "React.ReactNode", default: "—", description: "Icon rendered after trigger label." },
-      { name: "badge (TabsTrigger)", type: "React.ReactNode", default: "—", description: "Badge/count indicator next to label." },
-      { name: "disabled (TabsTrigger)", type: "boolean", default: "false", description: "Disables the individual tab trigger." },
+      { name: "size (Tabs)", type: "'md' | 'lg'", default: "'md'", description: "Unified size scale for the entire tab system." },
       { name: "defaultValue (Tabs)", type: "string", default: "—", description: "Initially selected tab value." },
       { name: "value (Tabs)", type: "string", default: "—", description: "Controlled selected value." },
       { name: "onValueChange (Tabs)", type: "(value: string) => void", default: "—", description: "Callback when selected tab changes." },
+      { name: "disabled (TabsTrigger)", type: "boolean", default: "false", description: "Disables the individual tab trigger." },
     ],
     codeExample: `import {
   Tabs,
@@ -179,12 +174,13 @@ import { Mail, ArrowRight, Settings } from "lucide-react"
 } from "@/components/ui/tabs"
 import { LayoutDashboard } from "lucide-react"
 
-<Tabs defaultValue="overview">
-  <TabsList variant="surface" size="md">
-    <TabsTrigger value="overview" iconStart={<LayoutDashboard size={14} />}>
+<Tabs defaultValue="overview" size="md">
+  <TabsList>
+    <TabsTrigger value="overview">
+      <LayoutDashboard size={14} className="mr-2" />
       Overview
     </TabsTrigger>
-    <TabsTrigger value="analytics" badge={5}>
+    <TabsTrigger value="analytics">
       Analytics
     </TabsTrigger>
     <TabsTrigger value="settings" disabled>
@@ -437,18 +433,18 @@ import { Plus, Trash2, Settings, X } from "lucide-react"
     category: "UI",
     summary: "Collapsible sidebar navigation drawer with icon items, tooltips, and chevron toggle.",
     description:
-      "The Drawer component is a vertical sidebar icon drawer — a collapsible strip of icon navigation buttons. Built on Collapsible. Drawer wraps all items, DrawerTrigger adds icon buttons with right-side tooltips, DrawerContainer holds the expanded icon list, and DrawerItem is each navigation button.",
+      "The Drawer component is a vertical sidebar icon drawer — a collapsible strip of icon navigation buttons. It follows a Root-Prop pattern where active state is controlled at the top level. Built on Collapsible with a specialized CSS-driven active highlight. Use DrawerTrigger for main category buttons and DrawerItem for sub-navigation.",
     variants: [
       { label: "Collapsed", description: "Only the toggle chevron is visible. Items are hidden." },
       { label: "Expanded", description: "DrawerContainer reveals all DrawerItem icon buttons." },
-      { label: "Active Item", description: "DrawerItem with active={true} shows green tint and selected state." },
+      { label: "Active Selection", description: "Root active={true} highlights the entire drawer category with Antaris selection tokens." },
     ],
     props: [
-      { name: "defaultOpen (Drawer)", type: "boolean", default: "false", description: "Initial open state of the Collapsible." },
-      { name: "open (Drawer)", type: "boolean", default: "—", description: "Controlled open state." },
-      { name: "onOpenChange (Drawer)", type: "(open: boolean) => void", default: "—", description: "Callback on open state change." },
+      { name: "active (Drawer)", type: "boolean", default: "false", description: "Active logical state based on current navigation category." },
+      { name: "open (Drawer)", type: "boolean", default: "—", description: "Controlled open/closed state of the collapsible panel." },
+      { name: "onOpenChange (Drawer)", type: "(open: boolean) => void", default: "—", description: "Callback triggered when the drawer is toggled via chevron or trigger." },
       { name: "title (DrawerTrigger)", type: "string", default: "—", description: "Tooltip text shown on the right side of the trigger." },
-      { name: "active (DrawerItem)", type: "boolean", default: "false", description: "Highlights the item with green tint and selected state." },
+      { name: "active (DrawerItem)", type: "boolean", default: "false", description: "Highlights the individual sub-navigation item." },
       { name: "title (DrawerItem)", type: "string", default: "—", description: "Tooltip label shown on hover (required).", required: true },
     ],
     codeExample: `import {
@@ -459,18 +455,18 @@ import { Plus, Trash2, Settings, X } from "lucide-react"
 } from "@/components/ui/drawer"
 import { Satellite, Globe, Settings } from "lucide-react"
 
-<Drawer>
-  <DrawerTrigger title="Navigation">
+<Drawer active={isSatellitesActive} open={isOpen} onOpenChange={setOpen}>
+  <DrawerTrigger title="Navigation" onClick={() => switchDrawer('satellites')}>
     <Satellite />
   </DrawerTrigger>
   <DrawerContainer>
-    <DrawerItem title="Satellites" active>
+    <DrawerItem title="Active Mission" active>
       <Satellite />
     </DrawerItem>
-    <DrawerItem title="Ground Stations">
+    <DrawerItem title="Global Constellation">
       <Globe />
     </DrawerItem>
-    <DrawerItem title="Settings">
+    <DrawerItem title="System Settings">
       <Settings />
     </DrawerItem>
   </DrawerContainer>
@@ -659,31 +655,32 @@ import { Search } from "lucide-react"
     slug: "select",
     name: "Select",
     category: "Forms",
-    summary: "Dropdown select with surface/solid variants, sizes, grouped options, and error state.",
+    summary: "Dropdown select with surface/solid variants, sizes, and readonly state on root.",
     description:
-      "Select is built on Radix UI Select. The trigger supports surface and solid variants, md and lg sizes, a leadingIcon, and color states. The dropdown content automatically matches the trigger width.",
+      "Select is built on Radix UI Select. It utilizes a Root-Prop pattern where all aesthetic configuration (variant, color, size, readOnly) is managed on the root <Select> component. This state automatically propagates to the trigger and dropdown content via internal cloning, ensuring perfect synchronization.",
     variants: [
       { label: "Surface", description: "Default — outlined trigger with hover background." },
       { label: "Solid", description: "Filled trigger background." },
       { label: "Grouped Options", description: "SelectGroup + SelectLabel for categorized option lists." },
-      { label: "Error State", description: "color='error' applies red ring and border." },
+      { label: "ReadOnly", description: "Sets the entire select control to a non-editable visual state." },
     ],
     props: [
-      { name: "variant (SelectTrigger)", type: "'surface' | 'solid'", default: "'surface'", description: "Visual style of the SelectTrigger." },
-      { name: "color (SelectTrigger)", type: "'primary' | 'info' | 'success' | 'warning' | 'error'", default: "'primary'", description: "Semantic color state for focus ring." },
-      { name: "size (SelectTrigger)", type: "'md' | 'lg'", default: "'md'", description: "Height and padding of the trigger." },
-      { name: "leadingIcon (SelectTrigger)", type: "React.ReactNode", default: "—", description: "Icon rendered on the left side of the trigger." },
-      { name: "placeholder (SelectValue)", type: "string", default: "—", description: "Placeholder text when no value is selected." },
-      { name: "disabled (Select)", type: "boolean", default: "false", description: "Disables the select control." },
+      { name: "variant", type: "'surface' | 'solid' | 'neutral'", default: "'surface'", description: "Visual style of the Select component." },
+      { name: "color", type: "'primary' | 'error'", default: "'primary'", description: "Semantic color state." },
+      { name: "size", type: "'md' | 'lg'", default: "'md'", description: "Height and padding scale." },
+      { name: "readOnly", type: "boolean", default: "false", description: "Sets the select to a visual non-editable mode." },
+      { name: "disabled", type: "boolean", default: "false", description: "Standard HTML disabled state." },
+      { name: "placeholder", type: "string", default: "—", description: "Placeholder text when no value is selected." },
     ],
     codeExample: `import {
   Select, SelectContent, SelectGroup,
-  SelectItem, SelectLabel, SelectTrigger, SelectValue,
+  SelectItem, SelectLabel, SelectTrigger, SelectValue, SelectItemText
 } from "@/components/ui/select"
 import { Globe } from "lucide-react"
 
-<Select>
-  <SelectTrigger leadingIcon={<Globe size={14} />}>
+<Select variant="surface" size="lg" color="primary">
+  <SelectTrigger>
+    <Globe size={14} className="mr-6" />
     <SelectValue placeholder="Select region" />
   </SelectTrigger>
   <SelectContent>

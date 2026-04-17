@@ -6,10 +6,7 @@ import { IconButton } from "@/components/ui/icon-button"
 import { ChevronDown } from "lucide-react";
 import { Tooltip } from "./tooltip";
 
-
-
 import { Collapsible as CollapsiblePrimitive } from "@base-ui/react/collapsible";
-
 
 export function Collapsible({
   ...props
@@ -52,14 +49,16 @@ export function CollapsiblePanel({
 function Drawer({
   className,
   children,
+  active,
   ...props
-}: React.ComponentProps<typeof Collapsible>) {
+}: React.ComponentProps<typeof Collapsible> & { active?: boolean }) {
   return (
     <Collapsible
       className={cn(
-        "inline-flex flex-col items-center bg-surface-bg p-4 rounded-lg relative",
+        "group/drawer inline-flex flex-col items-center bg-surface-bg p-4 rounded-lg relative",
         className
       )}
+      data-active={active}
       {...props}
     >
       {children}
@@ -78,7 +77,7 @@ Drawer.displayName = "Drawer"
 
 const DrawerTrigger = React.forwardRef<
   React.ElementRef<typeof CollapsibleTrigger>,
-  React.ComponentProps<typeof CollapsibleTrigger>
+  React.ComponentProps<typeof CollapsibleTrigger> & { title: string }
 >(({ className, children, title, ...props }, ref) => {
   return (
     <Tooltip side="right" content={title}>
@@ -87,6 +86,7 @@ const DrawerTrigger = React.forwardRef<
           // Ensure standard hover states and text color for the trigger. 
           // When open, we might want to preserve a particular tint if defined.
           "flex items-center justify-center hover:bg-green-alpha-3 hover:border-[0.5px] hover:border-stroke-selected [&_svg]:text-icon-secondary rounded-md p-0 h-40 w-40 [&_svg]:size-20 hover:[&_svg]:scale-105 [&_svg]:transition-transform [&_svg]:duration-400 [&_svg]:ease-[cubic-bezier(0.34,1.56,0.64,1)] data-panel-open:[&_svg]:text-icon-primary data-panel-open:bg-green-alpha-2 data-panel-open:border-[0.5px] data-panel-open:border-stroke-selected",
+          "group-data-[active=true]/drawer:[&_svg]:text-icon-primary group-data-[active=true]/drawer:bg-green-alpha-2 group-data-[active=true]/drawer:border-[0.5px] group-data-[active=true]/drawer:border-stroke-selected",
           className
         )}
         {...props}

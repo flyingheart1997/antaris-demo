@@ -34,16 +34,16 @@ export function DocsTabs({ slug, code, previewHeight = 560 }: DocsTabsProps) {
         <TabsList className="bg-surface-bg border border-stroke-primary p-4 rounded-xl h-40 shadow-inner">
           <TabsTrigger
             value="preview"
-            iconStart={<Eye size={16} />}
             className="rounded-lg px-20 font-bold text-sm tracking-tight data-[state=active]:bg-green-alpha-3 data-[state=active]:text-green-11 data-[state=active]:shadow-sm transition-all"
           >
+            <Eye size={16} />
             Visual
           </TabsTrigger>
           <TabsTrigger
             value="code"
-            iconStart={<Code2 size={16} />}
             className="rounded-lg px-20 font-bold text-sm tracking-tight data-[state=active]:bg-green-alpha-3 data-[state=active]:text-green-11 data-[state=active]:shadow-sm transition-all"
           >
+            <Code2 size={16} />
             Code
           </TabsTrigger>
         </TabsList>

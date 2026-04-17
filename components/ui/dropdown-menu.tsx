@@ -99,12 +99,12 @@ DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName
 const DropdownMenuItemText = React.forwardRef<
   HTMLSpanElement,
   React.ComponentPropsWithoutRef<"span"> & {
+    title?: string
     side?: "top" | "bottom" | "left" | "right"
-    hideTooltip?: boolean
   }
->(({ className, side = "right", hideTooltip = false, children, ...props }, ref) => {
+>(({ className, side = "right", title, children, ...props }, ref) => {
   return (
-    <Tooltip content={children} side={side} hidden={hideTooltip}>
+    <Tooltip content={title} side={side} hidden={!title}>
       <span
         ref={ref}
         data-slot="dropdown-menu-item-text"

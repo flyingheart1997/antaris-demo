@@ -3,16 +3,14 @@
 import * as React from "react"
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
 import CatalogCard from "./catalog-card"
-import type { CatalogItem } from "../types/catalog"
-import { mockCatalogItems } from "../utils/mock-data"
+import type { CatalogItem } from "../../types/catalog-data-types"
+import { mockCatalogItems } from "../../utils/mock-data"
 import { Text } from "@/components/ui/text"
 
-interface CatalogListProps {
-  selectedId: string | null
-  onSelect: (id: string) => void
-}
+import { useCatalogSelection } from "../../hooks/use-catalog-selection"
 
-export function CatalogList({ selectedId, onSelect }: CatalogListProps) {
+export function CatalogList() {
+  const { isSelectedComponent, selectComponent } = useCatalogSelection()
 
   // Group items by category
   const groups = React.useMemo(() => {
@@ -27,7 +25,7 @@ export function CatalogList({ selectedId, onSelect }: CatalogListProps) {
       items,
       count: items.length
     }))
-  }, [])
+  }, [mockCatalogItems])
 
   return (
     <div className="h-[calc(100vh-165px)] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
@@ -45,8 +43,8 @@ export function CatalogList({ selectedId, onSelect }: CatalogListProps) {
                 <CatalogCard
                   key={item.id}
                   item={item}
-                  selected={selectedId === item.id}
-                  onClick={() => onSelect(item.id)}
+                  selected={isSelectedComponent(item.id)}
+                  onClick={() => selectComponent(item)}
                 />
               ))}
             </AccordionContent>

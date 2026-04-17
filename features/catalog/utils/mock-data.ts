@@ -1,4 +1,4 @@
-import type { CatalogItem } from "../types/catalog";
+import type { CatalogItem } from "../types/catalog-data-types";
 
 export const mockCatalogItems: CatalogItem[] = [
   {
@@ -42,6 +42,32 @@ export const mockCatalogItems: CatalogItem[] = [
   },
   {
     id: "4",
+    name: "HyperSpec-10",
+    category: "Imager",
+    specs: {
+      size: "U6",
+      mass: "7.2 kg",
+      power: "15 W",
+      gsd: "4 M",
+      swath: "10 km",
+    },
+    tags: ["Hyperspectral"],
+  },
+  {
+    id: "5",
+    name: "HyperSpec-11",
+    category: "Imager",
+    specs: {
+      size: "U6",
+      mass: "7.2 kg",
+      power: "15 W",
+      gsd: "4 M",
+      swath: "10 km",
+    },
+    tags: ["Hyperspectral"],
+  },
+  {
+    id: "6",
     name: "AIS Receiver Pro",
     category: "AIS",
     specs: {
@@ -54,20 +80,7 @@ export const mockCatalogItems: CatalogItem[] = [
     tags: ["AIS", "VHF"],
   },
   {
-    id: "5",
-    name: "DragonEye Optic",
-    category: "Imager",
-    specs: {
-      size: "U12",
-      mass: "12.5 kg",
-      power: "25 W",
-      gsd: "0.8 M",
-      swath: "20 km",
-    },
-    tags: ["Optical", "High-Res"],
-  },
-  {
-    id: "6",
+    id: "7",
     name: "L-Band SAR payload",
     category: "SAR",
     specs: {

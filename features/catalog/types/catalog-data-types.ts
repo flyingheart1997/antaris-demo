@@ -1,3 +1,5 @@
+import { CatalogComponentTypes, CatalogDrawerTypes } from "./catalog-selection-state-types";
+
 export interface CatalogItem {
   id: string;
   name: string;
@@ -12,6 +14,9 @@ export interface CatalogItem {
     [key: string]: string | undefined;
   };
   tags: string[];
+  catalogType: CatalogDrawerTypes;
+  componentType: CatalogComponentTypes | null;
+  componentIcon: React.ComponentType
 }
 
 export interface CatalogCategoryGroup {

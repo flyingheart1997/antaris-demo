@@ -9,9 +9,9 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card"
-import type { CatalogItem } from "../types/catalog"
 import { Badge } from "@/components/ui/badge"
 import { Text } from "@/components/ui/text"
+import type { CatalogItem } from "../../types/catalog-data-types"
 
 interface CatalogCardProps extends React.HTMLAttributes<HTMLDivElement> {
   item: CatalogItem

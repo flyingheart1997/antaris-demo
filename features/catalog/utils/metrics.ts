@@ -1,4 +1,4 @@
-import type { PhysicalMetric, PhysicalMetricSource } from "../types/catalog"
+import type { PhysicalMetric, PhysicalMetricSource } from "../types/catalog-data-types"
 
 export function getPhysicalMetrics(
   sources: PhysicalMetricSource[]

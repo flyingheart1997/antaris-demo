@@ -44,6 +44,14 @@
   mask-image: linear-gradient(to right, transparent 0%, black 25%, black 75%, transparent 100%);
 }
 
+@utility hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 :root {
   --destructive-foreground: var(--color-red-700);
 }
