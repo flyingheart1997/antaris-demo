@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Text } from "@/components/ui/text"
-import type { CatalogItem } from "../../types/catalog-data-types"
+import type { CatalogItem } from "@/features/catalog/types/catalog-data-types"
 
 interface CatalogCardProps extends React.HTMLAttributes<HTMLDivElement> {
   item: CatalogItem

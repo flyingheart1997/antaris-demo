@@ -10,11 +10,11 @@ import {
   AdcsIcon,
   GpsIcon,
   TempIcon,
-  ThrusterIcon
+  ThrusterIcon,
 } from "@/icons";
-import { CatalogDrawerTypes, CatalogComponentTypes, DrawerConfigType } from "../types/catalog-selection-state-types";
+import { CatalogCategoryTypes, CatalogSubsystemTypes, CategoryConfigType } from "../types/catalog-selection-state-types";
 
-export const DRAWER_CONFIGS: DrawerConfigType[] = [
+export const CATEGORY_CONFIGS: CategoryConfigType[] = [
   {
     label: "Payload",
     value: "payload",
@@ -43,14 +43,13 @@ export const DRAWER_CONFIGS: DrawerConfigType[] = [
   }
 ];
 
-export const getDrawerConfig = (drawerType: CatalogDrawerTypes) => {
-  return DRAWER_CONFIGS.find((d) => d.value === drawerType)
+export const getCategoryConfig = (categoryType: CatalogCategoryTypes) => {
+  return CATEGORY_CONFIGS.find((d) => d.value === categoryType)
 }
 
-export const getDrawerItemConfig = (drawerType: CatalogDrawerTypes, componentType: CatalogComponentTypes | null) => {
-  const drawer = DRAWER_CONFIGS.find((d) => d.value === drawerType)
-  if (!drawer) return null
-  else if (!componentType) return drawer
-  else return drawer.items.find((i) => i.value === componentType)
+export const getSubsystemConfig = (categoryType: CatalogCategoryTypes, subsystemType: CatalogSubsystemTypes | null) => {
+  const category = CATEGORY_CONFIGS.find((d) => d.value === categoryType)
+  if (!category) return null
+  else if (!subsystemType) return category
+  else return category.items.find((i) => i.value === subsystemType)
 }
-

@@ -1,25 +1,22 @@
 import { CatalogItem } from "./catalog-data-types";
 
-export type CatalogDrawerTypes = 'payload' | 'bus';
-export type CatalogComponentTypes = 'earth-observation' | 'comms' | 'edge' | 'processor' | 'eps' | 'adcs' | 'gps' | 'temperature' | 'thruster' | 'custom';
+export type CatalogCategoryTypes = 'payload' | 'bus';
+export type CatalogSubsystemTypes = 'earth-observation' | 'comms' | 'edge' | 'processor' | 'eps' | 'adcs' | 'gps' | 'temperature' | 'thruster' | 'custom';
 
-export interface DrawerItemConfig {
+export interface SubsystemItemConfig {
     label: string;
-    value: CatalogComponentTypes;
+    value: CatalogSubsystemTypes;
     icon: React.ComponentType;
 }
 
-export interface DrawerConfigType {
+export interface CategoryConfigType {
     label: string;
-    value: CatalogDrawerTypes;
+    value: CatalogCategoryTypes;
     icon: React.ComponentType;
-    items: DrawerItemConfig[];
+    items: SubsystemItemConfig[];
 }
 
 export interface CatalogSelectionStateType {
-    drawer: CatalogDrawerTypes;
-    open: boolean;
-    activeDrawer: CatalogComponentTypes | null;
-    selectedComponents: CatalogItem[];
-    selectedComponentTab: string | null;
+    selectedComponents: string[]; // Stores IDs only
+    open: boolean;                 // Sidebar state
 }

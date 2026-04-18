@@ -4,7 +4,9 @@ export const mockCatalogItems: CatalogItem[] = [
   {
     id: "1",
     name: "XDLINX 2M Imager",
-    category: "Imager",
+    groupLabel: "Imager",
+    category: "payload",
+    subSystem: "earth-observation",
     specs: {
       size: "8 U",
       mass: "10 Kg",
@@ -17,7 +19,9 @@ export const mockCatalogItems: CatalogItem[] = [
   {
     id: "2",
     name: "SAR-X Band Radar",
-    category: "SAR",
+    groupLabel: "SAR",
+    category: "payload",
+    subSystem: "earth-observation",
     specs: {
       size: "U24",
       mass: "42.0 kg",
@@ -30,33 +34,9 @@ export const mockCatalogItems: CatalogItem[] = [
   {
     id: "3",
     name: "HyperSpec-9",
-    category: "Imager",
-    specs: {
-      size: "U6",
-      mass: "7.2 kg",
-      power: "15 W",
-      gsd: "4 M",
-      swath: "10 km",
-    },
-    tags: ["Hyperspectral"],
-  },
-  {
-    id: "4",
-    name: "HyperSpec-10",
-    category: "Imager",
-    specs: {
-      size: "U6",
-      mass: "7.2 kg",
-      power: "15 W",
-      gsd: "4 M",
-      swath: "10 km",
-    },
-    tags: ["Hyperspectral"],
-  },
-  {
-    id: "5",
-    name: "HyperSpec-11",
-    category: "Imager",
+    groupLabel: "Imager",
+    category: "payload",
+    subSystem: "earth-observation",
     specs: {
       size: "U6",
       mass: "7.2 kg",
@@ -69,7 +49,9 @@ export const mockCatalogItems: CatalogItem[] = [
   {
     id: "6",
     name: "AIS Receiver Pro",
-    category: "AIS",
+    groupLabel: "AIS",
+    category: "payload",
+    subSystem: "comms",
     specs: {
       size: "1 U",
       mass: "0.5 Kg",
@@ -82,7 +64,9 @@ export const mockCatalogItems: CatalogItem[] = [
   {
     id: "7",
     name: "L-Band SAR payload",
-    category: "SAR",
+    groupLabel: "SAR",
+    category: "payload",
+    subSystem: "earth-observation",
     specs: {
       size: "U36",
       mass: "36.0 kg",
@@ -92,4 +76,30 @@ export const mockCatalogItems: CatalogItem[] = [
     },
     tags: ["L-Band", "SAR"],
   },
+  {
+    id: "8",
+    name: "Antaris EPS Module",
+    groupLabel: "Power",
+    category: "bus",
+    subSystem: "eps",
+    specs: {
+      size: "1 U",
+      mass: "1.2 kg",
+      power: "100 W",
+    },
+    tags: ["Li-Ion", "Standard"],
+  },
+  {
+    id: "9",
+    name: "Reaction Wheel V4",
+    groupLabel: "ADCS",
+    category: "bus",
+    subSystem: "adcs",
+    specs: {
+      size: "0.5 U",
+      mass: "2.5 kg",
+      power: "5 W",
+    },
+    tags: ["Precise", "High Torque"],
+  }
 ];

@@ -8,8 +8,8 @@ import {
   getPhysicalMetrics,
   mockCatalogItems,
   useCatalogSelection,
+  CatalogComponentPreview,
 } from "@/features/catalog"
-import CatalogComponentPreview from "@/features/catalog/components/preview/catalog-component-preview"
 
 export default function CatalogIndexPage() {
   const { selectedComponents } = useCatalogSelection()

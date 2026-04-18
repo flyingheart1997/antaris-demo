@@ -126,7 +126,7 @@ export default function HeroSection() {
                                     radius='lg'
                                 >
                                     {/* <Link href="/users"> */}
-                                    <Link href="/catalog">
+                                    <Link href="/catalog?category=payload&drawer=true&subSystem=earth-observation">
                                         <span className="text-nowrap">Get Started</span>
                                     </Link>
                                 </Button>

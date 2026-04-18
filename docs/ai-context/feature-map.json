@@ -166,15 +166,23 @@
           "features/catalog/components/catalog-sidepanel.tsx",
           "features/catalog/components/catalog-stats.tsx"
         ],
+        "hooks": [
+          "features/catalog/hooks/use-catalog-navigation.ts"
+        ],
         "types": "features/catalog/types/catalog.ts",
         "mock": "features/catalog/utils/mock-data.ts",
         "barrel": "features/catalog/index.ts"
       },
       "exports": [
-        "CatalogCard",
-        "CatalogCategoryGroup",
-        "CatalogSidepanel",
-        "CatalogStats"
+        "useCatalogSelection",
+        "useCatalogNavigation",
+        "useCatalogStore",
+        "CatalogLayout"
+      ],
+      "interfaces": [
+        "CatalogCategoryTypes",
+        "CatalogSubsystemTypes",
+        "CatalogItem"
       ],
       "doc": "docs/features/catalog.md",
       "_note": "Backend routes (tRPC) not yet implemented — uses static mock data"

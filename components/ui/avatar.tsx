@@ -5,6 +5,7 @@ import * as AvatarPrimitive from "@radix-ui/react-avatar"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
+import { Tooltip } from "./tooltip"
 
 const avatarVariants = cva(
   "inline-flex shrink-0 items-center justify-center overflow-hidden bg-surface-bg border relative rounded-md text-text-primary select-none",
@@ -66,19 +67,26 @@ const indicatorVariants = cva(
 
 interface AvatarProps
   extends Omit<React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root>, "color">,
-  VariantProps<typeof avatarVariants> { }
+  VariantProps<typeof avatarVariants> {
+  title?: string
+  side?: "top" | "bottom" | "left" | "right"
+}
 
 const Avatar = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Root>,
   AvatarProps
->(({ className, size, color, ...props }, ref) => (
+>(({ className, children, title, side = 'top', size, color, ...props }, ref) => (
   <AvatarPrimitive.Root
     ref={ref}
     data-slot="avatar"
     data-size={size}
     className={cn(avatarVariants({ size, color, className }))}
     {...props}
-  />
+  >
+    <Tooltip content={title} side={side} hidden={!title}>
+      {children}
+    </Tooltip>
+  </AvatarPrimitive.Root>
 ))
 Avatar.displayName = AvatarPrimitive.Root.displayName
 

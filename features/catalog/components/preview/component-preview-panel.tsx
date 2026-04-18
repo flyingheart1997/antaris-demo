@@ -1,6 +1,6 @@
 'use client'
 
-import { useCatalogSelection } from '../../hooks/use-catalog-selection'
+import { useCatalogSelection } from '@/features/catalog/hooks/use-catalog-selection'
 import { TabsContent } from '@/components/ui/tabs'
 
 export const ComponentPreviewPanel = () => {

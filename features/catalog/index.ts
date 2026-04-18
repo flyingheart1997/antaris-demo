@@ -1,4 +1,5 @@
 export { default as CatalogLayout } from './components/catalog-layout';
+export { CatalogComponentPreview } from './components/preview/catalog-component-preview';
 export { CatalogSidepanel } from './components/sidepanel/catalog-sidepanel';
 export { MetricProgress } from '@/components/metric-progress';
 export { getPhysicalMetrics } from './utils/metrics';

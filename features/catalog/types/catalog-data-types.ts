@@ -1,10 +1,10 @@
-import { CatalogComponentTypes, CatalogDrawerTypes } from "./catalog-selection-state-types";
+import { CatalogSubsystemTypes, CatalogCategoryTypes } from "./catalog-selection-state-types";
 
 export interface CatalogItem {
   id: string;
   name: string;
   subtitle?: string;
-  category?: string;
+  groupLabel?: string; // e.g. "Imager", "SAR"
   specs: {
     size?: string;
     mass?: string;
@@ -14,9 +14,9 @@ export interface CatalogItem {
     [key: string]: string | undefined;
   };
   tags: string[];
-  catalogType: CatalogDrawerTypes;
-  componentType: CatalogComponentTypes | null;
-  componentIcon: React.ComponentType
+  category: CatalogCategoryTypes; // "payload" | "bus"
+  subSystem: CatalogSubsystemTypes | null;
+  componentIcon?: React.ComponentType;
 }
 
 export interface CatalogCategoryGroup {
