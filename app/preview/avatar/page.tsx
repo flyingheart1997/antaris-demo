@@ -37,7 +37,7 @@ export default function AvatarPreview() {
               {SIZES.map((size) => (
                 <div key={size} className="flex flex-col items-center justify-center min-w-40">
                   <Avatar size={size} color={color} className="relative">
-                    <AvatarFallback size={size}>{color.slice(0, 2).toUpperCase()}</AvatarFallback>
+                    <AvatarFallback>{color.slice(0, 2).toUpperCase()}</AvatarFallback>
                   </Avatar>
                 </div>
               ))}
@@ -63,7 +63,7 @@ export default function AvatarPreview() {
               {SIZES.map((size) => (
                 <div key={size} className="flex flex-col items-center justify-center min-w-40">
                   <Avatar size={size} color={color}>
-                    <AvatarFallback size={size}>{color.slice(0, 2).toUpperCase()}</AvatarFallback>
+                    <AvatarFallback >{color.slice(0, 2).toUpperCase()}</AvatarFallback>
                   </Avatar>
                 </div>
               ))}
@@ -106,12 +106,12 @@ export default function AvatarPreview() {
           </Avatar>
           <Avatar size="5">
             <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka" alt="Aneka" />
-            <AvatarFallback size="5" color="green">AN</AvatarFallback>
+            <AvatarFallback color="green">AN</AvatarFallback>
           </Avatar>
           <Avatar size="5">
             {/* Intentionally broken src for fallback demo */}
             <AvatarImage src="/broken-image.jpg" alt="Fallback" />
-            <AvatarFallback size="5" color="red">FB</AvatarFallback>
+            <AvatarFallback color="red">FB</AvatarFallback>
           </Avatar>
         </div>
       </Section>
@@ -120,11 +120,11 @@ export default function AvatarPreview() {
         <div className="flex -space-x-12">
           {["KD", "JS", "MC", "RN"].map((initials, i) => (
             <Avatar key={initials} size="5" color={["blue", "green", "yellow", "red"][i] as "blue" | "green" | "yellow" | "red"} className="ring-2 ring-surface-bg shadow-sm">
-              <AvatarFallback size="5">{initials}</AvatarFallback>
+              <AvatarFallback>{initials}</AvatarFallback>
             </Avatar>
           ))}
           <Avatar size="5" color="white" className="ring-2 ring-surface-bg shadow-sm">
-            <AvatarFallback size="5">+4</AvatarFallback>
+            <AvatarFallback>+4</AvatarFallback>
           </Avatar>
         </div>
       </Section>

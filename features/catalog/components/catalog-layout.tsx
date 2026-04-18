@@ -1,6 +1,6 @@
 'use client'
 
-import { CatalogNav } from "./catalog-nav";
+import { CatalogNav } from "./nav/catalog-nav";
 import CatalogComponentDrawer from "./sidepanel/catalog-component-drawer";
 interface CatalogLayoutProps {
     children: React.ReactNode
