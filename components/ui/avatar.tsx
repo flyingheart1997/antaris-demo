@@ -75,18 +75,16 @@ interface AvatarProps
 const Avatar = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Root>,
   AvatarProps
->(({ className, children, title, side = 'top', size, color, ...props }, ref) => (
-  <AvatarPrimitive.Root
-    ref={ref}
-    data-slot="avatar"
-    data-size={size}
-    className={cn(avatarVariants({ size, color, className }))}
-    {...props}
-  >
-    <Tooltip content={title} side={side} hidden={!title}>
-      {children}
-    </Tooltip>
-  </AvatarPrimitive.Root>
+>(({ className, title, side = 'top', size, color, ...props }, ref) => (
+  <Tooltip content={title} side={side} hidden={!title}>
+    <AvatarPrimitive.Root
+      ref={ref}
+      data-slot="avatar"
+      data-size={size}
+      className={cn(avatarVariants({ size, color, className }))}
+      {...props}
+    />
+  </Tooltip>
 ))
 Avatar.displayName = AvatarPrimitive.Root.displayName
 

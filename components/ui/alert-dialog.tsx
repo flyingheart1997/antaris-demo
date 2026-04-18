@@ -40,19 +40,15 @@ function AlertDialogOverlay({
 
 function AlertDialogContent({
   className,
-  size = "md",
   ...props
-}: React.ComponentProps<typeof AlertDialogPrimitive.Content> & {
-  size?: "md" | "sm"
-}) {
+}: React.ComponentProps<typeof AlertDialogPrimitive.Content>) {
   return (
     <AlertDialogPortal>
       <AlertDialogOverlay />
       <AlertDialogPrimitive.Content
         data-slot="alert-dialog-content"
-        data-size={size}
         className={cn(
-          "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 bg-surface-bg border-[0.5px] border-stroke-primary/50 shadow-lg gap-3 rounded-lg p-3 duration-150 data-[size=md]:max-w-xs data-[size=sm]:max-w-64 data-[size=md]:sm:max-w-sm group/alert-dialog-content fixed top-1/2 left-1/2 z-50 grid w-full -translate-x-1/2 -translate-y-1/2 outline-none",
+          "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 bg-surface-bg border-[0.5px] border-stroke-primary/50 shadow-lg gap-3 rounded-lg p-3 duration-150 max-w-sm group/alert-dialog-content fixed top-1/2 left-1/2 z-50 grid w-full -translate-x-1/2 -translate-y-1/2 outline-none",
           className
         )}
         {...props}
@@ -68,7 +64,7 @@ function AlertDialogHeader({
   return (
     <div
       data-slot="alert-dialog-header"
-      className={cn("grid grid-rows-[auto_1fr] items-start place-items-start gap-3 text-left has-data-[slot=alert-dialog-media]:grid-rows-[auto_auto_1fr] has-data-[slot=alert-dialog-media]:gap-x-4 sm:group-data-[size=md]/alert-dialog-content:place-items-start sm:group-data-[size=md]/alert-dialog-content:text-left sm:group-data-[size=md]/alert-dialog-content:has-data-[slot=alert-dialog-media]:grid-rows-[auto_1fr]", className)}
+      className={cn("grid grid-rows-[auto_1fr] items-start place-items-start gap-3 text-left has-data-[slot=alert-dialog-media]:grid-rows-[auto_auto_1fr] has-data-[slot=alert-dialog-media]:gap-x-4", className)}
       {...props}
     />
   )
@@ -97,7 +93,7 @@ function AlertDialogMedia({
   return (
     <div
       data-slot="alert-dialog-media"
-      className={cn("bg-surface-secondary inline-flex size-14 items-center justify-center rounded-md sm:group-data-[size=md]/alert-dialog-content:row-span-2 *:[svg:not([class*='size-'])]:size-14", className)}
+      className={cn("bg-surface-secondary inline-flex size-14 items-center justify-center rounded-md *:[svg:not([class*='size-'])]:size-14", className)}
       {...props}
     />
   )
@@ -110,7 +106,7 @@ function AlertDialogTitle({
   return (
     <AlertDialogPrimitive.Title
       data-slot="alert-dialog-title"
-      className={cn("flex justify-start text-start items-center gap-6 text-lg font-medium font-heading text-text-primary sm:group-data-[size=md]/alert-dialog-content:group-has-data-[slot=alert-dialog-media]/alert-dialog-content:col-start-2", className)}
+      className={cn("flex justify-start text-start items-center gap-6 text-lg font-medium font-heading text-text-primary", className)}
       {...props}
     />
   )

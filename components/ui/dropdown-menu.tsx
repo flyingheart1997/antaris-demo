@@ -63,12 +63,11 @@ DropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName
 const DropdownMenuItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item> & {
-    inset?: boolean
     variant?: "default" | "destructive"
     color?: "accent" | "error"
     size?: DropdownMenuSize
   }
->(({ className, inset, variant = "default", color = "accent", size, ...props }, ref) => {
+>(({ className, variant = "default", color = "accent", size, ...props }, ref) => {
   const context = React.useContext(DropdownMenuSizeContext)
   const effectiveSize = size ?? context.size
 
@@ -76,7 +75,6 @@ const DropdownMenuItem = React.forwardRef<
     <DropdownMenuPrimitive.Item
       ref={ref}
       data-slot="dropdown-menu-item"
-      data-inset={inset}
       data-variant={variant}
       data-color={color}
       data-size={effectiveSize}
@@ -87,7 +85,6 @@ const DropdownMenuItem = React.forwardRef<
         "data-[color=accent]:text-text-primary focus:bg-surface-hover data-[state=checked]:bg-surface-selected",
         "data-[color=error]:text-text-error focus:bg-surface-error-hover",
         "data-disabled:pointer-events-none data-disabled:opacity-50 data-disabled:text-text-disabled",
-        "data-inset:pl-32",
         className
       )}
       {...props}
@@ -194,17 +191,13 @@ DropdownMenuRadioItem.displayName = DropdownMenuPrimitive.RadioItem.displayName
 
 const DropdownMenuLabel = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Label>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label> & {
-    inset?: boolean
-  }
->(({ className, inset, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label>
+>(({ className, ...props }, ref) => (
   <DropdownMenuPrimitive.Label
     ref={ref}
     data-slot="dropdown-menu-label"
-    data-inset={inset}
     className={cn(
       "text-text-primary opacity-60 px-2 py-0.5 text-sm font-regular font-body",
-      "data-inset:pl-8",
       className
     )}
     {...props}
@@ -244,10 +237,9 @@ DropdownMenuShortcut.displayName = "DropdownMenuShortcut"
 const DropdownMenuSubTrigger = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.SubTrigger>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubTrigger> & {
-    inset?: boolean
     size?: DropdownMenuSize
   }
->(({ className, inset, children, size, ...props }, ref) => {
+>(({ className, children, size, ...props }, ref) => {
   const context = React.useContext(DropdownMenuSizeContext)
   const effectiveSize = size ?? context.size
 
@@ -255,13 +247,12 @@ const DropdownMenuSubTrigger = React.forwardRef<
     <DropdownMenuPrimitive.SubTrigger
       ref={ref}
       data-slot="dropdown-menu-sub-trigger"
-      data-inset={inset}
       data-size={effectiveSize}
       className={cn(
         "group/dropdown-menu-sub-trigger relative flex cursor-default select-none items-center rounded-md pl-6 pr-4 outline-hidden transition-colors duration-100 data-open:bg-surface-hover focus:bg-surface-hover",
         "data-[size=md]:h-28 data-[size=md]:text-md gap-4",
         "data-[size=lg]:h-36 data-[size=lg]:text-lg gap-6",
-        "data-inset:pl-32 text-text-primary",
+        "text-text-primary",
         className
       )}
       {...props}

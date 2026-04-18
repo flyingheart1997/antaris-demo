@@ -1,53 +1,70 @@
 # Feature: Satellite Catalog Workspace
 
-The Catalog feature is a high-performance hardware browser designed for satellite operators to discover, compare, and select mission-critical components.
+The Catalog feature is an enterprise-grade hardware registry designed for satellite operators to discover, compare, and select mission-critical components for satellite construction.
 
 ## Architecture
 
-We use a **Hybrid State Management** model to ensure zero-flicker performance and persistence:
+The Catalog uses a **Hybrid Responsive State** model for zero-flicker performance:
 
-1. **Navigation & UI State (URL)**: `category`, `subSystem`, `componentId`, and **`drawer`** (open/close) are stored in the URL search parameters. This makes the entire workspace state deep-linkable and shareable.
-2. **Workspace Persistence (Zustand)**: `selectedComponents` stores the list of persistent **IDs** in LocalStorage.
-3. **Enrichment Layer**: The `useCatalogSelection` hook bridges the URL and LocalStorage, mapping IDs to full objects for UI consumption.
+1.  **URL-Driven Navigation**: All layout states are deep-linkable via `category`, `subSystem`, and `componentId`.
+2.  **Modular Logic Separation**:
+    -   `useCatalogNavigation`: Managed URL synchronization and context-switching.
+    -   `useCatalogGroups`: Encapsulates high-performance filtering and grouping logic.
+    -   `useCatalogStats`: Resolves and normalizes technical metrics for visualization.
+    -   `useCatalogSelection`: The enrichment bridge that map workspace IDs back to full hardware objects.
+3.  **Context-Locked Workspace**: Navigating between categories or subsystems automatically purges selected components and URL IDs to prevent data contamination across different hardware contexts.
 
-## Terminology
+## Enterprise Data Model
 
-| Term | Scope | Values |
-| :--- | :--- | :--- |
-| `category` | URL Parameter | `payload`, `bus` |
-| `subSystem` | URL Parameter | `eps`, `adcs`, `comms`, etc. |
-| `componentId` | URL Parameter | The active component being viewed |
-| `drawer` | URL Parameter | `true` (open) \| `false` (closed) |
-| `selectedComponents` | Zustand Store | Array of item IDs in the user's workspace |
+The Catalog implements a nested hardware schema aligned with the ATMOS backend:
+
+-   **Common Attributes**: Shared metrics like Mass, Dimensions, and Vendor.
+-   **Registry Specifics**:
+    -   `component_specific_attributes`: Technical data for payload modules (GSD, Swath, etc.).
+    -   `bus_specific_attributes`: Performance metrics for satellite platforms (Power Output, Mission Life).
+
+### UI Implementation Patterns
+
+#### Truncation & Tooltips
+To maintain layout integrity with high-precision technical data, use the following pattern:
+- Enforce `block w-full truncate` on text elements.
+- Wrap content in the `Tooltip` component for hover-based reveal.
+- Use `minmax(0, 1fr)` grid tracks to allow containers to shrink and trigger truncation.
 
 ## File Structure
 
-- `features/catalog/`
-  - `components/` — UI components (Layout, Sidebar, Preview)
-  - `hooks/`
-    - `use-catalog-navigation.ts` — Manages URL state and toggle logic
-    - `use-catalog-selection.ts` — The Enrichment Bridge
-  - `store/`
-    - `catalog-store.ts` — Persistent Thin Store (IDs only)
-  - `types/` — Shared Zod schemas and TypeScript interfaces
-  - `utils/`
-    - `drawer-configs.ts` — Domain configuration (Icons, Labels)
+-   `features/catalog/`
+    -   `components/` — Radix-based UI components (Layout, Cards, Preview).
+    -   `hooks/`
+        -   `use-catalog-navigation.ts` — Engine for URL state management.
+        -   `use-catalog-selection.ts` — The Enrichment Bridge (IDs -> Full Objects).
+        -   `use-catalog-groups.ts` — Data-agnostic logic for filtering and grouping.
+    -   `utils/`
+        -   `mock-data.ts` — High-fidelity enterprise hardware registry.
+        -   `drawer-configs.ts` — Domain configuration (Icons, Accents).
 
-## Implementation Pattern
+## Implementation Patterns
 
-To access the catalog state, always use the `useCatalogSelection` hook. The toggle logic for drawers is encapsulated within `setCategory`:
+Always use the `useCatalogSelection` hook to interact with the catalog. It abstracts away the complexity of URL management and store persistence:
 
 ```typescript
 const { 
   category, 
   subSystem, 
-  drawer,
+  selectedComponents, 
+  selectComponent,
   setCategory 
 } = useCatalogSelection();
-
-// setCategory handles differentiated toggle logic for Payload and Bus
-<Button onClick={() => setCategory('payload')}>Toggle Payload</Button>
 ```
 
-> [!TIP]
-> **Zero-Flicker Toggle**: By moving the `drawer` state to the URL, we eliminate hydration flicker. The server knows whether to render the drawer as open or closed before the page even reaches the user.
+### Automated UI Truncation
+All technical specifications in the catalog cards utilize the `Tooltip` component and CSS truncation to handle high-precision technical values without breaking the layout.
+
+## Logic Overview
+
+| Interaction | Trigger | Resulting URL |
+| :--- | :--- | :--- |
+| **Category Switch** | Top Icon Click | `?drawer=true&category=bus` (Purges workspace) |
+| **Drawer Toggle** | Chevron Click | `?drawer=false...` (Preserves workspace) |
+| **Reset Bus** | Bus Icon | `?category=bus&subSystem=null` (Purges workspace) |
+| **Deep Link** | Component Tab | `?componentId=8f3c...` |

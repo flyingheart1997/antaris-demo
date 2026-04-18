@@ -4,9 +4,12 @@ import { useSearchParams, useRouter, usePathname } from 'next/navigation'
 import { useCallback } from 'react'
 import { CatalogCategoryTypes, CatalogSubsystemTypes } from '../types/catalog-selection-state-types'
 
+const PARAM_ORDER = ['drawer', 'category', 'subSystem', 'componentId'] as const
+
 /**
  * Hook to manage Catalog navigation via URL search parameters.
  * Handles category switching, subsystem selection, and drawer toggle logic.
+ * Enforces strict URL parameter ordering for a professional dashboard experience.
  */
 export function useCatalogNavigation() {
   const router = useRouter()
@@ -16,71 +19,77 @@ export function useCatalogNavigation() {
   const category = searchParams.get('category') as CatalogCategoryTypes
   const subSystem = searchParams.get('subSystem') as CatalogSubsystemTypes | null
   const componentId = searchParams.get('componentId')
-  const drawer = searchParams.get('drawer') !== 'false' // Default to true if not specified or is 'true'
+  const drawer = searchParams.get('drawer') !== 'false'
 
+  /**
+   * Builds an ordered query string based on a professional schema.
+   * Drawer -> Category -> SubSystem -> ComponentId
+   */
   const createQueryString = useCallback(
     (params: Record<string, string | null>) => {
-      const newParams = new URLSearchParams(searchParams.toString())
-      Object.entries(params).forEach(([key, value]) => {
-        if (value === null) {
-          newParams.delete(key)
-        } else {
-          newParams.set(key, value)
+      const merged: Record<string, string | null> = {}
+      searchParams.forEach((value, key) => { merged[key] = value })
+      Object.assign(merged, params)
+
+      const orderedParams = new URLSearchParams()
+      PARAM_ORDER.forEach(key => {
+        const value = merged[key]
+        if (value !== null && value !== undefined) {
+          orderedParams.set(key, value)
         }
       })
-      return newParams.toString()
+
+      return orderedParams.toString()
     },
     [searchParams]
   )
 
   /**
-   * Unified handler for drawer toggle and category selection.
-   * Utilizes a DOM check to distinguish between Chevron clicks and Icon clicks.
+   * Refined handler for category selection and visibility toggling.
+   * Preserves exact business logic with context-locked persistence rules.
    */
   const setCategory = useCallback(
     (newCategory: CatalogCategoryTypes) => {
-      // 1. Detect if the click originated from the bottom Chevron
       const activeEl = typeof document !== 'undefined' ? document.activeElement : null
-      const isChevronClick = activeEl?.id === 'drawer-toggle-chevron' ||
-        activeEl?.closest('#drawer-toggle-chevron')
+      const isChevronClick = activeEl?.id === 'drawer-toggle-chevron' || 
+                             activeEl?.closest('#drawer-toggle-chevron')
 
       const isSameCategory = category === newCategory
+      const toggleDrawer = drawer ? 'false' : 'true'
+      
       let targetSubSystem = subSystem
       let targetDrawer = 'true'
+      let targetComponentId = componentId
 
-      // 2. Branch logic based on click source
       if (isChevronClick && isSameCategory) {
-        // CASE A: Bottom Chevron Click -> ALWAYS only toggle visibility, NEVER reset data
-        targetDrawer = drawer ? 'false' : 'true'
-      }
+        // VISIBILITY TOGGLE (Chevron): Preserve everything
+        targetDrawer = toggleDrawer
+      } 
       else if (isSameCategory) {
-        // CASE B: Top Icon Click (Same Category) -> Apply specialized toggle rules
-        if (newCategory === 'payload') {
-          // Payload icon click: Toggle drawer, preserve subsystem
-          targetDrawer = drawer ? 'false' : 'true'
+        // NAVIGATION (Icon Toggle - Same Category)
+        if (newCategory === 'bus' && subSystem) {
+          // Bus reset rule: Switching from subsystem to top-level Bus (CONTEXT SHIFT)
+          targetSubSystem = null
+          targetDrawer = 'true'
+          targetComponentId = null
         } else {
-          // Bus icon click: 
-          if (subSystem !== null) {
-            // Reset to top-level bus view first
-            targetSubSystem = null
-            targetDrawer = 'true'
-          } else {
-            // If already at top-level, toggle drawer
-            targetDrawer = drawer ? 'false' : 'true'
-          }
+          // Normal toggle (Payload icon or Bus-at-top icon)
+          targetDrawer = toggleDrawer
+          targetComponentId = componentId // Preserve
         }
-      }
+      } 
       else {
-        // CASE C: Different Category Click -> Full Reset to default
+        // NAVIGATION (New Category - CONTEXT SHIFT)
         targetSubSystem = newCategory === 'payload' ? 'earth-observation' : null
         targetDrawer = 'true'
+        targetComponentId = null
       }
 
       const query = createQueryString({
         category: newCategory,
         subSystem: targetSubSystem,
         drawer: targetDrawer,
-        componentId: isSameCategory && !isChevronClick ? componentId : null
+        componentId: targetComponentId
       })
 
       router.push(`${pathname}?${query}`)
@@ -90,9 +99,10 @@ export function useCatalogNavigation() {
 
   const setSubSystem = useCallback(
     (newSubSystem: CatalogSubsystemTypes | null) => {
-      const query = createQueryString({
-        subSystem: newSubSystem,
-        drawer: 'true'
+      const query = createQueryString({ 
+        subSystem: newSubSystem, 
+        drawer: 'true',
+        componentId: null // Any subsystem change is a CONTEXT SHIFT
       })
       router.push(`${pathname}?${query}`)
     },

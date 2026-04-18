@@ -66,11 +66,10 @@ const TabTriggerText = React.forwardRef<
   React.ComponentPropsWithoutRef<"span"> & {
     title?: string
     side?: "top" | "bottom" | "left" | "right"
-    hideTooltip?: boolean
   }
->(({ className, side = "bottom", hideTooltip = false, title, children, ...props }, ref) => {
+>(({ className, side = "bottom", title, children, ...props }, ref) => {
   return (
-    <Tooltip content={title} side={side} hidden={hideTooltip}>
+    <Tooltip content={title} side={side} hidden={!title}>
       <span
         ref={ref}
         data-slot="dropdown-menu-item-text"

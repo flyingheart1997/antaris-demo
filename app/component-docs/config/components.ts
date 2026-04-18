@@ -165,11 +165,12 @@ import { Mail, ArrowRight, Settings } from "lucide-react"
       { name: "value (Tabs)", type: "string", default: "—", description: "Controlled selected value." },
       { name: "onValueChange (Tabs)", type: "(value: string) => void", default: "—", description: "Callback when selected tab changes." },
       { name: "disabled (TabsTrigger)", type: "boolean", default: "false", description: "Disables the individual tab trigger." },
+      { name: "title (TabTriggerText)", type: "string", default: "—", description: "Tooltip content revealed on hover." },
+      { name: "side (TooltipPosition)", type: "'top' | 'bottom' | 'left' | 'right'", default: "'bottom'", description: "Side the tooltip appears on." },
     ],
-    codeExample: `import {
-  Tabs,
-  TabsList,
+    codeExample: `  TabsList,
   TabsTrigger,
+  TabTriggerText,
   TabsContent,
 } from "@/components/ui/tabs"
 import { LayoutDashboard } from "lucide-react"
@@ -177,14 +178,18 @@ import { LayoutDashboard } from "lucide-react"
 <Tabs defaultValue="overview" size="md">
   <TabsList>
     <TabsTrigger value="overview">
-      <LayoutDashboard size={14} className="mr-2" />
-      Overview
+      <TabTriggerText title="System Overview">
+        <LayoutDashboard size={14} className="mr-s-2" />
+        Overview
+      </TabTriggerText>
     </TabsTrigger>
     <TabsTrigger value="analytics">
-      Analytics
+      <TabTriggerText title="Usage Analytics">
+        Analytics
+      </TabTriggerText>
     </TabsTrigger>
     <TabsTrigger value="settings" disabled>
-      Settings
+       Settings
     </TabsTrigger>
   </TabsList>
 
@@ -254,6 +259,8 @@ import { CheckCircle2, AlertCircle } from "lucide-react"
     props: [
       { name: "size", type: "'1' | '2' | '3' | '4' | '5' | '6'", default: "'2'", description: "Size step from smallest (1) to largest (6)." },
       { name: "color", type: "'green' | 'blue' | 'yellow' | 'white' | 'red'", default: "'blue'", description: "Background color for the fallback initials." },
+      { name: "title", type: "string", default: "—", description: "Tooltip content revealed on hover." },
+      { name: "side", type: "'top' | 'bottom' | 'left' | 'right'", default: "'top'", description: "Side the tooltip appears on." },
       { name: "src (AvatarImage)", type: "string", default: "—", description: "Image URL for the avatar." },
       { name: "size (AvatarFallback)", type: "'1' | '2' | '3' | '4' | '5' | '6'", default: "'2'", description: "Must match the parent Avatar size." },
       { name: "color (AvatarIndicator)", type: "'green' | 'blue' | 'yellow' | 'white' | 'red'", default: "'green'", description: "Status dot color." },
@@ -496,7 +503,6 @@ import { Satellite, Globe, Settings } from "lucide-react"
       { name: "mask", type: "boolean", default: "false", description: "Adds fade-out mask on truncated text; hover reveals full text via scroll animation." },
       { name: "maskAlignment", type: "'left' | 'center' | 'right' | 'top' | 'bottom'", default: "'left'", description: "Side the fade gradient appears on for the mask effect." },
       { name: "asChild", type: "boolean", default: "false", description: "Renders as the Radix Slot child." },
-      { name: "as", type: "React.ElementType", default: "'span'", description: "HTML element to render (via asChild pattern or type casting)." },
     ],
     codeExample: `import { Text } from "@/components/ui/text"
 
@@ -665,12 +671,12 @@ import { Search } from "lucide-react"
       { label: "ReadOnly", description: "Sets the entire select control to a non-editable visual state." },
     ],
     props: [
-      { name: "variant", type: "'surface' | 'solid' | 'neutral'", default: "'surface'", description: "Visual style of the Select component." },
-      { name: "color", type: "'primary' | 'error'", default: "'primary'", description: "Semantic color state." },
-      { name: "size", type: "'md' | 'lg'", default: "'md'", description: "Height and padding scale." },
-      { name: "readOnly", type: "boolean", default: "false", description: "Sets the select to a visual non-editable mode." },
-      { name: "disabled", type: "boolean", default: "false", description: "Standard HTML disabled state." },
-      { name: "placeholder", type: "string", default: "—", description: "Placeholder text when no value is selected." },
+      { name: "variant (Select)", type: "'surface' | 'solid' | 'neutral'", default: "'surface'", description: "Visual style of the trigger." },
+      { name: "color (Select)", type: "'primary' | 'error'", default: "'primary'", description: "Semantic color intent." },
+      { name: "size (Select)", type: "'md' | 'lg'", default: "'md'", description: "Height scale." },
+      { name: "readOnly (Select)", type: "boolean", default: "false", description: "Disables interaction but preserves visual style." },
+      { name: "disabled (SelectTrigger)", type: "boolean", default: "false", description: "Standard disabled state." },
+      { name: "placeholder (SelectValue)", type: "string", default: "—", description: "Text displayed when no value is selected." },
     ],
     codeExample: `import {
   Select, SelectContent, SelectGroup,
@@ -745,7 +751,6 @@ import { Field, FieldLabel, FieldArea, FieldDescription } from "@/components/ui/
       { label: "With Limits", description: "Sub-labels and limit values shown below each input." },
     ],
     props: [
-      { name: "minPlaceholder", type: "string", default: "—", description: "Placeholder text for the min input." },
       { name: "maxPlaceholder", type: "string", default: "—", description: "Placeholder text for the max input." },
       { name: "minValue", type: "string", default: "—", description: "Controlled value for the min input." },
       { name: "maxValue", type: "string", default: "—", description: "Controlled value for the max input." },
@@ -1018,7 +1023,7 @@ import { Home, Settings } from "lucide-react"
     category: "Feedback",
     summary: "Accessible dropdown with items, groups, labels, checkboxes, radio groups, and shortcuts.",
     description:
-      "DropdownMenu is built on Radix UI DropdownMenu. Supports item groups with labels, separators, checkbox/radio items, keyboard shortcuts, and nested sub-menus. DropdownMenuGroup accepts size, type, and groupLabel props to auto-configure child items.",
+      "DropdownMenu is built on Radix UI DropdownMenu. Supports item groups with labels, separators, checkbox/radio items, keyboard shortcuts, and nested sub-menus. High-fidelity items like DropdownMenuItemText provide built-in tooltip and truncation support for hardware catalogs.",
     variants: [
       { label: "Basic Items", description: "Simple action list with icons and keyboard shortcuts." },
       { label: "Checkbox Items", description: "Toggle visibility/preference options." },
@@ -1026,20 +1031,23 @@ import { Home, Settings } from "lucide-react"
       { label: "Sub-menu", description: "DropdownMenuSub for nested menu levels." },
     ],
     props: [
-      { name: "open", type: "boolean", default: "—", description: "Controlled open state." },
-      { name: "onOpenChange", type: "(open: boolean) => void", default: "—", description: "Open state change callback." },
-      { name: "modal", type: "boolean", default: "true", description: "Enables modal behavior (locks scroll)." },
+      { name: "open (DropdownMenu)", type: "boolean", default: "—", description: "Controlled open state." },
+      { name: "onOpenChange (DropdownMenu)", type: "(open: boolean) => void", default: "—", description: "Open state change callback." },
+      { name: "modal (DropdownMenu)", type: "boolean", default: "true", description: "Enables modal behavior (locks scroll)." },
       { name: "side (DropdownMenuContent)", type: "'top' | 'right' | 'bottom' | 'left'", default: "'bottom'", description: "Side the menu appears on." },
-      { name: "align (DropdownMenuContent)", type: "'start' | 'center' | 'end'", default: "'center'", description: "Alignment relative to trigger." },
-      { name: "size (DropdownMenuGroup)", type: "'md' | 'lg'", default: "—", description: "Propagates item size to all children in the group." },
-      { name: "type (DropdownMenuGroup)", type: "'default' | 'checkbox' | 'radio'", default: "'default'", description: "Item type context for the group." },
-      { name: "groupLabel (DropdownMenuGroup)", type: "string", default: "—", description: "Label heading rendered above the group." },
-      { name: "topSeparator (DropdownMenuGroup)", type: "boolean", default: "false", description: "Adds a separator above the group." },
-      { name: "bottomSeparator (DropdownMenuGroup)", type: "boolean", default: "false", description: "Adds a separator below the group." },
+      { name: "align (DropdownMenuContent)", type: "'start' | 'center' | 'end'", default: "'start'", description: "Alignment relative to trigger." },
+      { name: "sideOffset (DropdownMenuContent)", type: "number", default: "4", description: "Distance from the trigger." },
+      { name: "size (DropdownMenuContent)", type: "'md' | 'lg'", default: "'md'", description: "Item size scale for all children." },
+      { name: "variant (DropdownMenuItem)", type: "'default' | 'destructive'", default: "'default'", description: "Visual style of the item." },
+      { name: "color (DropdownMenuItem)", type: "'accent' | 'error'", default: "'accent'", description: "Semantic color intent." },
+      { name: "size (DropdownMenuItem)", type: "'md' | 'lg'", default: "—", description: "Override size for individual item." },
+      { name: "title (DropdownMenuItemText)", type: "string", default: "—", description: "Tooltip content revealed on hover." },
+      { name: "side (DropdownMenuItemText)", type: "'top' | 'bottom' | 'left' | 'right'", default: "'right'", description: "Side the tooltip appears on." },
+      { name: "checked (DropdownMenuCheckboxItem)", type: "boolean", default: "false", description: "Controlled checked state." },
     ],
     codeExample: `import {
   DropdownMenu, DropdownMenuContent,
-  DropdownMenuGroup, DropdownMenuItem,
+  DropdownMenuItem, DropdownMenuItemText,
   DropdownMenuSeparator, DropdownMenuTrigger,
   DropdownMenuShortcut,
 } from "@/components/ui/dropdown-menu"
@@ -1051,18 +1059,21 @@ import { User, Settings, LogOut } from "lucide-react"
     <Button variant="surface" color="neutral">Actions</Button>
   </DropdownMenuTrigger>
   <DropdownMenuContent>
-    <DropdownMenuGroup groupLabel="Account">
-      <DropdownMenuItem leadingIcon={<User size={14} />}>
+    <DropdownMenuItem>
+      <User size={14} />
+      <DropdownMenuItemText title="View user profile">
         Profile
-        <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-      </DropdownMenuItem>
-      <DropdownMenuItem leadingIcon={<Settings size={14} />}>
-        Settings
-      </DropdownMenuItem>
-    </DropdownMenuGroup>
+      </DropdownMenuItemText>
+      <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+    </DropdownMenuItem>
+    <DropdownMenuItem>
+      <Settings size={14} />
+      <DropdownMenuItemText>Settings</DropdownMenuItemText>
+    </DropdownMenuItem>
     <DropdownMenuSeparator />
-    <DropdownMenuItem color="error" leadingIcon={<LogOut size={14} />}>
-      Logout
+    <DropdownMenuItem color="error">
+      <LogOut size={14} />
+      <DropdownMenuItemText>Logout</DropdownMenuItemText>
     </DropdownMenuItem>
   </DropdownMenuContent>
 </DropdownMenu>`,
@@ -1205,7 +1216,6 @@ import { Spinner } from "@/components/ui/spinner"
     props: [
       { name: "open (AlertDialog)", type: "boolean", default: "—", description: "Controlled open state." },
       { name: "onOpenChange (AlertDialog)", type: "(open: boolean) => void", default: "—", description: "Open state change callback." },
-      { name: "size (AlertDialogContent)", type: "'md' | 'sm'", default: "'md'", description: "Width of the dialog container." },
       { name: "variant (AlertDialogAction)", type: "Button variant", default: "'solid'", description: "Visual style of the confirm button." },
       { name: "size (AlertDialogAction)", type: "Button size", default: "'md'", description: "Size of the confirm button." },
       { name: "variant (AlertDialogCancel)", type: "Button variant", default: "'outline'", description: "Visual style of the cancel button." },

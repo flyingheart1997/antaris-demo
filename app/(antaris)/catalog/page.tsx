@@ -2,52 +2,54 @@
 
 import * as React from "react"
 import {
-  MetricProgress,
   CatalogSidepanel,
-  CatalogStats,
-  getPhysicalMetrics,
-  mockCatalogItems,
+  mockBusData,
   useCatalogSelection,
   CatalogComponentPreview,
+  getPhysicalMetrics,
 } from "@/features/catalog"
 
 export default function CatalogIndexPage() {
   const { selectedComponents } = useCatalogSelection()
   const selectedItem = React.useMemo(
-    () => selectedComponents[selectedComponents.length - 1] || mockCatalogItems[0],
+    () => selectedComponents[selectedComponents.length - 1] || mockBusData[0],
     [selectedComponents]
   )
 
   const physicalMetrics = React.useMemo(
-    () =>
-      selectedItem
-        ? getPhysicalMetrics([
-          {
-            key: "size",
-            icon: "size",
-            value: selectedItem.specs.size,
-            max: "24U",
-            maxValue: 24,
-            fallbackValue: "0 U",
-          },
-          {
-            key: "mass",
-            icon: "mass",
-            value: selectedItem.specs.mass,
-            max: "100KG",
-            maxValue: 100,
-            fallbackValue: "0 Kg",
-          },
-          {
-            key: "power",
-            icon: "power",
-            value: selectedItem.specs.power,
-            max: "12W",
-            maxValue: 12,
-            fallbackValue: "0 W",
-          },
-        ])
-        : [],
+    () => {
+      if (!selectedItem) return []
+
+      const massVal = selectedItem.common_attributes.mass
+      const dim = selectedItem.common_attributes.dimensions
+
+      return getPhysicalMetrics([
+        {
+          key: "size",
+          icon: "size",
+          value: `${dim.length}x${dim.width}x${dim.height} ${dim.unit}`,
+          max: "1m",
+          maxValue: 1,
+          fallbackValue: "N/A",
+        },
+        {
+          key: "mass",
+          icon: "mass",
+          value: `${massVal.attribute_value}${massVal.attribute_unit}`,
+          max: "1000kg",
+          maxValue: 1000,
+          fallbackValue: "0kg",
+        },
+        {
+          key: "power",
+          icon: "power",
+          value: "100W", // Mocked for now until specific power attributes are standardized
+          max: "500W",
+          maxValue: 500,
+          fallbackValue: "0W",
+        },
+      ])
+    },
     [selectedItem]
   )
 

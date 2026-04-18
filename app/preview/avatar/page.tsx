@@ -101,14 +101,14 @@ export default function AvatarPreview() {
 
       <Section title="With Image Support (Size 5)">
         <div className="flex flex-wrap items-center gap-24">
-          <Avatar size="5">
+          <Avatar size="5" title="Felix (Design Engineer)" side="top">
             <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Felix" />
           </Avatar>
-          <Avatar size="5">
+          <Avatar size="5" title="Aneka (Mission Chief)" side="bottom">
             <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka" alt="Aneka" />
             <AvatarFallback color="green">AN</AvatarFallback>
           </Avatar>
-          <Avatar size="5">
+          <Avatar size="5" title="System Error: Check Log" side="left">
             {/* Intentionally broken src for fallback demo */}
             <AvatarImage src="/broken-image.jpg" alt="Fallback" />
             <AvatarFallback color="red">FB</AvatarFallback>

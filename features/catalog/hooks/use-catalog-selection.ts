@@ -4,8 +4,10 @@ import { useCatalogStore } from '../store/catalog-store'
 import { CatalogItem } from '../types/catalog-data-types'
 import { getSubsystemConfig } from '../utils/drawer-configs'
 import { useCatalogNavigation } from './use-catalog-navigation'
-import { mockCatalogItems } from '../utils/mock-data'
+import { mockBusData, mockCatalogComponents } from '../utils/mock-data'
 import { CustomIcon } from '@/icons'
+import * as React from 'react'
+import { CatalogCategoryTypes, CatalogSubsystemTypes } from '../types/catalog-selection-state-types'
 
 export interface EnrichedCatalogItem extends CatalogItem {
   componentIcon: React.ComponentType
@@ -21,9 +23,9 @@ export function useCatalogSelection() {
     category,
     subSystem,
     componentId,
-    drawer, // Managed via URL parameter
-    setCategory,
-    setSubSystem,
+    drawer,
+    setCategory: navSetCategory,
+    setSubSystem: navSetSubSystem,
     setComponentId
   } = useCatalogNavigation()
 
@@ -33,17 +35,59 @@ export function useCatalogSelection() {
   } = useCatalogStore()
 
   /**
+   * Selection Purge Logic:
+   * Wraps navigation setters to ensure workspace is cleared during context shifts.
+   */
+  const setCategory = (newCategory: CatalogCategoryTypes) => {
+    const activeEl = typeof document !== 'undefined' ? document.activeElement : null
+    const isChevronClick = activeEl?.id === 'drawer-toggle-chevron' || 
+                           activeEl?.closest('#drawer-toggle-chevron')
+    
+    const isSameCategory = category === newCategory
+    
+    // CONTEXT SHIFT: New category selected, OR Bus subsystem reset triggered (not a chevron toggle)
+    const isContextShift = !isSameCategory || (newCategory === 'bus' && subSystem && !isChevronClick)
+
+    if (isContextShift) {
+      setSelectedComponentIds([])
+    }
+    navSetCategory(newCategory)
+  }
+
+  const setSubSystem = (newSubSystem: CatalogSubsystemTypes | null) => {
+    if (newSubSystem !== subSystem) {
+      setSelectedComponentIds([])
+    }
+    navSetSubSystem(newSubSystem)
+  }
+
+  /**
+   * Unified Registry: Combines both data sources for efficient ID resolution.
+   * Prefetched separately but merged here for the enrichment layer.
+   */
+  const unifiedRegistry = React.useMemo(() => [
+    ...mockBusData,
+    ...mockCatalogComponents
+  ], [])
+
+  /**
    * Enrichment Layer: Maps persisted IDs to full component data from the registry.
+   * Handles translation from backend-style keys (assembly_type) to UI-style keys (uiCategory).
    */
   const selectedComponentsObjs: EnrichedCatalogItem[] = (selectedComponentIds || [])
     .map((id) => {
-      const component = mockCatalogItems.find((item) => item.id === id)
-      if (!component) return null
+      const item = unifiedRegistry.find((item) => item.id === id)
+      if (!item) return null
       
-      const icon = getSubsystemConfig(component.category, component.subSystem)?.icon || CustomIcon
+      const icon = getSubsystemConfig(
+        item.assembly_type === 'bus' ? 'bus' : 'payload', 
+        (item.sub_system as CatalogSubsystemTypes) || null
+      )?.icon || CustomIcon
       
       return {
-        ...component,
+        ...item,
+        uiCategory: item.assembly_type === 'bus' ? 'bus' : 'payload',
+        uiSubSystem: (item.sub_system as CatalogSubsystemTypes) || null,
         componentIcon: icon,
       } as EnrichedCatalogItem
     })
@@ -80,9 +124,9 @@ export function useCatalogSelection() {
     category,
     subSystem,
     componentId,
-    drawer, // Exposed as boolean derived from URL
-    setCategory, // Consolidated toggle logic inside
-    setSubSystem,
+    drawer, 
+    setCategory, // Wrapped with purge logic
+    setSubSystem, // Wrapped with purge logic
     setComponentId,
 
     // Workspace (Persistent IDs)

@@ -14,7 +14,7 @@ import { CardMask } from "./card-mask"
  * Backdrop blur spec (Figma: effects/bg_blur-60 / 2 = 30px)
  */
 const cardVariants = cva(
-  "inline-flex flex-col relative transition-all duration-300 backdrop-blur-[30px]",
+  "inline-flex flex-col relative transition-all duration-300 backdrop-blur-[30px] gap-4",
   {
     variants: {
       size: {

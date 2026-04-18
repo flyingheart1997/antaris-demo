@@ -153,39 +153,48 @@
       }
     },
     "catalog": {
-      "description": "Satellite component catalog — browse and select hardware for a mission. UI-only, mock data, no tRPC routes yet.",
+      "description": "Satellite component catalog — browse and select hardware for a mission. Features a high-performance dual-registry architecture with context-locked selection.",
       "files": {
         "pages": [
           "app/(antaris)/catalog/page.tsx",
           "app/(antaris)/catalog/layout.tsx"
         ],
         "components": [
-          "features/catalog/components/catalog-card.tsx",
-          "features/catalog/components/catalog-category-group.tsx",
-          "features/catalog/components/catalog-list.tsx",
-          "features/catalog/components/catalog-sidepanel.tsx",
+          "features/catalog/components/sidepanel/catalog-card.tsx",
+          "features/catalog/components/sidepanel/catalog-list.tsx",
+          "features/catalog/components/sidepanel/catalog-sidepanel.tsx",
+          "features/catalog/components/sidepanel/catalog-category-drawer.tsx",
+          "features/catalog/components/preview/catalog-component-preview.tsx",
           "features/catalog/components/catalog-stats.tsx"
         ],
         "hooks": [
-          "features/catalog/hooks/use-catalog-navigation.ts"
+          "features/catalog/hooks/use-catalog-navigation.ts",
+          "features/catalog/hooks/use-catalog-selection.ts",
+          "features/catalog/hooks/use-catalog-groups.ts",
+          "features/catalog/hooks/use-catalog-stats.ts"
         ],
-        "types": "features/catalog/types/catalog.ts",
+        "types": [
+          "features/catalog/types/catalog-data-types.ts",
+          "features/catalog/types/catalog-selection-state-types.tsx"
+        ],
         "mock": "features/catalog/utils/mock-data.ts",
         "barrel": "features/catalog/index.ts"
       },
       "exports": [
         "useCatalogSelection",
         "useCatalogNavigation",
-        "useCatalogStore",
-        "CatalogLayout"
+        "useCatalogGroups",
+        "useCatalogStats",
+        "CatalogSidepanel"
       ],
       "interfaces": [
         "CatalogCategoryTypes",
         "CatalogSubsystemTypes",
-        "CatalogItem"
+        "CatalogItem",
+        "CatalogGroup",
+        "CatalogStatRowData"
       ],
-      "doc": "docs/features/catalog.md",
-      "_note": "Backend routes (tRPC) not yet implemented — uses static mock data"
+      "doc": "docs/features/catalog.md"
     },
     "design-system": {
       "description": "Figma-synced design tokens and 37 UI components",
