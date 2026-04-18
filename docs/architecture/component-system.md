@@ -163,7 +163,9 @@ All Radix state attributes (`data-state`, `data-open`, `data-disabled`) are avai
 | Textarea | `textarea.tsx` | Custom | Yes — variant (surface, solid) |
 | Checkbox | `checkbox.tsx` | Radix Checkbox | Yes — variant (surface, solid) |
 | Radio Group | `radio-group.tsx` | Radix Radio | Yes — variant (surface, solid) |
-| Select | `select.tsx` | Radix Select | Yes — variant (surface, solid) |
+| Select | `select.tsx` | Radix Select | Yes — variant, color, size on root |
+| Tabs | `tabs.tsx` | Radix Tabs | Yes — size on root |
+| Drawer | `drawer.tsx` | Collapsible | Yes — active selection on root |
 
 ### 2. Overlay Components
 
@@ -172,7 +174,7 @@ All Radix state attributes (`data-state`, `data-open`, `data-disabled`) are avai
 | Dialog | `dialog.tsx` | Radix Dialog | Full-screen modal |
 | Alert Dialog | `alert-dialog.tsx` | Radix AlertDialog | Confirmation modal |
 | Sheet | `sheet.tsx` | Radix Dialog | Side drawer |
-| Drawer | `drawer.tsx` | Collapsible | Sidebar navigation icon drawer with DrawerTrigger, DrawerContainer, DrawerItem |
+| Drawer | `drawer.tsx` | Collapsible | Sidebar navigation icon drawer. Uses root `active` prop for CSS-driven selection highlight. Structure: `Drawer` → `DrawerTrigger`, `DrawerContainer`, `DrawerItem`. |
 | Dropdown Menu | `dropdown-menu.tsx` | Radix DropdownMenu | Context menus |
 | Tooltip | `tooltip.tsx` | Radix Tooltip | Hover hints |
 
@@ -376,6 +378,56 @@ import { cn } from '@/lib/utils'
 
 cn("base-class", conditional && "conditional-class", className)
 // className prop always wins — allows safe overrides from consumers
+```
+
+---
+
+---
+
+## Pattern: CSS-Driven Selection State
+
+For composite components like `Select` or `Drawer`, we follow a "Root-Prop" pattern. This centralizes state and styling logic at the root, using CSS data attributes and Tailwind `group` modifiers to drive the design of child components.
+
+### Key Principles
+
+1. **Root-Level Props**: Move configuration props (`variant`, `color`, `size`, `active`) to the parent component.
+2. **Data Attributes**: The root component applies these props as `data-*` attributes (e.g., `data-active={active}`).
+3. **Group Modifiers**: Use `group/name` on the root and `group-data-[active=true]/name:` on children.
+4. **Context-Free Propagation**: For portal components (like `SelectContent`), use lightweight prop propagation (`React.Children.map`) to pass size/variant info, keeping the DOM tree clean.
+
+### Example: Drawer
+
+```typescript
+// Root level
+<Drawer active={isCurrent}>
+  <DrawerTrigger>...</DrawerTrigger>
+</Drawer>
+
+// Internal Trigger
+<CollapsibleTrigger 
+  className="group-data-[active=true]/drawer:bg-green-alpha-2 ..."
+/>
+```
+
+### Example: Select
+
+```typescript
+// Root level
+<Select size="lg" variant="solid">
+  <SelectTrigger />
+  <SelectContent>...</SelectContent>
+</Select>
+```
+
+### Example: Tabs
+
+```typescript
+// Root level
+<Tabs size="lg">
+  <TabsList>
+    <TabsTrigger value="tab1">Tab 1</TabsTrigger>
+  </TabsList>
+</Tabs>
 ```
 
 ---

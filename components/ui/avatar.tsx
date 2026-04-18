@@ -5,9 +5,10 @@ import * as AvatarPrimitive from "@radix-ui/react-avatar"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
+import { Tooltip } from "./tooltip"
 
 const avatarVariants = cva(
-  "inline-flex shrink-0 items-center justify-center overflow-hidden bg-surface-bg border-[0.5px] relative rounded-md text-text-primary select-none",
+  "inline-flex shrink-0 items-center justify-center overflow-hidden bg-surface-bg border relative rounded-md text-text-primary select-none",
   {
     variants: {
       size: {
@@ -22,39 +23,13 @@ const avatarVariants = cva(
         green: "border-stroke-success",
         blue: "border-stroke-info",
         yellow: "border-stroke-warning",
-        white: "border-stroke-primary",
+        white: "border-gray-9",
         red: "border-stroke-error",
       },
     },
     defaultVariants: {
       size: "2",
       color: "blue",
-    },
-  }
-)
-
-const fallbackVariants = cva(
-  "flex h-full w-full items-center justify-center font-heading font-medium uppercase",
-  {
-    variants: {
-      size: {
-        "1": "text-sm",
-        "2": "text-md",
-        "3": "text-md",
-        "4": "text-lg",
-        "5": "text-xl",
-        "6": "text-xxl",
-      },
-      color: {
-        green: "text-text-primary",
-        blue: "text-text-primary",
-        yellow: "text-text-primary",
-        white: "text-text-primary",
-        red: "text-text-primary",
-      },
-    },
-    defaultVariants: {
-      size: "2",
     },
   }
 )
@@ -92,19 +67,24 @@ const indicatorVariants = cva(
 
 interface AvatarProps
   extends Omit<React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root>, "color">,
-  VariantProps<typeof avatarVariants> { }
+  VariantProps<typeof avatarVariants> {
+  title?: string
+  side?: "top" | "bottom" | "left" | "right"
+}
 
 const Avatar = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Root>,
   AvatarProps
->(({ className, size, color, ...props }, ref) => (
-  <AvatarPrimitive.Root
-    ref={ref}
-    data-slot="avatar"
-    data-size={size}
-    className={cn(avatarVariants({ size, color, className }))}
-    {...props}
-  />
+>(({ className, title, side = 'top', size, color, ...props }, ref) => (
+  <Tooltip content={title} side={side} hidden={!title}>
+    <AvatarPrimitive.Root
+      ref={ref}
+      data-slot="avatar"
+      data-size={size}
+      className={cn(avatarVariants({ size, color, className }))}
+      {...props}
+    />
+  </Tooltip>
 ))
 Avatar.displayName = AvatarPrimitive.Root.displayName
 
@@ -121,16 +101,16 @@ const AvatarImage = React.forwardRef<
 ))
 AvatarImage.displayName = AvatarPrimitive.Image.displayName
 
-type AvatarFallbackProps = React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback> & VariantProps<typeof fallbackVariants>
+type AvatarFallbackProps = React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback>
 
 const AvatarFallback = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Fallback>,
   AvatarFallbackProps
->(({ className, size, ...props }, ref) => (
+>(({ className, ...props }, ref) => (
   <AvatarPrimitive.Fallback
     ref={ref}
     data-slot="avatar-fallback"
-    className={cn(fallbackVariants({ size, className }))}
+    className={cn(className)}
     {...props}
   />
 ))
@@ -146,4 +126,17 @@ const AvatarIndicator = ({ className, size, color, position, ...props }: AvatarI
   />
 )
 
-export { Avatar, AvatarImage, AvatarFallback, AvatarIndicator }
+function AvatarGroup({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="avatar-group"
+      className={cn(
+        "group/avatar-group flex -space-x-8",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+export { Avatar, AvatarImage, AvatarFallback, AvatarIndicator, AvatarGroup }

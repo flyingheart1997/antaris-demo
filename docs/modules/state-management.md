@@ -349,32 +349,29 @@ TanStack Query refetches in background
 
 ---
 
+## State Persistence (Zustand)
+
+For UI state that must survive page refreshes (e.g., Catalog selections, user preferences), we use a **Persistent Thin Store** architecture.
+
+### Persistence Principles
+
+1. **Storage**: Always use `localStorage` for workspace data.
+2. **Thin Store Pattern**: Only persist **serializable IDs** or primitive values. Never persist full objects or non-serializable data (React icons, functions).
+3. **Hybrid State (Gold Standard)**: 
+   - **URL Search Params (探索 Navigation)**: `category`, `subSystem`, and `componentId` are stored in the URL. This enables instant SSR rendering and zero-flicker transitions.
+   - **LocalStorage (Workspace Persistence)**: For personal workspace state (e.g., `selectedComponents` as ID list).
+4. **Zero-Boilerplate Hydration**: By putting critical navigation state in the URL, we avoid the need for complex `isHydrated` flags for navigation items. The workspace list is enriched client-side, ensuring a smooth, flicker-free experience.
+
+---
+
 ## State Separation Rules
 
 | Data type | Where it lives | Why |
 |---|---|---|
-| User list, user details | TanStack Query | Fetched from API, needs caching, refetching, invalidation |
-| Auth token | Zustand (auth-store) | Synchronous access needed, SSR hydration, no caching layer needed |
-| Modal open/close/mode | Zustand (useUserModal) | Pure UI state, no async, no caching |
-| Form field values | React Hook Form | Form-local, tied to component lifecycle, needs validation |
-| Toast notifications | Sonner (imperative) | Fire-and-forget, no subscription needed |
-
-### Never do this:
-
-```typescript
-// ❌ BAD — storing API data in Zustand
-const [users, setUsers] = useState([])
-useEffect(() => { fetch('/rpc/users').then(setUsers) }, [])
-
-// ❌ BAD — storing auth token in TanStack Query
-const { data: token } = useQuery(['token'], getToken)
-
-// ✅ GOOD — server data in TanStack Query
-const { data } = useSuspenseQuery(trpc.user.list.queryOptions())
-
-// ✅ GOOD — auth token in Zustand
-const { token } = useAuth()
-```
+| API responses | TanStack Query | Fetched from API, needs caching, refetching, invalidation |
+| Auth session | Zustand (auth-store) | Synchronous access needed, SSR hydration |
+| Catalog Selection | Zustand + URL | Persistent IDs (Local) + Navigation & Drawer (URL) |
+| UI ephemeral state | Zustand (feature hooks) | Modal open/close, form data |
 
 ---
 
@@ -388,13 +385,8 @@ AllProviders (providers/index.tsx)
     ├─ ThemeProvider          (next-themes — dark/light mode)
     │
     ├─ AuthProvider           (hydrates useAuthStore with server token)
-    │       token={token}     ← from app/layout.tsx getAccessToken()
     │
-    ├─ TanstackQueryProvider  (QueryClientProvider — makes queryClient available)
+    ├─ TanstackQueryProvider  (QueryClientProvider)
     │
-    ├─ ModalsProvider         (renders <UserModal /> as a portal — always mounted)
-    │
-    └─ TooltipProvider        (Radix tooltip context)
+    └─ ModalsProvider         (renders dynamic feature modals)
 ```
-
-`AuthProvider` runs before `TanstackQueryProvider` because some queries might need the auth token in their request headers (future use). `ModalsProvider` renders `<UserModal />` outside the page tree — this is the "portal pattern" that ensures the modal is always available regardless of which page is rendered.

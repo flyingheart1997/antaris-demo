@@ -5,7 +5,7 @@ import { MassIcon, SizeIcon, SolarGenerationIcon } from "@/icons"
 import { cn } from "@/lib/utils"
 // Note: In a real project, these types should be generic or moved to a shared location.
 // For now, importing from catalog feature as per plan.
-import type { PhysicalMetric } from "@/features/catalog/types/catalog"
+import type { PhysicalMetric } from "@/features/catalog/types/catalog-data-types"
 
 export interface MetricProgressProps extends React.HTMLAttributes<HTMLDivElement> {
   metrics: PhysicalMetric[]

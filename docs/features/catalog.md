@@ -1,148 +1,70 @@
-# Feature: Catalog
+# Feature: Satellite Catalog Workspace
 
-## Purpose
+The Catalog feature is an enterprise-grade hardware registry designed for satellite operators to discover, compare, and select mission-critical components for satellite construction.
 
-The Catalog feature lets operators browse and select satellite hardware components for a mission. It renders a searchable, filterable grid of component cards, each showing key specs and supporting selection state.
+## Architecture
 
-**Current status:** UI-only. Uses static mock data. oRPC routes and Zustand store not yet implemented.
+The Catalog uses a **Hybrid Responsive State** model for zero-flicker performance:
 
----
+1.  **URL-Driven Navigation**: All layout states are deep-linkable via `category`, `subSystem`, and `componentId`.
+2.  **Modular Logic Separation**:
+    -   `useCatalogNavigation`: Managed URL synchronization and context-switching.
+    -   `useCatalogGroups`: Encapsulates high-performance filtering and grouping logic.
+    -   `useCatalogStats`: Resolves and normalizes technical metrics for visualization.
+    -   `useCatalogSelection`: The enrichment bridge that map workspace IDs back to full hardware objects.
+3.  **Context-Locked Workspace**: Navigating between categories or subsystems automatically purges selected components and URL IDs to prevent data contamination across different hardware contexts.
 
-## Routes
+## Enterprise Data Model
 
-| Route | Component | Description |
-|---|---|---|
-| `/catalog` | `app/(antaris)/catalog/page.tsx` | Catalog workspace with sidepanel selection and stats detail panel |
-| `/catalog` layout | `app/(antaris)/catalog/layout.tsx` | Full-screen container, `bg-surface-bg` |
+The Catalog implements a nested hardware schema aligned with the ATMOS backend:
 
----
+-   **Common Attributes**: Shared metrics like Mass, Dimensions, and Vendor.
+-   **Registry Specifics**:
+    -   `component_specific_attributes`: Technical data for payload modules (GSD, Swath, etc.).
+    -   `bus_specific_attributes`: Performance metrics for satellite platforms (Power Output, Mission Life).
+
+### UI Implementation Patterns
+
+#### Truncation & Tooltips
+To maintain layout integrity with high-precision technical data, use the following pattern:
+- Enforce `block w-full truncate` on text elements.
+- Wrap content in the `Tooltip` component for hover-based reveal.
+- Use `minmax(0, 1fr)` grid tracks to allow containers to shrink and trigger truncation.
 
 ## File Structure
 
-```
-features/catalog/
-├── index.ts                          # Barrel exports
-├── components/
-│   ├── catalog-card.tsx              # Satellite component card (uses Card selected state)
-│   ├── catalog-category-group.tsx    # Collapsible category group (WIP — mostly commented out)
-│   ├── catalog-list.tsx              # Left-side grouped catalog list with item selection
-│   ├── catalog-sidepanel.tsx         # Filter + grouped list + create custom action
-│   └── catalog-stats.tsx             # Figma-style stats panel for the selected item
-├── hooks/                            # Reserved for future Zustand store
-├── types/
-│   └── catalog.ts                    # CatalogItem, CatalogCategoryGroup interfaces
-└── utils/
-    └── mock-data.ts                  # Static mock catalog items
-```
+-   `features/catalog/`
+    -   `components/` — Radix-based UI components (Layout, Cards, Preview).
+    -   `hooks/`
+        -   `use-catalog-navigation.ts` — Engine for URL state management.
+        -   `use-catalog-selection.ts` — The Enrichment Bridge (IDs -> Full Objects).
+        -   `use-catalog-groups.ts` — Data-agnostic logic for filtering and grouping.
+    -   `utils/`
+        -   `mock-data.ts` — High-fidelity enterprise hardware registry.
+        -   `drawer-configs.ts` — Domain configuration (Icons, Accents).
 
----
+## Implementation Patterns
 
-## Data Types
+Always use the `useCatalogSelection` hook to interact with the catalog. It abstracts away the complexity of URL management and store persistence:
 
 ```typescript
-// features/catalog/types/catalog.ts
-
-interface CatalogItem {
-  id: string
-  name: string
-  subtitle?: string
-  category?: string
-  specs: {
-    size?: string
-    mass?: string
-    power?: string
-    gsd?: string
-    swath?: string
-    [key: string]: string | undefined
-  }
-  tags: string[]
-}
-
-interface CatalogCategoryGroup {
-  category: string
-  count: number
-  items: CatalogItem[]
-}
+const { 
+  category, 
+  subSystem, 
+  selectedComponents, 
+  selectComponent,
+  setCategory 
+} = useCatalogSelection();
 ```
 
----
+### Automated UI Truncation
+All technical specifications in the catalog cards utilize the `Tooltip` component and CSS truncation to handle high-precision technical values without breaking the layout.
 
-## CatalogCard Component
+## Logic Overview
 
-`features/catalog/components/catalog-card.tsx`
-
-Wraps the `Card` component with catalog-specific layout:
-- Uses `Card` with `selected` prop for the Figma selected-state mask overlay
-- Uses `state="emphasis"` when selected (green-alpha-2 tint)
-- Displays: name, category label, 4 spec slots (size/mass/power/swath), tags as badges
-- Content children use `relative z-10` to render above the mask SVG
-
-```tsx
-<CatalogCard
-  item={catalogItem}
-  selected={selectedId === item.id}
-  onClick={() => setSelectedId(item.id)}
-/>
-```
-
-**Important:** The `selected` prop on `Card` triggers the `CardMask` SVG overlay — dark green gradient background + right-side bump with lime-green glow (source: Figma node 2895:297).
-
-## CatalogStats Component
-
-`features/catalog/components/catalog-stats.tsx`
-
-Renders the selected catalog item in the right-hand panel using the Figma "Stats" composition:
-- Header with selected component name and category
-- Five specification rows: size, mass, power, GSD, swath
-- Angled segmented meters with a green guide line and right-aligned value labels
-- Lightweight normalization so each spec can map to a useful fill amount without backend metadata
-
-The panel is wired into `app/(antaris)/catalog/page.tsx`, and selection is controlled at the page level so clicking a list card updates the detail panel.
-
----
-
-## Page Pattern
-
-The catalog page is a `'use client'` component (no SSR prefetch yet — no oRPC routes):
-
-```tsx
-// app/(antaris)/catalog/page.tsx
-'use client'
-
-export default function CatalogPage() {
-  const [selectedId, setSelectedId] = useState<string | null>(null)
-
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-24">
-      {mockCatalogItems.map((item) => (
-        <CatalogCard
-          key={item.id}
-          item={item}
-          selected={selectedId === item.id}
-          onClick={() => setSelectedId(item.id)}
-        />
-      ))}
-    </div>
-  )
-}
-```
-
----
-
-## What's Not Yet Implemented
-
-| Item | Status | Future plan |
-|---|---|---|
-| oRPC routes | ❌ Not built | `app/(server)/router/catalog.ts` — list, get, filter |
-| Zustand store | ❌ Not built | `features/catalog/hooks/useCatalogStore.ts` — selected items, filters |
-| `CatalogCategoryGroup` | ⚠️ Placeholder | Collapsible group with `useCatalogStore` — currently returns empty div |
-| Search/filter | ❌ Not built | Filter by category, specs, tags |
-| Sidebar layout | ❌ Not built | Category tree sidebar + main grid |
-
----
-
-## See Also
-
-- [`docs/architecture/component-system.md`](../architecture/component-system.md) — Card component + selected state mask
-- [`docs/modules/trpc-api.md`](../modules/trpc-api.md) — Pattern to follow when adding catalog tRPC procedures
-- [`docs/features/user-management.md`](./user-management.md) — Reference implementation for the full feature pattern
+| Interaction | Trigger | Resulting URL |
+| :--- | :--- | :--- |
+| **Category Switch** | Top Icon Click | `?drawer=true&category=bus` (Purges workspace) |
+| **Drawer Toggle** | Chevron Click | `?drawer=false...` (Preserves workspace) |
+| **Reset Bus** | Bus Icon | `?category=bus&subSystem=null` (Purges workspace) |
+| **Deep Link** | Component Tab | `?componentId=8f3c...` |

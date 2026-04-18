@@ -60,11 +60,11 @@ export default function AlertDialogPreview() {
             </Button>
           </AlertDialogTrigger>
           <AlertDialogContent>
-            <AlertDialogMedia>
-              <AlertTriangle size={24} className="text-yellow-9" />
-            </AlertDialogMedia>
             <AlertDialogHeader>
-              <AlertDialogTitle>Override Active Configuration?</AlertDialogTitle>
+              <AlertDialogTitle>
+                <AlertTriangle className="text-yellow-9 size-16" />
+                Override Active Configuration?
+              </AlertDialogTitle>
               <AlertDialogDescription>
                 This will overwrite the current mission parameters. The satellite will need to re-sync on next pass.
               </AlertDialogDescription>
@@ -87,12 +87,12 @@ export default function AlertDialogPreview() {
               System Notice
             </Button>
           </AlertDialogTrigger>
-          <AlertDialogContent size="sm">
-            <AlertDialogMedia>
-              <Info size={24} className="text-blue-9" />
-            </AlertDialogMedia>
+          <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Maintenance Window</AlertDialogTitle>
+              <AlertDialogTitle>
+                <Info className="text-blue-9 size-16" />
+                Maintenance Window
+              </AlertDialogTitle>
               <AlertDialogDescription>
                 Scheduled maintenance begins in 30 minutes. Save your work before the window starts.
               </AlertDialogDescription>

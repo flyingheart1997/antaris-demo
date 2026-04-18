@@ -48,19 +48,19 @@ export default function DropdownMenuPreview() {
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuItem>
                 <User className="size-14" />
-                <DropdownMenuItemText>Profile</DropdownMenuItemText>
+                <DropdownMenuItemText title="Profile">Profile</DropdownMenuItemText>
                 <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Settings className="size-14" />
-                <DropdownMenuItemText>Settings</DropdownMenuItemText>
+                <DropdownMenuItemText title="Settings">Settings</DropdownMenuItemText>
                 <DropdownMenuShortcut>⇧⌘S</DropdownMenuShortcut>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem color="error">
               <LogOut className="size-14" />
-              <DropdownMenuItemText>Log Out</DropdownMenuItemText>
+              <DropdownMenuItemText title="Log Out">Log Out</DropdownMenuItemText>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -76,19 +76,19 @@ export default function DropdownMenuPreview() {
               <DropdownMenuLabel>Personal Settings</DropdownMenuLabel>
               <DropdownMenuItem>
                 <User className="size-14 shrink-0" />
-                <DropdownMenuItemText>Profile Management</DropdownMenuItemText>
+                <DropdownMenuItemText title="Profile Management">Profile Management</DropdownMenuItemText>
                 <DropdownMenuShortcut>⇧⌘S</DropdownMenuShortcut>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Settings className="size-14 shrink-0" />
-                <DropdownMenuItemText>Application Settings</DropdownMenuItemText>
+                <DropdownMenuItemText title="Application Settings">Application Settings</DropdownMenuItemText>
                 <DropdownMenuShortcut>⇧⌘S</DropdownMenuShortcut>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem color="error">
               <LogOut className="size-16 shrink-0" />
-              <DropdownMenuItemText>Terminate Session</DropdownMenuItemText>
+              <DropdownMenuItemText title="Terminate Session">Terminate Session</DropdownMenuItemText>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -105,27 +105,27 @@ export default function DropdownMenuPreview() {
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger>
                   <User className="size-14" />
-                  <DropdownMenuItemText hideTooltip>Invite Team</DropdownMenuItemText>
+                  <DropdownMenuItemText title="Invite Team">Invite Team</DropdownMenuItemText>
                 </DropdownMenuSubTrigger>
                 <DropdownMenuSubContent>
                   <DropdownMenuItem>
                     <Mail className="size-14" />
-                    <DropdownMenuItemText>Via Email</DropdownMenuItemText>
+                    <DropdownMenuItemText title="Via Email">Via Email</DropdownMenuItemText>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <MessageSquare className="size-14" />
-                    <DropdownMenuItemText>Via Discord</DropdownMenuItemText>
+                    <DropdownMenuItemText title="Via Discord">Via Discord</DropdownMenuItemText>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>
                     <PlusCircle className="size-14" />
-                    <DropdownMenuItemText>Custom Link</DropdownMenuItemText>
+                    <DropdownMenuItemText title="Custom Link">Custom Link</DropdownMenuItemText>
                   </DropdownMenuItem>
                 </DropdownMenuSubContent>
               </DropdownMenuSub>
               <DropdownMenuItem>
                 <Plus className="size-14" />
-                <DropdownMenuItemText>New Org</DropdownMenuItemText>
+                <DropdownMenuItemText title="New Org">New Org</DropdownMenuItemText>
                 <DropdownMenuShortcut>⌘T</DropdownMenuShortcut>
               </DropdownMenuItem>
             </DropdownMenuGroup>
@@ -143,10 +143,10 @@ export default function DropdownMenuPreview() {
               <DropdownMenuLabel>View Mode</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuCheckboxItem checked={checked} onCheckedChange={setChecked}>
-                <DropdownMenuItemText>Show Grid</DropdownMenuItemText>
+                <DropdownMenuItemText title="Show Grid">Show Grid</DropdownMenuItemText>
               </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem checked={false}>
-                <DropdownMenuItemText>Show Hidden</DropdownMenuItemText>
+                <DropdownMenuItemText title="Show Hidden">Show Hidden</DropdownMenuItemText>
               </DropdownMenuCheckboxItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -159,9 +159,9 @@ export default function DropdownMenuPreview() {
               <DropdownMenuLabel>Alignment</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuRadioGroup value={position} onValueChange={setPosition}>
-                <DropdownMenuRadioItem value="top"><DropdownMenuItemText>Top</DropdownMenuItemText></DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="bottom"><DropdownMenuItemText>Bottom</DropdownMenuItemText></DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="right"><DropdownMenuItemText>Right</DropdownMenuItemText></DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="top"><DropdownMenuItemText title="Top">Top</DropdownMenuItemText></DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="bottom"><DropdownMenuItemText title="Bottom">Bottom</DropdownMenuItemText></DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="right"><DropdownMenuItemText title="Right">Right</DropdownMenuItemText></DropdownMenuRadioItem>
               </DropdownMenuRadioGroup>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -176,7 +176,7 @@ export default function DropdownMenuPreview() {
           <DropdownMenuContent>
             <DropdownMenuItem color="error">
               <Trash2 className="size-14" />
-              <DropdownMenuItemText>Delete Forever</DropdownMenuItemText>
+              <DropdownMenuItemText title="Delete Forever">Delete Forever</DropdownMenuItemText>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
